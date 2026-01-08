@@ -1,0 +1,5 @@
+sb.Popen(["py", python_plot_file, scat_mat_file, "S11"])
+sb.Popen(["py", python_plot_file, scat_mat_file, "DoP"])
+sb.Popen(["py", python_plot_file, scat_mat_file, "DoLP"])
+sb.Popen(["py", python_plot_file, scat_mat_file, "DoCP"])
+sb.Popen(["py", python_plot_file, scat_mat_file, "ALL"])

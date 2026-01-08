@@ -1,0 +1,27 @@
+! calculations for figure 1
+output_file
+singlesphere.dat
+number_spheres
+1
+sphere_data
+0.d0,0.d0,0.d0,5.d0,(1.6d0,0.d0)
+end_of_sphere_data
+incident_beta_deg
+30.d0
+incident_alpha_deg
+0.d0
+length_scale_factor
+1.d0
+calculate_scattering_matrix
+f
+calculate_near_field
+t
+near_field_minimum_border
+-10.d0,0.d0,-10.d0
+near_field_maximum_border
+10.d0,0.d0,10.d0
+near_field_step_size
+0.1d0
+near_field_output_file
+prueba_later_nf.dat
+end_of_options

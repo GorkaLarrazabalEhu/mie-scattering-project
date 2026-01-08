@@ -1,0 +1,337 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+
+\title{TFG Física: Dispersión de la luz por partículas esféricas y conglomerados de partículas esféricas}
+\author{Gorki}
+\date{2024}
+
+\begin{document}
+
+\maketitle
+
+% \section{Introducción}
+% En este trabajo se va a realizar un estudio sobre 
+% la dispersión de la luz por partículas esféricas y 
+% conglomerados de partículas esféricas, utilizando 
+% simulaciones basadas en la teoría de Mie. Gustav Mie 
+% (1868-1957), físico Alemán, formuló la teoría que 
+% proporciona una descripción matemática precisa de 
+% cómo la luz se dispersa y absorbe cuando incide sobre 
+% partículas esféricas de diferentes tamaños y composiciones.
+% En época posterior, Michenko escribió un programa en Fortran
+% basado en la teoría de Mie, que permite calcular
+% las propiedades de dispersión y absorción de partículas
+% esféricas individuales y de conglomerados de partículas.
+
+
+% El principal objetivo de este trabajo es estudiar el comportamiento
+% de la luz al interactuar con partículas esféricas. Para lograr el objetivo
+% principal, se plantean los siguientes objetivos específicos:
+
+% \begin{itemize}
+%     \item Analizar el programa de Fortran de Mishenko.
+%     \item Caracterizar la dispersión de la luz por una única partícula esférica
+%     \item Caracterizar la dispersión de la luz por múltiples partículas esféricas
+%     \item Caso de estudio: Aplicación de la teoría de Mie en nanoantenas
+% \end{itemize}
+
+\section{Introducción}
+\hspace{1em} En este trabajo se realizará un estudio sobre la dispersión de la 
+luz por partículas esféricas y conglomerados de partículas 
+esféricas, utilizando simulaciones basadas en la teoría de Mie. 
+Formulada por el físico alemán Gustav Mie a principios del 
+siglo XX, esta teoría ofrece una descripción matemática 
+detallada de cómo la luz interactúa con partículas de 
+diferentes tamaños y composiciones. A lo largo de los años, 
+la teoría de Mie se ha consolidado como una herramienta 
+fundamental para entender fenómenos ópticos en diversas 
+disciplinas.
+
+La importancia de estudiar la dispersión de la luz 
+mediante la teoría de Mie radica en su aplicabilidad 
+en una amplia gama de campos, como la óptica atmosférica, 
+biomédica, y el desarrollo de materiales fotónicos. En 
+estos contextos, la interacción de la luz con partículas 
+esféricas de tamaño comparable a la longitud de onda de 
+la luz puede influir de manera significativa en el 
+comportamiento de la radiación, afectando tanto su 
+dispersión como su absorción.
+
+El objetivo principal de este trabajo es estudiar 
+cómo se dispersa la luz cuando interactúa con partículas 
+esféricas, utilizando simulaciones numéricas basadas 
+en el programa de Fortran de D. W. Mackowski, que implementa 
+la teoría de Mie. Para ello, se plantean los siguientes 
+objetivos específicos:
+
+\begin{itemize}
+\item Analizar el programa de Fortran de D. W. Mackowski.
+\item Caracterizar la dispersión de la luz por una única 
+        partícula esférica.
+\item Estudiar la dispersión de la luz por conglomerados 
+        de partículas esféricas.
+\item Caso de estudio: Aplicación de la teoría de Mie en 
+        nanoantenas ópticas.
+\end{itemize}
+
+\section{Fundamento teórico}
+\subsection{Dispersión y absorción}
+%¿Qué es la dispersión de la luz? 
+La dispersión de la luz ocurre cuando la radiación electromagnética, 
+al chocar con partículas, cambia de dirección en su trayectoria de 
+propagación. Este fenómeno es consecuencia de la excitación de partículas 
+y la posterior radiación, y durante este proceso, parte de la energía 
+puede perderse en forma de absorción.
+
+
+Imaginemos una partícula dividida en pequeñas regiones. Cuando una 
+onda electromagnética incide en la partícula, el campo eléctrico de 
+la onda induce la polarización de la partícula, haciendo que las pequeñas 
+regiones adquieran momentos dipolares cuya polaridad oscila con la misma 
+frecuencia que la onda. Estos dipolos oscilantes actúan como fuentes 
+emisoras de radiación electromagnética secundaria. El campo electromagnético 
+detectado en un punto será la superposición de todas estas radiaciones secundarias. 
+La magnitud y dirección de esta radiación total dependerán de la fase y 
+amplitud de cada una de las radiaciones individuales, que a su vez están 
+determinadas por las propiedades ópticas del material. Por lo tanto, la 
+dispersión de la luz depende de las propiedades ópticas de la partícula.
+
+
+En 1865, Maxwell publicó sus famosas ecuaciones, que serán 
+necesarias para desarrollar la teoría de Mie. El conjunto 
+de ecuaciones del electromagnetismo está asociado a cuatro 
+vectores de campo: El campo eléctrico $\vec E$, el 
+desplazamiento dieléctrico $\vec D$, la intensidad del 
+campo magnético $\vec H$ y la inducción magnética $\vec B$. 
+En cada punto del espacio, los vectores están sujetos a 
+las ecuaciones de Maxwell y la versión macroscópica de 
+estas ecuaciones es la siguiente:
+
+\begin{equation}
+    \vec{\nabla} \cdot \vec{D} = \rho_F
+\end{equation}
+\begin{equation}
+    \vec{\nabla} \times \vec{E} + \frac{\partial \vec{B}}{\partial t} = 0
+\end{equation}
+\begin{equation}
+    \vec{\nabla} \cdot \vec B = 0
+\end{equation}
+\begin{equation}
+    \vec \nabla \times \vec H = \vec J_F + \frac{\partial\vec D}{\partial t}
+\end{equation}
+
+Aquí, $t$ es el tiempo, $\rho_F$ la densidad de carga libre y $\vec J_F$ la densidad de corriente. Las relaciones entre el campo eléctrico e inducción magnética están relacionadas con el desplazamiento y campo magnético por:
+
+\begin{equation}
+    \vec D = \epsilon_0 \vec E + \vec P
+\end{equation}
+\begin{equation}
+    \vec H = \frac{\vec B}{\mu_0} - \vec M
+\end{equation}
+
+$\vec P$ y $\vec M$ son la polarización eléctrica y la magnetización, y $\epsilon_0$ y $\mu_0$ la permitividad y permeabilidad magnética en el vacío. Por último, las relaciones constitutivas:
+
+\begin{equation}
+    \vec J_F = \sigma \vec E
+\end{equation}
+\begin{equation}
+    \vec B = \mu \vec H
+\end{equation}
+\begin{equation}
+    \vec P = \epsilon_0\chi \vec E
+\end{equation}
+
+donde $\sigma$ es la conductividad, $\mu$ la permeabilidad y $\chi$ la susceptibilidad eléctrica. Los coeficientes son dependientes de la frecuencia y del medio. %, pero vamos a tomarlos como independientes del medio por ahora.
+
+
+
+Un campo electromagnético en un medio lineal, homogéneo e isotrópico tiene que satisfacer la ecuación de onda:
+\begin{equation}
+    \nabla^2\vec E + k^2 \vec E = 0, \ \  \nabla^2\vec H + k^2 \vec H = 0
+\end{equation}
+
+donde $k^2 = \omega^2\varepsilon\mu $ y la divergencia de anula.
+
+\begin{equation}
+    \nabla \cdot \vec E = 0, \ \ \nabla \cdot \vec H = 0
+\end{equation}
+
+\begin{equation}
+ \nabla \cdot \vec{E}=0, \quad \nabla \cdot \vec{H}=0 \\
+ \nabla \times \vec{E}=i \omega \mu \vec{H}, \quad \nabla \times \vec{H}=-i \omega \epsilon \vec{E}
+\end{equation}
+
+Las ondas electromagnéticas planas tienen la siguiente forma:
+\begin{equation}
+    \vec E_c = \vec E_0 e^{i\vec k \cdot \vec x-i\omega t}; \ \ \vec H_c = \vec H_0 e^{i\vec k \cdot \vec x-i\omega t}
+\end{equation}
+
+
+La forma general de los campos es la siguiente:
+\begin{equation}
+    \vec F = \vec A \cos(\omega t) + \vec B \sin(\omega t)
+\end{equation}
+
+y la forma compleja es:
+\begin{equation}
+    \vec F_c = \vec C e^{-i\omega t} \ ; \ \vec C = \vec A + i\vec B.
+\end{equation}
+
+El exponente puede ser negativo o positivo, pero vamos a seguir la convención de ser negativo.
+
+Es de alto interés definir el vector de Poynting, debido a que es de fundamental importancia en problemas de dispersión electromagnética. Se define como $\vec S = \vec E \times \vec H$, la magnitud representa la tasa de transferencia de energía y su dirección es la dirección de propagación.
+
+
+
+La velocidad neta a la que la energía electromagnética atraviesa una área que encierra un volumen V es:
+\begin{equation}
+    W = -\int_A \vec S \cdot \hat n  \ dA
+\end{equation}
+
+Si W es positiva, entonces la energía electromagnética ha sido absorbida en el volumen, es decir, la energía ha sido convertida en otra forma de energía en V.
+
+Como la mayoría de instrumentos no pueden calcular $\vec S$, se utiliza la media:
+
+\begin{equation}
+    \langle \vec{S} \rangle = \frac{1}{2} \, \text{Re}\!\left\{ \vec{E}_c \times \vec{H}^*_c \right\}.
+\end{equation}
+
+Las ondas electromagnéticas planas:
+\begin{equation}
+    \vec E_c = \vec E_0 e^{i\vec k \cdot \vec x-i\omega t}; \ \ \vec H_c = \vec H_0 e^{i\vec k \cdot \vec x-i\omega t}
+\end{equation}
+
+El vector de onda de una onda homogénea
+
+\begin{equation}
+    k = k' + ik'' = \frac{\omega N}{c},
+\end{equation}
+donde N es el índice de refracción complejo:
+\begin{equation}
+    N = c\sqrt{\varepsilon\mu} = \sqrt{\frac{\varepsilon\mu}{\varepsilon_0 \mu_0}} = n + ik
+\end{equation}
+
+Los números $n$ y $k$ se conocen como constantes ópticas (que no son constantes, ya que dependen de la frecuencia). La parte real del índice de refracción determina la velocidad a la que se propaga la onda en el medio, mientras que la parte imaginaria, determina la atenuación de la onda a medida que se propaga por el medio.
+
+El número de onda $k = \omega/v$ donde $v$ es la velocidad de propagación de la onda en el medio.
+La longitud de onda en el medio es $\lambda = 2\pi/k$.
+
+
+
+La polarización es una propiedad intrínseca de las ondas electromagnéticas monocromáticas. La parte real del campo eléctrico viene dado por
+
+\begin{equation}
+    \vec E = \vec A \cos{kz - \omega t} - \vec B \sin{kz -\omega t}
+\end{equation}
+
+que, al seleccionar un plano arbitrario, como $z = 0$, el campo eléctrico sería
+
+\begin{equation}
+    \vec E(z=0) = \vec A \cos \omega t + \vec B \sin \omega t
+\end{equation}
+
+que describe una elipse. Si $\vec A$ o $\vec B$ es 0, la vibración de la elipse sería solo una línea recta, y la onda estaría polarizada linealmente.
+
+Para hacer una descripción precisa de una onda monocromática, se utilizan los parámetros de Stokes. Los parámetros de Stokes [Stokes (1819-1903)] son un grupo de valores que describen el estado de polarización de una onda electromagnética.
+
+\begin{equation*}
+    I = c^2
+\end{equation*}
+
+\begin{equation*}
+    Q = c^2 \cos 2\eta \cos 2\gamma
+\end{equation*}
+\begin{equation*}
+    U = c^2 \cos 2\eta  \sin 2\gamma
+\end{equation*}
+\begin{equation}
+    V = c^2 \sin2\eta
+\end{equation}
+donde $c^2 = a^2+b^2$ 
+
+I es la irradiancia de la onda, que es la magnitud utilizada para describir la potencia incidente por unidad de superficie de radiación electromagnética.
+
+AQUI FALTA PONER LA IMAGEN DE QUE ES ETA Y GAMMA, son los parametros de elipcicidad.
+
+Los parámetros de Stokes están definidos en términos medibles, (irradiancia). Los parámetros no son independientes, tenemos las siguientes relaciones:
+
+\begin{equation}
+    \tan 2\gamma = \frac{U}{Q}
+\end{equation}
+
+\begin{equation}
+    I^2 = Q^2+U^2+V^2
+\end{equation}
+
+La matriz de Mueller describe la relación entre el vector de Stokes de la onda incidente y el vector de onda de la onda transmitida.
+
+por ahora no lo voy a explicar porque no parece esencial.
+
+
+
+
+Extinción dispersión y absorción:
+Si construimos una esfera imaginaria alrededor de una partícula, la velocidad neta a la que la energía electromagnética atraviesa la superficie A de la esfera es
+
+\begin{equation}
+    W_a = -\int_A \vec S \cdot \hat{e}_rdA
+\end{equation}
+
+Si $W_a$ > 0 la energía es absorbida dentro de la esfera y como el medio es no absorbente, la energía tiene que haber sido absorbida por la partícula.
+
+Como $\vec S = \vec S_i + \vec S_ext + S_{ext}$, entonces
+\begin{equation}
+    W_a = W_i -W_s + W_{ext}
+\end{equation}
+
+$W_s$ es la velocidad de a la que la energía se dispersa a través de la superficie.
+
+\begin{equation}
+    W_i = -\int_A \vec S_i \cdot \hat{e}_rdA, \ \
+    W_s = \int_A \vec S_s \cdot \hat{e}_rdA, \ \
+    W_{ext}= -\int_A \vec S_{ext} \cdot \hat{e}_rdA.
+\end{equation}
+
+como $W_i$ se desvanece en un medio no absorbente:
+
+\begin{equation}
+    W_ext = W_a + W_s
+\end{equation}
+
+Las secciones eficaces son 
+\begin{equation}
+    C_{ext} = C_{abs} + C_{sca}
+\end{equation}
+
+Donde $C_{abs}=W_{abs}/I_i$ y $C_{sca}=W_{sca}/I_i$ 
+
+
+p es $|\vec X|^2/k^2C_{sca}$ y está normalizado en el ángulo sólido.
+
+La media del ángulo del coseno de dispersión, el parámetro de asimetría g es
+\begin{equation}
+    g = <\cos\theta> = \int_{4\pi} p\cos \theta
+\end{equation}
+
+Las eficiencias para la dispersión extinción y absorción son:
+
+\begin{equation}
+    Q_{sca} = \frac{C_{Sca}}{G} \ \ Q_{ext} = \frac{C_{ext}}{G} \ \ Q_{abs} = \frac{C_{abs}}{G}
+\end{equation}
+
+G es el área de sección transversal perpendicular a la onda incidente.
+
+Hasta ahora hemos considerado una única partícula. Con múltiples partículas las secciones eficaces serian:
+
+\begin{equation}
+    C_{ext} = \sum_j C_{ext, j}; \ \ C_{ext, j} = C_{abs,j} + C_{sca, j}
+\end{equation}
+
+
+Absorción y dispersión por una esfera.
+
+\section{Referencias}
+\bibliographystyle{plain}
+\bibliography{referencias}
+\end{document}

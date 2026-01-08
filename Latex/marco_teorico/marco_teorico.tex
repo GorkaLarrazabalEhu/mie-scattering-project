@@ -1,0 +1,377 @@
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{cite}
+\geometry{margin=2.5cm}
+
+\title{Marco teórico}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Introducción general}
+
+La interacción entre la radiación electromagnética y sistemas materiales de tamaño comparable a la longitud de onda constituye un problema fundamental en óptica clásica.
+Las partículas esféricas, debido a su simetría geométrica, permiten obtener soluciones analíticas exactas a las ecuaciones de Maxwell, siendo la más importante la
+\emph{teoría de Mie}, desarrollada en 1908.
+Esta teoría describe rigurosamente los campos internos y dispersados por una esfera homogénea iluminada por una onda plana y constituye el eje central de múltiples áreas
+de investigación: óptica atmosférica, fotónica, plasmones, caracterización óptica de materiales y nanoantenas, entre otras.
+
+En este trabajo se estudia el comportamiento de la luz al interactuar con partículas esféricas, apoyándose en dos pilares principales: por un lado, la formulación
+electromagnética desarrollada en textos clásicos como \emph{Absorption and Scattering of Light by Small Particles} de Bohren y Huffman, donde se presenta de forma sistemática
+la teoría de la dispersión por partículas pequeñas; y por otro lado, los códigos de Fortran desarrollados por Mishchenko y colaboradores, que implementan de manera numéricamente
+estable la teoría de Mie para partículas individuales y el método de la matriz--T (T--matrix) para sistemas de múltiples partículas.
+
+El objetivo de este marco teórico es proporcionar una base conceptual sólida que permita comprender:
+
+\begin{itemize}
+  \item La física fundamental de la dispersión de la luz por partículas pequeñas.
+  \item La formulación electromagnética que conduce a la teoría de Mie para una esfera homogénea.
+  \item La definición e interpretación de las secciones eficaces de extinción, absorción y dispersión.
+  \item La extensión de la teoría a sistemas formados por múltiples partículas esféricas mediante el método T--matrix.
+  \item Los conceptos básicos necesarios para entender el funcionamiento de nanoantenas basadas en partículas esféricas.
+  \item La relación entre toda esta teoría y las magnitudes que calcula el código de Fortran de Mishchenko.
+\end{itemize}
+
+En las secciones siguientes se desarrollan estos puntos de forma autocontenida, de manera que el lector pueda interpretar correctamente los resultados numéricos obtenidos con
+el código de simulación sin necesidad de recurrir constantemente a la bibliografía original.
+
+
+\section{Fundamentos electromagnéticos de la dispersión}
+
+\subsection{Ecuaciones de Maxwell en medios lineales}
+
+El comportamiento de la radiación electromagnética en un medio lineal, isótropo y homogéneo está gobernado por las ecuaciones de Maxwell en ausencia de cargas y corrientes libres:
+
+\begin{align}
+  \nabla \times \mathbf{E} &= -\mu \frac{\partial \mathbf{H}}{\partial t}, \\
+  \nabla \times \mathbf{H} &=  \epsilon \frac{\partial \mathbf{E}}{\partial t}, \\
+  \nabla \cdot (\epsilon \mathbf{E}) &= 0, \\
+  \nabla \cdot (\mu \mathbf{H}) &= 0,
+\end{align}
+
+donde $\mathbf{E}$ y $\mathbf{H}$ son los campos eléctrico y magnético, respectivamente, y $\epsilon$ y $\mu$ son la permitividad y permeabilidad del medio.
+En medios no magnéticos se suele tomar $\mu \approx \mu_0$, mientras que la respuesta de la materia se incorpora en la permitividad efectiva $\epsilon$.
+
+Suponiendo una dependencia temporal armónica de la forma $\exp(-i\omega t)$, las ecuaciones de Maxwell se reducen a la ecuación de onda vectorial para el campo eléctrico:
+
+\begin{equation}
+  \nabla^2 \mathbf{E} + k^2 \mathbf{E} = 0,
+\end{equation}
+
+donde
+
+\begin{equation}
+  k = \frac{2\pi}{\lambda} n
+\end{equation}
+
+es el número de onda en el medio, $\lambda$ la longitud de onda en el vacío y $n$ el índice de refracción del medio circundante.
+En materiales absorbentes el índice de refracción es complejo, $m = n + i k$, y la parte imaginaria da cuenta de la absorción interna.
+
+El problema de la dispersión de la luz por una partícula esférica consiste en resolver la ecuación de onda en dos dominios: el interior de la esfera, caracterizado por un índice
+de refracción $m$, y el exterior, caracterizado por el índice del medio circundante (típicamente aire o vacío).
+Las soluciones deben satisfacer las condiciones de contorno en la superficie de la partícula, que exigen la continuidad de las componentes tangenciales de los campos eléctrico y magnético.
+
+\subsection{Concepto físico de dispersión}
+
+Desde un punto de vista físico, la dispersión puede interpretarse como la re--radiación de energía electromagnética por parte de las cargas ligadas y corrientes de polarización inducidas
+en la partícula por el campo incidente.
+La onda incidente excita dipolos (y multipolos de orden superior) en el interior de la partícula, que a su vez emiten radiación en todas las direcciones.
+En medios disipativos, parte de la energía electromagnética se transforma en energía interna del material, lo que da lugar a la absorción.
+
+El balance energético de la interacción se expresa mediante la relación
+
+\begin{equation}
+  C_{\text{ext}} = C_{\text{sca}} + C_{\text{abs}},
+\end{equation}
+
+donde $C_{\text{ext}}$ es la sección eficaz de extinción, $C_{\text{sca}}$ la sección eficaz de dispersión y $C_{\text{abs}}$ la de absorción.
+Estas magnitudes cuantifican el área efectiva que presenta la partícula frente al haz incidente y constituyen las salidas fundamentales del código de Mishchenko.
+El libro de Bohren y Huffman hace especial énfasis en esta interpretación energética, ilustrando con numerosos ejemplos su significado físico en distintos regímenes de tamaño.
+
+\subsection{Parámetro de tamaño y regímenes de dispersión}
+
+Un parámetro adimensional clave en la teoría de la dispersión es el llamado \emph{parámetro de tamaño}
+
+\begin{equation}
+  x = k a = \frac{2\pi a}{\lambda},
+\end{equation}
+
+donde $a$ es el radio de la partícula.
+En función de $x$ se distinguen tres regímenes principales:
+
+\begin{itemize}
+  \item $x \ll 1$: régimen de dispersión de Rayleigh, en el que la partícula es mucho más pequeña que la longitud de onda. En este caso la respuesta está dominada por el modo dipolar y las secciones eficaces
+        presentan una fuerte dependencia con la longitud de onda ($C_{\text{sca}} \propto \lambda^{-4}$).
+  \item $x \sim 1$: régimen de tamaño intermedio, en el que la partícula y la longitud de onda son comparables. En este rango aparecen resonancias asociadas a modos multipolares de orden superior
+        y el comportamiento espectral es complejo.
+  \item $x \gg 1$: régimen de óptica geométrica, en el que los fenómenos pueden interpretarse en términos de reflexión, refracción y difracción clásicas, y la teoría de Mie se aproxima a los resultados
+        de la óptica geométrica.
+\end{itemize}
+
+Una de las ventajas de la teoría de Mie es que proporciona una solución exacta válida para cualquier valor de $x$, ofreciendo una descripción continua entre los distintos regímenes.
+El código de Fortran de Mishchenko está diseñado para trabajar de forma robusta en un amplio rango de parámetros de tamaño, prestando especial atención a la estabilidad numérica
+en el cálculo de funciones especiales de alto orden.
+
+
+
+\section{Teoría de Mie para una esfera homogénea}
+
+\subsection{Formulación general y expansión multipolar}
+
+La resolución del problema de dispersión por una esfera homogénea se basa en expandir los campos incidente, interno y dispersado en armónicos esféricos vectoriales.
+La simetría esférica del problema permite desacoplar las soluciones en contribuciones eléctricas y magnéticas, que se asocian a modos multipolares de distinto orden.
+
+En la formulación estándar, la onda plana incidente se escribe como una superposición de armónicos esféricos vectoriales regulares, mientras que el campo dispersado se expresa en términos
+de armónicos esféricos esféricos salientes (funciones de Hankel).
+Aplicando las condiciones de contorno en la superficie de la esfera se obtienen las expresiones analíticas de los coeficientes de Mie $a_n$ y $b_n$, que cuantifican la contribución
+de cada modo eléctrico y magnético, respectivamente.
+
+Las expresiones explícitas para estos coeficientes son
+
+\begin{align}
+  a_n &= \frac{ m \psi_n(m x)\,\psi_n'(x) - \psi_n(x)\,\psi_n'(m x) }
+              { m \psi_n(m x)\,\xi_n'(x) - \xi_n(x)\,\psi_n'(m x) }, \\[4pt]
+  b_n &= \frac{ \psi_n(m x)\,\psi_n'(x) - m \psi_n(x)\,\psi_n'(m x) }
+              { \psi_n(m x)\,\xi_n'(x) - m \xi_n(x)\,\psi_n'(m x) },
+\end{align}
+
+donde $\psi_n$ y $\xi_n$ son las funciones de Riccati--Bessel y la prima indica derivada respecto al argumento.
+Estas funciones especiales se relacionan con las funciones de Bessel esféricas de primera especie $j_n$ y con las funciones de Hankel esféricas $h_n^{(1)}$.
+En la práctica, el cálculo numérico de $\psi_n$, $\xi_n$ y sus derivadas requiere algoritmos estables para evitar sobreflujos y pérdidas de precisión, especialmente para órdenes altos.
+
+El texto de Bohren y Huffman dedica el capítulo 4 a derivar estas expresiones de manera detallada, discutiendo además diferentes estrategias de truncamiento del sumatorio y criterios
+de convergencia.
+El código de Mishchenko implementa precisamente estos coeficientes, utilizando algoritmos optimizados para el cálculo recursivo de las funciones de Bessel esféricas, con especial cuidado
+en la elección de $n_{\text{max}}$ en función del parámetro de tamaño $x$.
+
+\subsection{Secciones eficaces de dispersión, extinción y absorción}
+
+A partir de los coeficientes de Mie se pueden calcular las principales magnitudes observables que caracterizan la interacción de la luz con la partícula.
+Las expresiones para las secciones eficaces de dispersión y extinción son
+
+\begin{align}
+  C_{\text{sca}} &= \frac{2\pi}{k^2} \sum_{n=1}^{\infty} (2n+1) \left( |a_n|^2 + |b_n|^2 \right), \\[4pt]
+  C_{\text{ext}} &= \frac{2\pi}{k^2} \sum_{n=1}^{\infty} (2n+1) \,\Re(a_n + b_n),
+\end{align}
+
+mientras que la sección eficaz de absorción se obtiene como
+
+\begin{equation}
+  C_{\text{abs}} = C_{\text{ext}} - C_{\text{sca}}.
+\end{equation}
+
+En la práctica resulta útil normalizar estas cantidades dividiéndolas por el área geométrica de la partícula, $\pi a^2$, introduciendo así las \emph{eficiencias ópticas}:
+
+\begin{equation}
+  Q_{\text{sca}} = \frac{C_{\text{sca}}}{\pi a^2}, \qquad
+  Q_{\text{ext}} = \frac{C_{\text{ext}}}{\pi a^2}, \qquad
+  Q_{\text{abs}} = \frac{C_{\text{abs}}}{\pi a^2}.
+\end{equation}
+
+El código de Mishchenko devuelve precisamente estas eficiencias como una de sus salidas principales.
+De este modo, el usuario puede comparar la respuesta óptica de partículas de distinto tamaño y material de forma adimensional.
+
+\subsection{Matriz de dispersión y parámetros de polarización}
+
+La teoría de Mie permite obtener no solo magnitudes integradas, sino también la distribución angular de la radiación dispersada y su estado de polarización.
+Esta información se encapsula en la \emph{matriz de dispersión} o matriz de amplitud, cuyos elementos se suelen denotar por $S_1(\theta)$ y $S_2(\theta)$ para partículas esféricas.
+Estos elementos se escriben como
+
+\begin{align}
+  S_1(\theta) &= \sum_{n=1}^{\infty} \frac{2n+1}{n(n+1)}
+   \left( a_n \pi_n(\theta) + b_n \tau_n(\theta) \right), \\
+  S_2(\theta) &= \sum_{n=1}^{\infty} \frac{2n+1}{n(n+1)}
+   \left( a_n \tau_n(\theta) + b_n \pi_n(\theta) \right),
+\end{align}
+
+donde $\pi_n$ y $\tau_n$ son funciones angulares relacionadas con los polinomios de Legendre asociados.
+A partir de $S_1$ y $S_2$ se construyen los elementos de la matriz de Müller, que relaciona los parámetros de Stokes del haz incidente con los del haz dispersado.
+Este formalismo es especialmente relevante en problemas donde la polarización juega un papel importante, como en óptica atmosférica o caracterización de aerosoles.
+
+Los programas de Mishchenko calculan los elementos de la matriz de dispersión y de la matriz de Müller para diferentes ángulos de observación, proporcionando así una descripción completa
+de la intensidad y el estado de polarización de la luz dispersada.
+Esta información es fundamental para comparar con medidas experimentales y para estudiar fenómenos de radiación más complejos.
+
+
+
+\section{Interacciones entre múltiples partículas esféricas}
+
+\subsection{Motivación y formulación del problema}
+
+En muchas situaciones físicas de interés no se tiene una única partícula aislada, sino un conjunto de partículas que pueden interactuar entre sí a través de los campos dispersados.
+Ejemplos incluyen agregados de nanopartículas, aerosoles densos, suspensiones coloidales o arreglos de nanoantenas.
+En estos casos, el campo dispersado por cada partícula actúa como campo incidente sobre las demás, de modo que la solución del problema requiere tener en cuenta la \emph{dispersión múltiple}.
+
+Resolver de forma exacta el problema de muchas partículas es, en general, muy complejo.
+Sin embargo, cuando las partículas son esféricas es posible explotar de nuevo la simetría geométrica y utilizar métodos basados en la superposición de soluciones de Mie individuales.
+El enfoque más extendido en la literatura es el \emph{método de la matriz--T} (T--matrix method), del cual los códigos de Mishchenko son uno de los referentes principales.
+
+\subsection{Método de superposición T--matrix}
+
+La idea básica del método T--matrix es describir la respuesta de cada partícula mediante una matriz $\mathbf{T}_i$ que relaciona los coeficientes multipolares del campo incidente local
+sobre la partícula $i$ con los coeficientes del campo dispersado por ella.
+Para una esfera aislada, la matriz $\mathbf{T}_i$ puede construirse directamente a partir de los coeficientes de Mie $a_n$ y $b_n$.
+Cuando hay varias partículas, el campo incidente sobre la partícula $i$ es la suma del campo incidente externo y de los campos dispersados por todas las demás partículas:
+
+\begin{equation}
+  \mathbf{a}_i^{\text{tot}} = \mathbf{a}_i^{\text{inc}} + \sum_{j \neq i} \mathbf{A}_{ij}\,\mathbf{b}_j,
+\end{equation}
+
+donde $\mathbf{a}_i^{\text{tot}}$ son los coeficientes multipolares del campo total incidente sobre la partícula $i$, $\mathbf{b}_j$ los coeficientes del campo dispersado por la partícula $j$
+y $\mathbf{A}_{ij}$ son matrices de traslación que permiten expresar los armónicos esféricos centrados en la partícula $j$ en torno al centro de la partícula $i$.
+
+La respuesta de cada partícula viene dada por
+
+\begin{equation}
+  \mathbf{b}_i = \mathbf{T}_i \,\mathbf{a}_i^{\text{tot}},
+\end{equation}
+
+de modo que sustituyendo se obtiene un sistema lineal acoplado para los vectores $\mathbf{b}_i$:
+
+\begin{equation}
+  \mathbf{b}_i = \mathbf{T}_i \left( \mathbf{a}_i^{\text{inc}} + \sum_{j \neq i} \mathbf{A}_{ij}\,\mathbf{b}_j \right).
+\end{equation}
+
+En forma matricial, el conjunto de ecuaciones para todas las partículas puede escribirse como
+
+\begin{equation}
+  \mathbf{M}\,\mathbf{b} = \mathbf{f},
+\end{equation}
+
+donde $\mathbf{M}$ es una matriz densa que contiene las contribuciones de las matrices $\mathbf{T}_i$ y de las matrices de traslación $\mathbf{A}_{ij}$, $\mathbf{b}$ es el vector que agrupa
+todos los coeficientes de campos dispersados y $\mathbf{f}$ representa la excitación debida al campo incidente externo.
+La resolución de este sistema proporciona los campos dispersados por cada partícula, a partir de los cuales se pueden calcular secciones eficaces globales, funciones de fase,
+campos cercanos, etc.
+
+Los códigos de Mishchenko implementan este esquema de forma eficiente y estable, permitiendo simular configuraciones con múltiples partículas esféricas colocadas en posiciones arbitrarias.
+Para ello, el programa requiere como entrada las coordenadas $(x_i,y_i,z_i)$ de los centros de cada esfera, sus radios $a_i$ y sus índices de refracción.
+A partir de estos datos, el código construye automáticamente las matrices de traslación y ensambla el sistema lineal global.
+
+\subsection{Condición de no solapamiento}
+
+Un aspecto importante de la formulación es que la teoría supone que las partículas no se solapan geométricamente; es decir, la distancia entre los centros de dos esferas cualesquiera
+debe satisfacer
+
+\begin{equation}
+  |\mathbf{r}_i - \mathbf{r}_j| > a_i + a_j.
+\end{equation}
+
+Si esta condición no se cumple, las superficies de las esferas se intersecan y el modelo pierde consistencia física, ya que las condiciones de contorno se vuelven ambiguas.
+Por este motivo, los códigos de Mishchenko incluyen comprobaciones explícitas de solapamiento: si se detecta que alguna pareja de partículas viola la desigualdad anterior,
+el programa aborta la ejecución y devuelve un mensaje de error.
+
+En el contexto de este trabajo, esta restricción se traduce en una condición geométrica que debe respetarse al generar las configuraciones de partículas que se utilizan como entrada
+del código de Fortran.
+
+
+
+\section{Bases teóricas para nanoantenas esféricas}
+
+\subsection{Resonancias multipolares en partículas esféricas}
+
+Las partículas esféricas de tamaño comparable a la longitud de onda pueden presentar resonancias asociadas a los diferentes modos multipolares descritos por los coeficientes de Mie.
+En el régimen $x \sim 1$ la respuesta óptica está dominada por un conjunto discreto de modos resonantes:
+
+\begin{itemize}
+  \item El modo dipolar eléctrico, asociado principalmente al coeficiente $a_1$.
+  \item El modo dipolar magnético, asociado al coeficiente $b_1$, especialmente relevante en materiales dieléctricos de alto índice.
+  \item Modos de orden superior (cuadrupolos, octupolos, etc.), que corresponden a $a_n$ y $b_n$ con $n>1$.
+\end{itemize}
+
+En materiales metálicos, la resonancia dipolar eléctrica está íntimamente relacionada con los plasmones de superficie localizados, mientras que en materiales dieléctricos de alto índice
+(Si, Ge, TiO$_2$, etc.) destacan las resonancias magnéticas.
+Estas resonancias producen fuertes variaciones en las secciones eficaces y en los campos cercano y lejano, y constituyen el mecanismo físico básico de funcionamiento de las nanoantenas ópticas.
+
+\subsection{Intensificación del campo cercano}
+
+La teoría de Mie permite calcular no solo el campo lejano, responsable de la radiación dispersada medida a grandes distancias, sino también el campo electromagnético en las proximidades
+inmediatas de la partícula.
+En las cercanías de una resonancia, el campo eléctrico puede verse fuertemente intensificado en regiones concretas alrededor de la partícula, dando lugar a efectos como la concentración
+de energía o el aumento de la densidad local de estados electromagnéticos.
+
+Los enfoques basados en la matriz--T, como el de Mishchenko, permiten evaluar estos campos cercanos en puntos arbitrarios del espacio, tanto para una única partícula como para
+conjuntos de partículas acopladas.
+Esta capacidad es fundamental para el diseño de nanoantenas, ya que el rendimiento de muchas aplicaciones (emisión dirigida, detección, sensado) depende directamente
+del perfil espacial del campo cercano.
+
+\subsection{Direccionalidad y patrones de radiación}
+
+Otra propiedad relevante de las nanoantenas es su capacidad para modificar la distribución angular de la radiación, concentrando la emisión en determinadas direcciones
+o suprimiéndola en otras.
+En el caso de partículas esféricas, la direccionalidad se puede analizar a partir de los elementos $S_1(\theta)$ y $S_2(\theta)$ de la matriz de dispersión.
+Determinadas combinaciones de los modos eléctricos y magnéticos pueden dar lugar a patrones de radiación fuertemente asimétricos, incluyendo la supresión de la retrodispersión
+o de la dispersión hacia adelante (condiciones de Kerker).
+
+Por ejemplo, cuando el modo dipolar eléctrico y el modo dipolar magnético están en fase y de amplitud comparable ($a_1 \approx b_1$) se puede obtener una dispersión predominantemente
+hacia adelante, mientras que si están en oposición de fase se favorece la dispersión hacia atrás.
+Estas ideas se utilizan extensamente en el diseño de nanoantenas dieléctricas para lograr direccionalidad en la emisión o en la recolección de luz.
+
+Los códigos basados en la matriz--T permiten calcular de forma directa los patrones de radiación de sistemas de partículas esféricas, de modo que es posible estudiar configuraciones
+que actúan como nanoantenas simples o arreglos más complejos (dímeros, cadenas, etc.).
+En el contexto de este trabajo, la teoría expuesta proporciona la base conceptual necesaria para interpretar los resultados de dispersión y campos cercanos
+que posteriormente se analizarán en configuraciones con potencial aplicación como nanoantenas.
+
+
+\section{Relación entre la teoría y el código de Fortran de Mishchenko}
+
+\subsection{Parámetros de entrada y su significado físico}
+
+El código de Fortran de Mishchenko requiere como entrada un conjunto de parámetros que se corresponden directamente con las magnitudes introducidas a lo largo de esta sección teórica.
+Entre los más relevantes se encuentran:
+
+\begin{itemize}
+  \item El número de partículas esféricas presentes en la configuración.
+  \item El radio $a_i$ de cada esfera y su índice de refracción complejo $m_i = n_i + i k_i$ a la longitud de onda de interés.
+  \item La longitud de onda $\lambda$ (o, de forma equivalente, la frecuencia o el número de onda $k$).
+  \item Las posiciones de los centros de las partículas $(x_i, y_i, z_i)$ en el sistema de coordenadas global.
+  \item La dirección de propagación y el estado de polarización de la onda incidente.
+  \item El orden de truncamiento máximo $n_{\text{max}}$ para las expansiones multipolares.
+\end{itemize}
+
+Estos parámetros permiten definir por completo el problema físico de dispersión, de acuerdo con la teoría de Mie y el método T--matrix.
+El usuario debe elegirlos de manera coherente con la configuración que se desea estudiar y con las condiciones experimentales que se pretenden modelizar.
+
+\subsection{Cálculos internos realizados por el código}
+
+Una vez proporcionados los parámetros de entrada, el código de Mishchenko realiza internamente una serie de pasos que pueden resumirse del siguiente modo:
+
+\begin{enumerate}
+  \item Para cada tipo de partícula, calcula los coeficientes de Mie $a_n$ y $b_n$ a partir del radio, el índice de refracción y la longitud de onda.
+  \item Construye la matriz--T individual de cada esfera, utilizando la relación entre los coeficientes de Mie y los coeficientes multipolares de los campos incidente y dispersado.
+  \item Evalúa las matrices de traslación $\mathbf{A}_{ij}$ necesarias para expresar los campos dispersados por una partícula como campos incidentes sobre las demás.
+  \item Ensambla el sistema lineal global que describe la dispersión múltiple en el conjunto de partículas y lo resuelve mediante técnicas numéricas apropiadas
+        (factorización directa o métodos iterativos, en función del tamaño del problema).
+  \item A partir de los coeficientes de campo dispersado $\mathbf{b}_i$ calcula las secciones eficaces globales del sistema, la matriz de dispersión para diferentes ángulos,
+        y, si se desea, los campos cercanos en puntos específicos del espacio.
+\end{enumerate}
+
+Cada uno de estos pasos tiene una base teórica directa en los desarrollos presentados en las secciones anteriores.
+Por tanto, el marco teórico proporciona la interpretación física de las magnitudes que el código calcula de manera numérica.
+
+\subsection{Salidas típicas y su interpretación}
+
+Entre las salidas más habituales del código se encuentran:
+
+\begin{itemize}
+  \item Las eficiencias ópticas globales del sistema ($Q_{\text{ext}}$, $Q_{\text{sca}}$, $Q_{\text{abs}}$), que permiten cuantificar el balance energético de la interacción luz--partículas.
+  \item La matriz de Müller o matriz de dispersión para diferentes ángulos de observación, a partir de la cual se obtienen patrones de radiación e información sobre la polarización.
+  \item Los campos cercanos en mallas bidimensionales o tridimensionales alrededor de las partículas, que permiten visualizar intensificaciones locales del campo
+        y modos resonantes relevantes para aplicaciones de nanoantenas.
+\end{itemize}
+
+La comparación entre estos resultados numéricos y las predicciones analíticas de la teoría de Mie, así como con observaciones experimentales, posibilita la validación del modelo
+y la exploración de nuevos fenómenos físicos en sistemas de partículas esféricas.
+
+En resumen, el código de Fortran de Mishchenko constituye una implementación computacional directa de la teoría electromagnética desarrollada en este marco teórico.
+El conocimiento de dicha teoría es imprescindible para seleccionar adecuadamente los parámetros de entrada, interpretar correctamente las salidas del programa
+y diseñar configuraciones de partículas con propiedades ópticas específicas, como las que se buscan en el contexto de nanoantenas y otras aplicaciones fotónicas.
+
+\end{document}

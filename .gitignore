@@ -1,0 +1,43 @@
+# ======================
+# LaTeX
+# ======================
+*.aux
+*.log
+*.toc
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+# ======================
+# Fortran
+# ======================
+*.o
+*.mod
+*.exe
+a.out
+*.dat
+
+# ======================
+# Python
+# ======================
+__pycache__/
+*.pyc
+
+# ======================
+# Simulation outputs
+# ======================
+Simulaciones/**
+!Simulaciones/README.md
+
+# =====================
+# Refractive index database
+# =====================
+refractiveindex.info/
+
+# ======================
+# OS / Editor
+# ======================
+.DS_Store
+Thumbs.db
+.vscode/

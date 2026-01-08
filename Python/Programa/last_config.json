@@ -1,0 +1,42 @@
+{
+    "output_file": "amayraul.dat",
+    "num_spheres": "1",
+    "positions": [
+        "0.d0, 0.d0, 0.d0, 0.632d0, (0.1837704918d0, 3.4312505855d0)"
+    ],
+    "incident_beta": "0.d0",
+    "incident_alpha": "0.d0",
+    "length_scale": "9.9291803211d0",
+    "gaussian_beam_constant": false,
+    "is_gaussian_beam": false,
+    "near_field": false,
+    "near_field_file": "f",
+    "nearfieldplot": "",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\amayraul",
+    "plot_type": "Magnetic",
+    "plot_options": [
+        "Re Hy \u2016",
+        "Im Hy \u2016",
+        "Re Hx \u27c2",
+        "Im Hx \u27c2",
+        "Re Hz \u27c2",
+        "Im Hz \u27c2"
+    ],
+    "wavelength": "0.6328",
+    "sphere_radius": "0.6320",
+    "material": "Au",
+    "separation": "0",
+    "geometry": "(none)",
+    "wavelength_sweep": {
+        "enabled": false,
+        "min": "0.1879",
+        "max": "1.937",
+        "n": "100"
+    },
+    "radius_sweep": {
+        "enabled": false,
+        "min": "0.3",
+        "max": "0.5",
+        "n": "10"
+    }
+}
