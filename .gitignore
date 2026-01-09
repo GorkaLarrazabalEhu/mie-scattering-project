@@ -8,6 +8,10 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+*.bbl
+*.bcf
+*.run.xml
+*.blg
 
 # ======================
 # Fortran
