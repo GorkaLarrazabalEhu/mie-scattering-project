@@ -1,0 +1,163 @@
+========================================================
+GUIDE
+========================================================
+
+This file is a practical reference for using Git and GitHub
+in a solo university project (Fortran + Python + LaTeX).
+
+Git = local version control
+GitHub = remote backup (optional but recommended)
+
+--------------------------------------------------------
+BASIC CONCEPTS
+--------------------------------------------------------
+
+- Git stores history in the hidden folder: .git/
+- If a file was committed once, it can always be restored
+- Ignored files are controlled by .gitignore
+- Commit often, push to GitHub when you want a backup
+
+--------------------------------------------------------
+CASE 0 — BEFORE A BIG / RISKY CHANGE (ALWAYS DO THIS)
+--------------------------------------------------------
+
+Check what has changed:
+    git status
+    git diff
+
+Save a checkpoint:
+    git add .
+    git commit -m "Checkpoint before major change"
+
+(Optional backup to GitHub):
+    git push
+
+--------------------------------------------------------
+CASE 1 — NORMAL COMMIT (LOCAL GIT ONLY)
+--------------------------------------------------------
+
+See current state:
+    git status
+
+Stage all non-ignored files:
+    git add .
+
+Commit:
+    git commit -m "Describe what changed"
+
+--------------------------------------------------------
+CASE 1b — COMMIT + BACKUP TO GITHUB
+--------------------------------------------------------
+
+    git status
+    git add .
+    git commit -m "Describe what changed"
+    git push
+
+--------------------------------------------------------
+CASE 2 — SEE WHAT YOU HAVE CHANGED
+--------------------------------------------------------
+
+See changed files:
+    git status
+
+See line-by-line changes (not staged):
+    git diff
+
+See staged changes only:
+    git diff --staged
+
+--------------------------------------------------------
+CASE 3 — RESTORE A FILE (UNDO LOCAL CHANGES)
+--------------------------------------------------------
+
+Restore ONE file to last commit:
+    git restore path/to/file
+
+Restore ALL files to last commit:
+    git restore .
+
+--------------------------------------------------------
+CASE 4 — UNSTAGE A FILE (ADDED BY MISTAKE)
+--------------------------------------------------------
+
+    git restore --staged path/to/file
+
+--------------------------------------------------------
+CASE 5 — RESTORE A DELETED FILE
+--------------------------------------------------------
+
+If the file was committed before:
+    git restore path/to/deleted_file
+
+--------------------------------------------------------
+CASE 6 — VIEW COMMIT HISTORY
+--------------------------------------------------------
+
+Compact history:
+    git log --oneline
+
+--------------------------------------------------------
+CASE 7 — RESTORE A FILE FROM AN OLD COMMIT
+--------------------------------------------------------
+
+    git restore --source=COMMIT_HASH path/to/file
+
+Example:
+    git restore --source=abc1234 Fortran/main.f90
+
+--------------------------------------------------------
+CASE 8 — RESTORE ENTIRE PROJECT TO AN OLD COMMIT
+--------------------------------------------------------
+
+WARNING: This discards all newer work.
+
+    git reset --hard COMMIT_HASH
+
+--------------------------------------------------------
+CASE 9 — ABORT EVERYTHING AND GO BACK TO LAST COMMIT
+--------------------------------------------------------
+
+Restore tracked files:
+    git restore .
+
+Delete untracked files/folders:
+    git clean -fd
+
+--------------------------------------------------------
+CASE 10 — CHECK WHICH FILES ARE IGNORED
+--------------------------------------------------------
+
+    git status --ignored
+
+--------------------------------------------------------
+CASE 11 — CHECK GITHUB CONNECTION
+--------------------------------------------------------
+
+    git remote -v
+
+--------------------------------------------------------
+CASE 12 — PUSH TO GITHUB (REMOTE BACKUP)
+--------------------------------------------------------
+
+    git push
+
+--------------------------------------------------------
+CASE 13 — WHERE GIT STORES HISTORY (INFO)
+--------------------------------------------------------
+
+    ls .git
+
+--------------------------------------------------------
+GOLDEN RULES
+--------------------------------------------------------
+
+- Commit BEFORE risky changes
+- Never work without checking `git status`
+- Do not track generated data or simulation outputs
+- Git first, GitHub second
+- If it was committed once, it can be recovered forever
+
+========================================================
+END OF FILE
+========================================================

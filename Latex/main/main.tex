@@ -1,6 +1,15 @@
 \documentclass{article}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{amsmath}
+\usepackage[%
+style=phys,%
+articletitle=true,biblabel=brackets,%
+chaptertitle=false,pageranges=false%
+]
+{biblatex}
+\addbibresource{../bib/bibliografia.bib}
+
+
 
 \title{TFG Física: Dispersión de la luz por partículas esféricas y conglomerados de partículas esféricas}
 \author{Gorki}
@@ -779,7 +788,8 @@ que presenta la partícula frente al haz incidente. La extinción es una medida 
 de luz que ocurre a medida que la luz viaja a través de un medio, por lo tanto, el coeficiente de extinción 
 es la suma de los efectos de absorción y dispersión.
 
+\cite{Bohren}\cite{Mishchenko}\cite{Bohren,Mishchenko}
 
-\bibliographystyle{plain}
-\bibliography{referencias}
+\printbibliography[title={Bibliografía}]
+
 \end{document}

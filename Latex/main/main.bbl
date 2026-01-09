@@ -1,0 +1,90 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{Bohren}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=c41360d0b1200a324731569f8e00798e}{%
+           family={Bohren},
+           familyi={B\bibinitperiod},
+           given={F.},
+           giveni={F\bibinitperiod}}}%
+        {{hash=090a4c58fa53a4f1e4b6fc1221eda050}{%
+           family={Huffman},
+           familyi={H\bibinitperiod},
+           given={B.},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{fullhash}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{fullhashraw}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{bibnamehash}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{authorbibnamehash}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{authornamehash}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{authorfullhash}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{authorfullhashraw}{e81eca8ff9616a74ee73c1fc524c2519}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Absorption and Scattering of Light by Small Particles}
+      \field{year}{1983}
+    \endentry
+    \entry{Mishchenko}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=959594e2d519ec8278a0f211f35a26de}{%
+           family={Mishchenko},
+           familyi={M\bibinitperiod},
+           given={M.\bibnamedelimi I.},
+           giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+        {{hash=7f99a4497e15a0fe9b653f7035cfcc4d}{%
+           family={Travis},
+           familyi={T\bibinitperiod},
+           given={L.\bibnamedelimi D.},
+           giveni={L\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=a17d27663bc06ad5bed1b13b82b79244}{%
+           family={Lacis},
+           familyi={L\bibinitperiod},
+           given={A.\bibnamedelimi A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{8a61f90ffd68bcfd4eddc4dbbb60e97a}
+      \strng{fullhash}{3114d35b80d76b156ca4ad069e0bcc75}
+      \strng{fullhashraw}{3114d35b80d76b156ca4ad069e0bcc75}
+      \strng{bibnamehash}{3114d35b80d76b156ca4ad069e0bcc75}
+      \strng{authorbibnamehash}{3114d35b80d76b156ca4ad069e0bcc75}
+      \strng{authornamehash}{8a61f90ffd68bcfd4eddc4dbbb60e97a}
+      \strng{authorfullhash}{3114d35b80d76b156ca4ad069e0bcc75}
+      \strng{authorfullhashraw}{3114d35b80d76b156ca4ad069e0bcc75}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Cambridge University Press}
+      \field{title}{Scattering, Absorption, and Emission of Light by Small Particles}
+      \field{year}{1999}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
