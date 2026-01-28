@@ -72,10 +72,9 @@ mediante la teoría de Mie radica en su aplicabilidad
 en una amplia gama de campos, como la óptica atmosférica, 
 biomédica, y el desarrollo de materiales fotónicos. En 
 estos contextos, la interacción de la luz con partículas 
-esféricas de tamaño comparable a la longitud de onda de 
-la luz puede influir de manera significativa en el 
-comportamiento de la radiación, afectando tanto su 
-dispersión como su absorción.
+esféricas de tamaño comparable a la longitud de onda puede influir 
+de manera significativa en el comportamiento de la radiación, 
+afectando tanto su dispersión como su absorción.
 
 El objetivo principal de este trabajo es estudiar 
 cómo se dispersa la luz cuando interactúa con partículas 
@@ -333,9 +332,9 @@ contienen toda la información sobre cómo la partícula afecta a la onda incide
 %====================================================================%
 %====================================================================%
 
-\subsection{Expansión en armónicos esféricos vectoriales (2)}
+\subsection{Expansión en armónicos esféricos vectoriales}
 % Esto es una posible reformulación alternativa de la sección anterior.
-La resolución del problema de dispersión por una partícula esférica requiere 
+\hspace{1em}La resolución del problema de dispersión por una partícula esférica requiere 
 expresar los campos electromagnéticos en una base que respete la simetría del 
 sistema. La ecuación de onda vectorial
 \[
@@ -408,7 +407,7 @@ azimutal y regularidad en el eje polar, aparecen las funciones
 \end{equation}
 
 donde $P_{n}^{m}$ son los polinomios de Legendre asociados y $z_{n}$ representa 
-cualquierda de las funciones de Bessel esféricas $j_n$, $y_n$, $h_n^{(1)}$ o 
+cualquiera de las funciones de Bessel esféricas $j_n$, $y_n$, $h_n^{(1)}$ o 
 $h_n^{(2)}$.
 
 Estas funciones escalares permiten generar los armónicos esféricos vectoriales 
@@ -425,12 +424,12 @@ mediante la construcción anterior. Los campos resultantes se expresan como
 \end{aligned}
 \]
 
-\textit{y representan modos transversos que forman una base completa y ortogonal en 
-regiones con simetría esférica. Esta propiedad es esencial en la teoría de Mie: 
-al expandir el campo incidente, el interno y el dispersado en esta misma base, 
-se consigue que las condiciones de contorno sobre la superficie $r = a$ 
-desacoplen los modos para cada par $(n,m)$, lo que permite determinar de forma 
-directa los coeficientes de Mie.} no me gusta esta frase, pero la dejo por si acaso.
+% \textit{y representan modos transversos que forman una base completa y ortogonal en 
+% regiones con simetría esférica. Esta propiedad es esencial en la teoría de Mie: 
+% al expandir el campo incidente, el interno y el dispersado en esta misma base, 
+% se consigue que las condiciones de contorno sobre la superficie $r = a$ 
+% desacoplen los modos para cada par $(n,m)$, lo que permite determinar de forma 
+% directa los coeficientes de Mie.} no me gusta esta frase, pero la dejo por si acaso.
 
 En forma explícita, los armónicos esféricos vectoriales pueden escribirse en 
 componentes angulares y radiales como
@@ -497,7 +496,7 @@ a partir de ellos, las propiedades ópticas de la partícula.
 
 
 % Una frase que me gusta: Añadir más adelante:
-2015-12-18. Mirar esto que está comentado. revisar simplemente.
+2025-12-18. Mirar esto que está comentado. revisar simplemente.
 % En problemas de dispersión por partículas esféricas resulta conveniente expresar 
 % los campos electromagnéticos en una base adaptada a la simetría del sistema. 
 % Los campos deben satisfacer la ecuación de onda vectorial
@@ -565,7 +564,7 @@ los coeficientes de la expansión tienen la forma
   },
 \end{equation}
 
-Para todo $m$ y $n$, se obtiene que $B_{emn} = A_{omn} = 0$, debido a la ortogonalidad
+Para todo $m$ y $n$, se obtiene que $B_{emn} = A_{omn} = 0$ debido a la ortogonalidad
 del seno y coseno y, por la misma razón, solo los términos con $m=1$ contribuyen a 
 la expansión en $B_{omn}$ y $A_{emn}$. Además, la regularidad del campo en el origen exige que la dependencia radial 
 de los armónicos generadores esté dada por las funciones de Bessel esféricas 
@@ -585,8 +584,7 @@ simplifica y adopta la forma
 donde el superíndice $(1)$ indica que la dependencia radial viene dada por las 
 funciones de Bessel esféricas de primera especie/tipo (kind?). Finalmente, los 
 coeficientes de la expansión se obtienen evaluando las integrales 
-anteriores (Bohren pag 92), logrando para el campo eléctrico incidente y magnético
-con el rotacional:
+anteriores (Bohren pag 92), logrando para el campo eléctrico y magnético incidente:
 
 
 \begin{equation}
@@ -618,19 +616,23 @@ aplicación de las condiciones de contorno en la superficie de la esfera. A part
 de esta expansión, los campos interno y dispersado pueden construirse de manera 
 análoga, permitiendo la determinación sistemática de los coeficientes de Mie.
 
-\subsubsection{Campos internos y dispersados}
 
-\hspace{1em}En la frontera de la esfera, imponemos las condiciones
+
+\subsubsection{Campos internos y dispersados}
+\hspace{1em}En el apartado anterior se obtuvo la expansión del campo incidente en armónicos
+esféricos vectoriales. El siguiente paso consiste en expresar los campos interno y
+dispersado. En la frontera de la esfera, imponemos las condiciones de contorno
+
 \begin{equation}
-  \left( \mathbf{E}_{int} + \mathbf{E}_{sca} - \mathbf{E}_{1} \right) \times \hat{\mathbf{e}}_r
+  \left( \mathbf{E}_{i} + \mathbf{E}_{sca} - \mathbf{E}_{int} \right) \times \hat{\mathbf{e}}_r
 =
-\left( \mathbf{H}_{int} + \mathbf{H}_{sca} - \mathbf{H}_{1} \right) \times \hat{\mathbf{e}}_r
+\left( \mathbf{H}_{i} + \mathbf{H}_{sca} - \mathbf{H}_{int} \right) \times \hat{\mathbf{e}}_r
 = 0.
 \end{equation}
 
-Los campos interno ($\mathbf{E}_{int}$, $\mathbf{H}_{int}$) y 
-dispersado ($\mathbf{E}_{sca}$, $\mathbf{H}_{sca}$) también pueden expresarse como 
-expansiones en armónicos esféricos vectoriales.
+Las condiciones de contorno, la ortogonalidad de los armónicos esféricos vectoriales y la
+forma de la expansión del campo incidente implican que los campos interno y dispersado
+tienen la forma siguiente:
 
 \begin{equation}
   \mathbf{E}_{int} =
@@ -675,6 +677,7 @@ donde los superíndices $(3)$ indican que la dependencia radial está dada por l
 funciones de Hankel esféricas de primera especie/tipo, y $a_{n}$ y $b_{n}$ son los
 coeficientes de scattering.
 
+\subsubsection{Coeficientes de scattering}
 El siguiente paso nos lleva a conseguir las expresiones explícitas de los coeficientes
 $a_{n}$, $b_{n}$, $c_{n}$ y $d_{n}$. Estos se obtienen imponiendo las condiciones de
 contorno en la superficie de la esfera, que exigen la continuidad de las componentes
@@ -702,7 +705,7 @@ m = \frac{k_1}{k} = \frac{N_1}{N}.
 
 Aquí, $N_1$ y $N$ son los índices de refracción de la partícula y del medio,
 respectivamente. Las cuatro ecuaciones lineales simultáneas se resuelven
-fácilmente para los coeficientes del campo dentro de la partícula:
+para los coeficientes del campo dentro de la partícula:
 
 
 \begin{align}
