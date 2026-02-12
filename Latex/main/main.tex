@@ -1,18 +1,51 @@
 \documentclass{article}
-\usepackage{graphicx} % Required for inserting images
-\usepackage{amsmath}
-\usepackage[%
-style=phys,%
-articletitle=true,biblabel=brackets,%
-chaptertitle=false,pageranges=false%
-]
-{biblatex}
-\addbibresource{../bib/bibliografia.bib}
 
+% -------------------------
+% FONT AND LANGUAGE SETUP
+% -------------------------
+\usepackage{fontspec}        
+\usepackage{polyglossia}      
+\setmainlanguage{spanish}    
+
+\usepackage{csquotes}         
+
+% -------------------------
+% EHUSans FONT
+% -------------------------
+\setmainfont{EHUSans}[%
+  Path = EHUSans/,  
+  Extension = .otf,
+  UprightFont = EHUSans-Light, 
+  BoldFont = EHUSans-Bold, 
+  ItalicFont = EHUSans-Italic, 
+  BoldItalicFont = EHUSans-BoldItalic
+]
+
+% -------------------------
+% BIBLATEX SETUP
+% -------------------------
+\usepackage[
+  backend=biber,              
+  style=phys,                 
+  language=auto,           
+  articletitle=true,
+  biblabel=brackets,
+  chaptertitle=false,
+  pageranges=false
+]{biblatex}
+
+\addbibresource{../bib/bibliografia.bib} % bib file
+
+% -------------------------
+% OTHER PACKAGES
+% -------------------------
+\usepackage{graphicx}          % for images
+\usepackage{amsmath}           % math support
+% \usepackage{microtype}         % fix small spacing issues / overfull hboxes
 
 
 \title{TFG Física: Dispersión de la luz por partículas esféricas y conglomerados de partículas esféricas}
-\author{Gorki}
+\author{Gorka}
 \date{2025-2026}
 
 
@@ -76,8 +109,8 @@ esféricas de tamaño comparable a la longitud de onda puede influir
 de manera significativa en el comportamiento de la radiación, 
 afectando tanto su dispersión como su absorción.
 
-El objetivo principal de este trabajo es estudiar 
-cómo se dispersa la luz cuando interactúa con partículas 
+El objetivo principal de este trabajo es estudiar cómo se dispersa 
+la luz cuando interactúa con partículas 
 esféricas, utilizando simulaciones numéricas basadas 
 en el programa de Fortran de D. W. Mackowski, que implementa 
 la teoría de Mie. Para ello, se plantean los siguientes 
@@ -158,16 +191,17 @@ Esta propiedad justifica que la teoría de Mie resuelva únicamente el problema
 para dos polarizaciones independientes, ya que cualquier polarización del campo 
 incidente puede expresarse como una suma lineal de ambas.
 
-La formulación estándar introduce así la matriz de amplitud de dispersión, 
-que relaciona de forma lineal los campos incidente y dispersado y permite 
-caracterizar completamente la interacción entre la onda y la partícula. 
-Esta matriz surge directamente de aplicar las condiciones de continuidad 
+La formulación estándar introduce así la matriz de amplitud de dispersión 
+(\ref{eq:amplitudematrix}), que relaciona de forma lineal los campos incidente 
+y dispersado y permite caracterizar completamente la interacción entre 
+la onda y la partícula. Esta matriz surge directamente de aplicar las condiciones de continuidad 
 del campo eléctrico y magnético sobre la superficie esférica, y constituye 
 la base para calcular magnitudes observables como los patrones angulares de 
 dispersión, la sección eficaz o el grado de polarización del campo dispersado.
 
-\[
-\begin{pmatrix}
+\begin{equation}
+\label{eq:amplitudematrix}
+  \begin{pmatrix}
 E_{\parallel}^{(s)} \\
 E_{\perp}^{(s)}
 \end{pmatrix}
@@ -181,10 +215,11 @@ S_{4}(\theta, \phi) & S_{1}(\theta, \phi)
 E_{\parallel}^{(i)} \\
 E_{\perp}^{(i)}
 \end{pmatrix}.
-\]
+\end{equation}
+
 Aquí, $E_{\parallel}^{(i)}$ y $E_{\perp}^{(i)}$ son las componentes paralela y perpendicular
 del campo eléctrico incidente, mientras que $E_{\parallel}^{(s)}$ y $E_{\perp}^{(s)}$ son las
-componentes correspondientes del campo dispersado (scattered). Los elementos de la matriz de amplitud
+componentes correspondientes del campo dispersado (\textit{scattered}). Los elementos de la matriz de amplitud
 de dispersión, $S_{1}(\theta, \phi)$, $S_{2}(\theta, \phi)$, $S_{3}(\theta, \phi)$ y 
 $S_{4}(\theta, \phi)$, dependen del ángulo de dispersión $\theta$ y angulo acimutal $\phi$, y
 contienen toda la información sobre cómo la partícula afecta a la onda incidente.
@@ -471,7 +506,7 @@ componentes angulares y radiales como
 
 
 Cualquier solución de las ecuaciones de campo puede expandirse como una serie infinita 
-de las funciones \ref{eq:Memn}–\ref{eq:Nomn}. En particular, el campo incidente puede 
+de las funciones (\ref{eq:Memn})–(\ref{eq:Nomn}). En particular, el campo incidente puede 
 escribirse como
 
 \begin{equation}
@@ -496,7 +531,7 @@ a partir de ellos, las propiedades ópticas de la partícula.
 
 
 % Una frase que me gusta: Añadir más adelante:
-2025-12-18. Mirar esto que está comentado. revisar simplemente.
+% 2025-12-18. Mirar esto que está comentado. revisar simplemente.
 % En problemas de dispersión por partículas esféricas resulta conveniente expresar 
 % los campos electromagnéticos en una base adaptada a la simetría del sistema. 
 % Los campos deben satisfacer la ecuación de onda vectorial
@@ -791,7 +826,7 @@ que presenta la partícula frente al haz incidente. La extinción es una medida 
 de luz que ocurre a medida que la luz viaja a través de un medio, por lo tanto, el coeficiente de extinción 
 es la suma de los efectos de absorción y dispersión.
 
-\cite{Bohren}\cite{Mishchenko}\cite{Bohren,Mishchenko}
+\cite{Bohren}\cite{Mishchenko}\cite{Bohren,Mishchenko} (prueba, funcionan las citas)
 
 \printbibliography[title={Bibliografía}]
 
