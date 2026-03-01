@@ -1258,6 +1258,77 @@ class MieTheoryApp:
             self.load_write_status_label.config(text="Loading completed")
 
 
+    def compute_near_field_step(self, coords, length_scale, side_scaled,
+                                ppw=50,
+                                nrad=25,
+                                ngap=12,
+                                max_points=2_000_000,
+                                step_min=0.002,
+                                step_max=0.15):
+        """
+        coords: lista de (x,y,z,r) en unidades físicas
+        length_scale: k0 = 2π/λ
+        side_scaled: lado del plano en unidades escaladas (k0·L)
+        """
+
+        if not coords:
+            return 0.02
+
+        # ---- Convertir a array ----
+        arr = np.array(coords, dtype=float)
+
+        # Escalar a coordenadas adimensionales k0·L
+        arr[:, :4] *= length_scale
+
+        xyz = arr[:, :3]
+        r = arr[:, 3]
+
+        rmin = np.min(r)
+
+        # 1) criterio por longitud de onda (en k0·L, λ = 2π)
+        step_wave = (2.0 * np.pi) / ppw
+
+        # 2) criterio geométrico (radio mínimo)
+        step_rad = rmin / nrad if rmin > 0 else step_wave
+
+        # 3) criterio por gap mínimo
+        n = len(arr)
+        if n > 1:
+            # Distancias centro-centro vectorizadas
+            diff = xyz[:, None, :] - xyz[None, :, :]
+            dist = np.linalg.norm(diff, axis=2)
+
+            # Matriz de suma de radios
+            rsum = r[:, None] + r[None, :]
+
+            gap = dist - rsum
+
+            # Ignorar diagonal y solapamientos (gap <= 0)
+            mask = np.triu(np.ones_like(gap, dtype=bool), k=1)
+            valid_gaps = gap[mask]
+            valid_gaps = valid_gaps[valid_gaps > 0]
+
+            if valid_gaps.size > 0:
+                gap_min = np.min(valid_gaps)
+                step_gap = gap_min / ngap
+            else:
+                step_gap = np.inf
+        else:
+            step_gap = np.inf
+
+        # Paso candidato
+        step = min(step_wave, step_rad, step_gap)
+        step = max(step_min, min(step, step_max))
+
+        # 4) limitar número total de puntos
+        if side_scaled > 0:
+            est_points = (side_scaled / step) ** 2
+            if est_points > max_points:
+                step = side_scaled / np.sqrt(max_points)
+
+        return float(step)
+
+
     def write_input_file(self):
         """Write simulation input parameters to mstm.inp (no backup)."""
         # Collect all data from entries and save to Config
@@ -1458,8 +1529,25 @@ class MieTheoryApp:
                     f.write("near_field_maximum_border\n")
                     f.write(f"{xmax:.6f}d0,0.d0,{zmax:.6f}d0\n")
 
+                    # porque 'side' aún está en unidades físicas
+                    side_scaled = length_scale * side
+
+
+                    step = self.compute_near_field_step(
+                        coords=coords,
+                        length_scale=length_scale,
+                        side_scaled=side_scaled,
+                        ppw=50,         # 50 → suave (si quieres más rápido baja a 30-40)
+                        nrad=25,        # 25 puntos por radio mínimo
+                        ngap=12,        # 12 puntos en el gap mínimo
+                        max_points=2_000_000,
+                        step_min=0.002,
+                        step_max=0.15
+                    )
+
+
                     f.write("near_field_step_size\n")
-                    f.write("0.1d0\n")
+                    f.write(f"{step:.6f}d0\n")
 
                     f.write("near_field_output_file\n")
                     f.write(f"{self.config.data['near_field_file']}\n")

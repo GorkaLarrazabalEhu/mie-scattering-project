@@ -6,17 +6,48 @@ import os
 import matplotlib as mpl
 from scipy.stats import binned_statistic_2d
 
-file = sys.argv[1]
-field_type = sys.argv[2]          # "Electric", "Magnetic", "Poynting"
-selected_options = sys.argv[3:-1] # all but last arg
-save_dir = sys.argv[-1] if len(sys.argv) > 3 else None
+if len(sys.argv) > 1:
+    # Use command-line arguments
+    file = sys.argv[1]
+    field_type = sys.argv[2]          # "Electric", "Magnetic", "Poynting"
+    selected_options = sys.argv[3:-1]  # all but last arg
+    save_dir = sys.argv[-1] if len(sys.argv) > 3 else None
+else:
+    # Interactive mode
+    print("No command-line arguments detected. Switching to interactive mode.\n")
 
-# detect if last argument is a folder
+    file = input("Enter file path: ").strip()
+
+    field_type = input(
+        'Enter field type ("Electric", "Magnetic", "Poynting"): '
+    ).strip()
+
+    options_input = input(
+        "Enter selected options (comma separated, or leave empty): "
+    ).strip()
+
+    if options_input:
+        selected_options = [opt.strip() for opt in options_input.split(",")]
+    else:
+        selected_options = []
+
+    save_dir = input(
+        "Enter save directory (or leave empty for None): "
+    ).strip()
+
+    if save_dir == "":
+        save_dir = None
+
+# ----------------------------
+# Detect if last argument is a folder
+# ----------------------------
 if save_dir and os.path.isdir(save_dir):
     mpl.rcParams['savefig.directory'] = os.path.abspath(save_dir)
     print(f"Default save folder set to: {mpl.rcParams['savefig.directory']}")
 else:
-    selected_options = sys.argv[3:]  # no folder given
+    if len(sys.argv) > 1:
+        # If running from CLI and last argument is NOT a folder
+        selected_options = sys.argv[3:]
     save_dir = None
 
 with open(file) as f:
