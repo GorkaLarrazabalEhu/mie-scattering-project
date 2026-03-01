@@ -110,10 +110,16 @@ def getFields(data):
 
 paralelE, paralelH, perpendE, perpendH = getFields(data)
 
-E1 = np.array(paralelE) + np.array(perpendE)
-H1 = np.array(paralelH) + np.array(perpendH)
-E = [E1[0] + 1.0j*E1[1], E1[2] + 1.0j*E1[3], E1[4] + 1.0j*E1[5]]
-H = [H1[0] + 1.0j*H1[1], H1[2] + 1.0j*H1[3], H1[4] + 1.0j*H1[5]]
+# Esto no se puede hacer porque no son coherentes
+# E1 = np.array(paralelE) + np.array(perpendE)
+# H1 = np.array(paralelH) + np.array(perpendH)
+# E = [E1[0] + 1.0j*E1[1], E1[2] + 1.0j*E1[3], E1[4] + 1.0j*E1[5]]
+# H = [H1[0] + 1.0j*H1[1], H1[2] + 1.0j*H1[3], H1[4] + 1.0j*H1[5]]
+E_paralel = [paralelE[0] + 1.0j*paralelE[1], paralelE[2] + 1.0j*paralelE[3], paralelE[4] + 1.0j*paralelE[5]]
+H_paralel = [paralelH[0] + 1.0j*paralelH[1], paralelH[2] + 1.0j*paralelH[3], paralelH[4] + 1.0j*paralelH[5]]
+
+E_perp = [perpendE[0] + 1.0j*perpendE[1], perpendE[2] + 1.0j*perpendE[3], perpendE[4] + 1.0j*perpendE[5]]
+H_perp = [perpendH[0] + 1.0j*perpendH[1], perpendH[2] + 1.0j*perpendH[3], perpendH[4] + 1.0j*perpendH[5]]
 
 def poynting_vector(vec1, vec2):
     return 0.5 * np.real(np.cross(vec1, np.conjugate(vec2), axis=0))
@@ -137,7 +143,12 @@ def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
 # === Build fields & titles based on selection ===
 fields, titles = [], []
 if field_type == "Poynting":
-    S = poynting_vector(E, H)
+    # ESTO NO SE PUEDE PQ NO ES COHERENTE
+    # S = poynting_vector(E, H)
+    
+    S_par = poynting_vector(E_paralel, H_paralel)
+    S_perp = poynting_vector(E_perp, H_perp)
+    S = S_par + S_perp
     component_map = {"Sx": S[0], "Sy": S[1], "Sz": S[2]}
     for opt in selected_options:
         if opt in component_map:

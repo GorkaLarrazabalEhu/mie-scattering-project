@@ -33,6 +33,7 @@ class Config:
             "gaussian_beam_constant": "0.1d0",
             "is_gaussian_beam": False,
             "near_field": False,
+            "near_field_stepsize": "",
             "separation": "",
             "geometry": "(none)",
             "wavelength_sweep": {
@@ -169,6 +170,8 @@ class MieTheoryApp:
         tk.Label(frame_near, text="Near Field Output File").grid(row=1, column=0, sticky="w")
         self.near_field_file_entry = tk.Entry(frame_near, width=20)
         self.near_field_file_entry.grid(row=1, column=1, sticky="w")
+        self.near_field_stepsize = tk.Label(frame_near, text="step size: ")
+        self.near_field_stepsize.grid(row=1, column=2, sticky="w", padx=5)
 
 
         # ---- Scattering Matrix plot options (LEFT container, right subcolumn) ----
@@ -1285,7 +1288,7 @@ class MieTheoryApp:
 
         rmin = np.min(r)
 
-        # 1) criterio por longitud de onda (en k0·L, λ = 2π)
+        # 1) criterio por longitud de onda (en k0·L, λ = 2π) points per wavelength
         step_wave = (2.0 * np.pi) / ppw
 
         # 2) criterio geométrico (radio mínimo)
@@ -1326,6 +1329,8 @@ class MieTheoryApp:
             if est_points > max_points:
                 step = side_scaled / np.sqrt(max_points)
 
+        self.near_field_step = step
+        self.near_field_stepsize.config(text=f"step size: {step:.4f}")
         return float(step)
 
 
