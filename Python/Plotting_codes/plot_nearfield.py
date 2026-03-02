@@ -4,14 +4,16 @@ import sys
 import matplotlib.patches as patches
 import os
 import matplotlib as mpl
+from matplotlib.ticker import FuncFormatter
 from scipy.stats import binned_statistic_2d
 
 if len(sys.argv) > 1:
     # Use command-line arguments
     file = sys.argv[1]
     field_type = sys.argv[2]          # "Electric", "Magnetic", "Poynting"
-    selected_options = sys.argv[3:-1]  # all but last arg
-    save_dir = sys.argv[-1] if len(sys.argv) > 3 else None
+    Ls = float(sys.argv[-2])
+    selected_options = sys.argv[3:-2]  # all but last arg
+    save_dir = sys.argv[-1] if len(sys.argv) > 4 else None
 else:
     # Interactive mode
     print("No command-line arguments detected. Switching to interactive mode.\n")
@@ -99,7 +101,18 @@ if False:  # disable rebinning for now
     data = np.vstack(rebinned).T
 else:
     data = raw_data
+    x_plot = data[:, 0] / Ls
+    z_plot = data[:, 2] / Ls
+    # Scale spheres (x,z centers and radius)
+    spheres_plot = []
+    for sph in spheres:
+        (xc, zc) = sph.get_center()
+        r = sph.radius
+        spheres_plot.append(plt.Circle((xc / Ls, zc / Ls),
+                            r / Ls, color="black", fill=False))
 
+    # Scale layer heights (z positions)
+    layers_plot = [h / Ls for h in layers]
 # === helpers ===
 def getFields(data):
     paralelE = [data[:, 3], data[:, 4], data[:, 5], data[:, 6], data[:, 7], data[:, 8]]
@@ -124,22 +137,77 @@ H_perp = [perpendH[0] + 1.0j*perpendH[1], perpendH[2] + 1.0j*perpendH[3], perpen
 def poynting_vector(vec1, vec2):
     return 0.5 * np.real(np.cross(vec1, np.conjugate(vec2), axis=0))
 
+
 def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
     grid_size = int(np.sqrt(len(x)))
     x = x.reshape((grid_size, grid_size))
     z = z.reshape((grid_size, grid_size))
     field_data = field_data.reshape((grid_size, grid_size))
-    contour = ax.contour(x, z, field_data, colors="black", levels=50, linewidths=0.1)
-    contourf = ax.contourf(x, z, field_data, cmap="viridis", levels=100, extend="both") 
-    ax.set_xlabel('x')
-    ax.set_ylabel('z')
+
+    contour = ax.contour(x, z, field_data, colors="black",
+                         levels=50, linewidths=0.1)
+    contourf = ax.contourf(
+        x, z, field_data, cmap="viridis", levels=100, extend="both")
+    # set the grrk letters mu for the units 
+    ax.set_xlabel('x ($\mu$m)')
+    ax.set_ylabel('z ($\mu$m)')
     ax.set_title(title)
+
     for sphere in spheres:
-        ax.add_patch(patches.Circle(sphere.get_center(), sphere.radius, color='black', fill=False))
+        ax.add_patch(patches.Circle(sphere.get_center(), sphere.radius,
+                                    color='black', fill=False))
     for height in layers:
         ax.axhline(y=height, color='black')
+
+
     return contourf
 
+
+def sort_key(title: str):
+    # Order within each family
+    comp_priority = {"Ex": 0, "Ey": 1, "Ez": 2,
+                     "Hx": 0, "Hy": 1, "Hz": 2,
+                     "Sx": 0, "Sy": 1, "Sz": 2}
+    ri_priority = {"Re": 0, "Im": 1}
+    pol_priority = {"‖": 0, "⟂": 1, "": 0}  # no pol -> treat as "first"
+
+    parts = title.split()
+
+    # Defaults for missing pieces
+    ri = ""      # no Re/Im
+    comp = ""    # component token
+    pol = ""     # no polarization
+
+    if len(parts) == 1:
+        # e.g. "Sx", "Sy", "Sz"
+        comp = parts[0]
+
+    elif len(parts) == 2:
+        # e.g. "Re Sx" (if you ever do this) or "Im Sz"
+        ri, comp = parts
+
+    else:
+        # e.g. "Re Ex ‖"
+        ri, comp, pol = parts[0], parts[1], parts[2]
+
+    # Family priority (optional): put E first, then H, then S (or whatever you want)
+    # Remove if you don't care.
+    if comp.startswith("E"):
+        family = 0
+    elif comp.startswith("H"):
+        family = 1
+    elif comp.startswith("S"):
+        family = 2
+    else:
+        family = 99
+
+    return (
+        family,
+        comp_priority.get(comp, 99),
+        ri_priority.get(ri, 99),
+        pol_priority.get(pol, 99),
+        title  # final stable tie-breaker
+    )
 # === Build fields & titles based on selection ===
 fields, titles = [], []
 if field_type == "Poynting":
@@ -148,7 +216,7 @@ if field_type == "Poynting":
     
     S_par = poynting_vector(E_paralel, H_paralel)
     S_perp = poynting_vector(E_perp, H_perp)
-    S = S_par + S_perp
+    S = 0.5 * (S_par + S_perp)
     component_map = {"Sx": S[0], "Sy": S[1], "Sz": S[2]}
     for opt in selected_options:
         if opt in component_map:
@@ -176,19 +244,68 @@ else:
             fields.append(component_map[opt])
             titles.append(opt)
 
+# sort everything before plotting
+sorted_pairs = sorted(zip(titles, fields), key=lambda x: sort_key(x[0]))
+titles, fields = zip(*sorted_pairs)
+
+titles = list(titles)
+fields = list(fields)
+
 nplots = len(fields)
-ncols = min(3, nplots)
-nrows = int(np.ceil(nplots / ncols))
-fig, axs = plt.subplots(nrows, ncols, figsize=(6*ncols, 5*nrows))
-if nplots == 1:
-    axs = np.array([axs])
-axs = axs.flatten()
 
-fig.subplots_adjust(right=0.8)
-cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+if nplots <= 3:
+    nrows, ncols = 1, nplots          # 1x2, 1x3 (horizontal)
+elif nplots == 4:
+    nrows, ncols = 2, 2               # 2x2
+elif nplots in (5, 6):
+    nrows, ncols = 2, 3               # 2x3 (what you want for 5 and 6)
+else:
+    ncols = 3
+    nrows = int(np.ceil(nplots / ncols))
 
-for ax, field_data, title in zip(axs, fields, titles):
-    contourf = plot_contour_subplot(ax, data[:,0], data[:,2], field_data, title, spheres, layers)
+fig, axs = plt.subplots(
+    nrows, ncols,
+    figsize=(6*ncols, 5*nrows),
+    sharex=True, sharey=True,
+    constrained_layout=True
+)
 
-fig.colorbar(contourf, cax=cbar_ax, label='Field Magnitude')
+# axs = np.atleast_1d(axs).ravel()
+axs = np.atleast_1d(axs)
+
+# If 2D grid, transpose first
+if axs.ndim == 2:
+    axs = axs.T.ravel()
+else:
+    axs = axs.ravel()
+
+
+contourf_last = None
+for i in range(nrows * ncols):
+    ax = axs[i]
+
+    if i < nplots:
+        contourf_last = plot_contour_subplot(
+            ax, x_plot, z_plot,
+            fields[i], titles[i],
+            spheres_plot, layers_plot
+        )
+
+        # Only keep labels where they help (layout cleaner, content same)
+        r = i % nrows
+        c = i // nrows
+
+        if r != nrows - 1:
+            ax.set_xlabel("")
+        if c != 0:
+            ax.set_ylabel("")
+    else:
+        # Hide unused axes so the grid looks tidy
+        ax.set_visible(False)
+
+# One shared colorbar (same data as before: last contourf)
+if contourf_last is not None:
+    cbar = fig.colorbar(contourf_last, ax=axs[:nplots], shrink=0.95, pad=0.02)
+    cbar.set_label('Field Magnitude')
+
 plt.show()

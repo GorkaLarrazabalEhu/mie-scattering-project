@@ -1739,9 +1739,15 @@ class MieTheoryApp:
             return
 
         save_dir = self.config.data["folder_location"]  # <- folder for saving plots
-
+        length_scale = self.length_scale_entry.get()
+        length_scale = length_scale.replace("d0", "").replace("D0", "")
         # Build the command → pass nearfieldplot type + selected components + save_dir
         args = ["py", python_plot_file, near_field_file, self.plot_type_var.get()] + selected_options + [save_dir]
+        args = ["py", python_plot_file,
+                near_field_file,
+                self.plot_type_var.get()] \
+                + selected_options \
+                + [length_scale, save_dir]
         sb.Popen(args)
         
 
