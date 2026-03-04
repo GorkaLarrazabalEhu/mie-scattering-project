@@ -239,7 +239,7 @@ def parse_runs_with_efficiencies(filepath):
 # =========================
 # Plotting
 # =========================
-def plot_S112(runs, run_ids, save_dir="."):
+def plot_S11_old(runs, run_ids, save_dir="."):
     fig, (ax1, ax2) = plt.subplots(
         1, 2, subplot_kw={'projection': 'polar'}, figsize=(12, 6)
     )
@@ -261,28 +261,63 @@ def plot_S112(runs, run_ids, save_dir="."):
 
 
 def plot_S11(runs, run_ids, save_dir="."):
-    fig, (ax1, ax2) = plt.subplots(
-        1, 2, subplot_kw={'projection': 'polar'}, figsize=(12, 6)
+
+    mode = {1, 2}   # choose plots here: {1}, {2}, or {1,2}
+    mode = {1}
+    mode = {2}
+
+    fig, axes = plt.subplots(
+        1, len(mode),
+        subplot_kw={'projection': 'polar'},
+        figsize=(12, 6)
     )
+
+    if not isinstance(axes, (list, np.ndarray)):
+        axes = [axes]
+
+    ax_map = {}
+    i = 0
+    if 1 in mode:
+        ax_map[1] = axes[i]
+        i += 1
+    if 2 in mode:
+        ax_map[2] = axes[i]
+
     has_data = False
+
     for ri in run_ids:
         r = runs[ri]
         if r["S"] is None:
-            continue  # skip runs with no scattering matrix
+            continue
+
         has_data = True
         l_scale = r.get("l_scale", 1.0)
-        wl = f"{2*np.pi/l_scale:.2f} um"
-        ax1.plot(r["radianTheta"], r["S"][:, 0], label=wl)
-        ax2.plot(r["radianTheta"], r["S"][:, 0], label=wl)
+        wl = f"{2*np.pi/l_scale:.2f} $\mu$m"
+
+        if 1 in mode:
+            ax_map[1].plot(r["radianTheta"], r["S"][:, 0], label=wl)
+
+        if 2 in mode:
+            ax_map[2].plot(r["radianTheta"], r["S"][:, 0], label=wl)
+
     if not has_data:
-        for ax in [ax1, ax2]:
+        for ax in axes:
             ax.text(0.5, 0.5, "No data", transform=ax.transAxes,
                     ha='center', va='center', fontsize=14, color='grey')
-    ax1.set_title("S11 (linear scale)")
-    ax2.set_title("S11 (log scale)")
-    ax2.set_yscale("log")
-    ax1.legend(loc="best")
-    ax2.legend(loc="best")
+
+    if 1 in mode:
+        ax_map[1].set_title("S11 (linear scale)", y=1.05)
+
+    if 2 in mode:
+        ax_map[2].set_title("S11 (log scale)", y=1.05)
+        ax_map[2].set_yscale("log")
+
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(handles, labels,
+               loc="upper center",
+               ncol=2,
+               bbox_to_anchor=(0.5, 0.93))
+
     plt.tight_layout()
     set_fig_title(fig, "S11")
     auto_save_or_show(fig, "S11", save_dir)

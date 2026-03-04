@@ -254,11 +254,11 @@ fields = list(fields)
 nplots = len(fields)
 
 if nplots <= 3:
-    nrows, ncols = 1, nplots          # 1x2, 1x3 (horizontal)
+    nrows, ncols = 1, nplots          # 1x2, 1x3
 elif nplots == 4:
     nrows, ncols = 2, 2               # 2x2
 elif nplots in (5, 6):
-    nrows, ncols = 2, 3               # 2x3 (what you want for 5 and 6)
+    nrows, ncols = 2, 3               # 2x3 
 else:
     ncols = 3
     nrows = int(np.ceil(nplots / ncols))
