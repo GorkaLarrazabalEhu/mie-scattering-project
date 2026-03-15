@@ -4,6 +4,20 @@ import sys
 import os
 import matplotlib as mpl
 
+
+# =========================
+# Global plotting style
+# =========================
+plt.rcParams.update({
+    "xtick.labelsize": 16,   # numbers on x axis
+    "ytick.labelsize": 16,   # numbers on y axis
+    "axes.titlesize": 16,    # subplot titles
+    "axes.labelsize": 20,    # axis labels
+    "legend.fontsize": 14,   # legend text
+})
+plt.rcParams["figure.titlesize"] = 18
+plt.rcParams["lines.linewidth"] = 2
+
 # =========================
 # Utilities
 # =========================
@@ -263,8 +277,8 @@ def plot_S11_old(runs, run_ids, save_dir="."):
 def plot_S11(runs, run_ids, save_dir="."):
 
     mode = {1, 2}   # choose plots here: {1}, {2}, or {1,2}
-    mode = {1}
-    mode = {2}
+    # mode = {1}
+    # mode = {2}
 
     fig, axes = plt.subplots(
         1, len(mode),
@@ -306,7 +320,7 @@ def plot_S11(runs, run_ids, save_dir="."):
                     ha='center', va='center', fontsize=14, color='grey')
 
     if 1 in mode:
-        ax_map[1].set_title("S11 (linear scale)", y=1.05)
+        ax_map[1].set_title("S11 (linear scale)", y=1.05, fontsize=16)
 
     if 2 in mode:
         ax_map[2].set_title("S11 (log scale)", y=1.05)

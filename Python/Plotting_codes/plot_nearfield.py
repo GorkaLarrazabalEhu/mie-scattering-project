@@ -7,6 +7,23 @@ import matplotlib as mpl
 from matplotlib.ticker import FuncFormatter
 from scipy.stats import binned_statistic_2d
 
+# ===== AJUSTES DE TAMAÑO =====
+TITLE_SIZE = 16
+LABEL_SIZE = 14
+TICK_SIZE = 12
+COLORBAR_LABEL_SIZE = 14
+
+FIG_WIDTH_PER_COL = 6
+FIG_HEIGHT_PER_ROW = 5
+
+plt.rcParams.update({
+    "axes.titlesize": TITLE_SIZE,
+    "axes.labelsize": LABEL_SIZE,
+    "xtick.labelsize": TICK_SIZE,
+    "ytick.labelsize": TICK_SIZE,
+    "lines.linewidth": 1.5,
+})
+
 if len(sys.argv) > 1:
     # Use command-line arguments
     file = sys.argv[1]
@@ -148,10 +165,13 @@ def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
                          levels=50, linewidths=0.1)
     contourf = ax.contourf(
         x, z, field_data, cmap="viridis", levels=100, extend="both")
-    # set the grrk letters mu for the units 
-    ax.set_xlabel('x ($\mu$m)')
-    ax.set_ylabel('z ($\mu$m)')
-    ax.set_title(title)
+
+
+    # set the greek letters mu for the units
+    ax.set_xlabel('x ($\mu$m)', fontsize=LABEL_SIZE)
+    ax.set_ylabel('z ($\mu$m)', fontsize=LABEL_SIZE)
+    ax.set_title(title, fontsize=TITLE_SIZE)
+    ax.tick_params(axis='both', labelsize=TICK_SIZE)
 
     for sphere in spheres:
         ax.add_patch(patches.Circle(sphere.get_center(), sphere.radius,
@@ -265,7 +285,7 @@ else:
 
 fig, axs = plt.subplots(
     nrows, ncols,
-    figsize=(6*ncols, 5*nrows),
+    figsize=(FIG_WIDTH_PER_COL*ncols, FIG_HEIGHT_PER_ROW*nrows),
     sharex=True, sharey=True,
     constrained_layout=True
 )
@@ -306,6 +326,7 @@ for i in range(nrows * ncols):
 # One shared colorbar (same data as before: last contourf)
 if contourf_last is not None:
     cbar = fig.colorbar(contourf_last, ax=axs[:nplots], shrink=0.95, pad=0.02)
-    cbar.set_label('Field Magnitude')
+    cbar.set_label('Field Magnitude', fontsize=COLORBAR_LABEL_SIZE)
+    cbar.ax.tick_params(labelsize=TICK_SIZE)
 
 plt.show()

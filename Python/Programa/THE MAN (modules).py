@@ -8,6 +8,7 @@ import subprocess as sb
 import calculations.mstm_utils as mstm
 import datetime
 import json
+import threading
 
 
 # Constants
@@ -1608,23 +1609,79 @@ class MieTheoryApp:
 
 
     def run_simulation(self):
-        """Run the Fortran executable."""
-        self.load_write_status_label.config(
-                text="Simulation input file written")
-        # Update the status label to show that the simulation is starting
+        """Start simulation with a modal spinner window."""
+
+        self.load_write_status_label.config(text="Simulation input file written")
         self.status_label.config(text="Running simulation...")
-        self.root.update_idletasks()  # Ensure the GUI updates immediately
-
         self.write_input_file()
-        result = sb.run(
-            "mstm.exe", cwd=self.config.data["folder_location"], stdout=sb.PIPE, stderr=sb.PIPE, text=True)
-        # C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Fortran\\Programa\\
 
-        # Update the status label to show that the simulation is completed
+        # --- Modal loading window ---
+        self.spinner_win = tk.Toplevel(self.root)
+        self.spinner_win.title("Running simulation")
+        self.spinner_win.geometry("320x120")
+        self.spinner_win.resizable(False, False)
+        self.spinner_win.transient(self.root)
+        self.spinner_win.grab_set()
+
+        tk.Label(
+            self.spinner_win,
+            text="Simulation running...\nPlease wait.",
+            font=("Arial", 11)
+        ).pack(pady=(15, 10))
+
+        self.progress = ttk.Progressbar(
+            self.spinner_win,
+            mode="indeterminate",
+            length=250
+        )
+        self.progress.pack(pady=5)
+        self.progress.start(12)  # smaller = faster animation
+
+        # Optional: disable closing the spinner manually
+        self.spinner_win.protocol("WM_DELETE_WINDOW", lambda: None)
+
+        # Center it roughly over root
+        self.spinner_win.update_idletasks()
+        x = self.root.winfo_rootx() + (self.root.winfo_width() // 2) - 160
+        y = self.root.winfo_rooty() + (self.root.winfo_height() // 2) - 60
+        self.spinner_win.geometry(f"+{x}+{y}")
+
+        # Run subprocess in background
+        thread = threading.Thread(target=self._simulation_worker, daemon=True)
+        thread.start()
+
+
+    def _simulation_worker(self):
+        """Background worker that runs the Fortran executable."""
+        try:
+            result = sb.run(
+                "mstm.exe",
+                cwd=self.config.data["folder_location"],
+                stdout=sb.PIPE,
+                stderr=sb.PIPE,
+                text=True
+            )
+            self.root.after(0, lambda: self._simulation_finished(result))
+        except Exception as e:
+            self.root.after(0, lambda: self._simulation_failed(e))
+
+
+    def _simulation_finished(self, result):
+        """Called in the Tkinter thread when simulation ends."""
+        self.progress.stop()
+        self.spinner_win.destroy()
+
         self.status_label.config(text="Simulation completed")
-        self.show_notification("Simulation completed",
-                               f"Result: {result.stdout}")
-        # messagebox.showinfo("Simulation completed", f"Result: {result.stdout}")
+        self.show_notification("Simulation completed", f"Result: {result.stdout}")
+
+
+    def _simulation_failed(self, error):
+        """Called in the Tkinter thread if simulation fails."""
+        self.progress.stop()
+        self.spinner_win.destroy()
+
+        self.status_label.config(text="Simulation failed")
+        self.show_notification("Simulation failed", str(error))
 
 
     def plot_scattering_matrix2(self):

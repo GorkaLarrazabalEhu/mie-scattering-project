@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,11pt]{article}
 
 % -------------------------
 % PAGE GEOMETRY (solo una vez)
@@ -17,6 +17,9 @@
 \usepackage{polyglossia}
 \setmainlanguage{spanish}
 \usepackage{csquotes}
+% quitar estas dos siguientes si quiero que se guionen las palabras
+\usepackage[none]{hyphenat} % Desactiva el guionado en todo el documento
+\sloppy % Permite que las líneas sean un poco más flexibles para evitar desbordamientos
 
 % -------------------------
 % EHUSans
@@ -24,7 +27,7 @@
 \setmainfont{EHUSans}[
   Path = EHUSans/,
   Extension = .otf,
-  UprightFont = EHUSans-Light,
+  UprightFont = EHUSans-Regular,
   BoldFont = EHUSans-Bold,
   ItalicFont = EHUSans-Italic,
   BoldItalicFont = EHUSans-BoldItalic
@@ -34,8 +37,12 @@
 % GRAPHICS + MATH
 % -------------------------
 \usepackage{graphicx}
+% \graphicspath{{../../Simulaciones/Definitivo}}
+\usepackage{float}
 \usepackage{amsmath}
 
+\usepackage{caption}
+\captionsetup{font=it} 
 % -------------------------
 % BIBLATEX
 % -------------------------
@@ -63,6 +70,10 @@
 \include{Secciones/Intro}
 
 \include{Secciones/Teoria}
+
+\include{Secciones/1Esfera}
+
+\include{Secciones/4Esferas}
 
 \printbibliography[title={Bibliografía}]
 

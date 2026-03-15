@@ -1,33 +1,37 @@
 {
-    "output_file": "sim1.dat",
+    "output_file": "sim2.dat",
     "num_spheres": "4",
     "positions": [
-        "-0.14849242404917498d0, 0d0, 0.0d0, 0.1d0, (0.2487319885d0, 3.0739827089d0)",
-        "0.14849242404917498d0, 0d0, 0.0d0, 0.1d0, (0.2487319885d0, 3.0739827089d0)",
-        "0.0d0, 0d0,-0.14849242404917498d0, 0.1d0, (0.2487319885d0, 3.0739827089d0)",
-        "0.0d0, 0d0, 0.14849242404917498d0, 0.1d0, (0.2487319885d0, 3.0739827089d0)"
+        "-0.579827560572969d0, 0d0, 0.0d0, 0.4d0, (0.2487319885d0, 3.0739827089d0)",
+        "0.579827560572969d0, 0d0, 0.0d0, 0.4d0, (0.2487319885d0, 3.0739827089d0)",
+        "0.0d0, 0d0,-0.579827560572969d0, 0.4d0, (0.2487319885d0, 3.0739827089d0)",
+        "0.0d0, 0d0, 0.579827560572969d0, 0.4d0, (0.2487319885d0, 3.0739827089d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
     "length_scale": "10.4719755120d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
-    "near_field": false,
-    "near_field_file": "f",
+    "near_field": true,
+    "near_field_file": "sim2_nf.dat",
     "nearfieldplot": "",
-    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\sim1",
-    "plot_type": "Poynting",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\sim2",
+    "plot_type": "Electric",
     "plot_options": [
-        "Sx",
-        "Sz"
+        "Re Ex \u2016",
+        "Im Ex \u2016",
+        "Re Ez \u2016",
+        "Im Ez \u2016",
+        "Re Ey \u27c2",
+        "Im Ey \u27c2"
     ],
     "wavelength": "0.6",
-    "sphere_radius": "0.1",
+    "sphere_radius": "0.4",
     "material": "Au",
-    "separation": "0.01",
+    "separation": "0.02",
     "geometry": "4 in a square (45\u00b0)",
     "wavelength_sweep": {
-        "enabled": true,
+        "enabled": false,
         "min": "0.1",
         "max": "1",
         "n": "5"

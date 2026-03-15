@@ -6,17 +6,29 @@ El comportamiento de la radiación electromagnética en un medio lineal, isótro
 y homogéneo está gobernado por las ecuaciones de Maxwell en ausencia de cargas y 
 corrientes libres:
 
+% \begin{equation}
+%   \nabla \times \mathbf{E} = -\mu \frac{\partial \mathbf{H}}{\partial t}.
+% \end{equation}
+% \begin{equation}
+%   \nabla \times \mathbf{H} =  \epsilon \frac{\partial \mathbf{E}}{\partial t}.
+% \end{equation}
+% \begin{equation}
+%   \nabla \cdot (\epsilon \mathbf{E}) = 0.
+% \end{equation}
+% \begin{equation}
+%   \nabla \cdot (\mu \mathbf{H}) = 0.
+% \end{equation}
+
+
 \begin{equation}
-  \nabla \times \mathbf{E} = -\mu \frac{\partial \mathbf{H}}{\partial t}.
-\end{equation}
-\begin{equation}
-  \nabla \times \mathbf{H} =  \epsilon \frac{\partial \mathbf{E}}{\partial t}.
-\end{equation}
-\begin{equation}
-  \nabla \cdot (\epsilon \mathbf{E}) = 0.
-\end{equation}
-\begin{equation}
-  \nabla \cdot (\mu \mathbf{H}) = 0.
+\begin{aligned}
+\nabla \times \mathbf{E} &= -\mu \frac{\partial \mathbf{H}}{\partial t}
+&\qquad
+\nabla \cdot (\epsilon \mathbf{E}) &= 0 \\
+\nabla \times \mathbf{H} &=  \epsilon \frac{\partial \mathbf{E}}{\partial t}
+&\qquad
+\nabla \cdot (\mu \mathbf{H}) &= 0
+\end{aligned}
 \end{equation}
 
 donde $\mathbf{E}$ y $\mathbf{H}$ son los campos eléctrico y magnético, respectivamente, 
@@ -315,7 +327,8 @@ $h_n^{(2)}$.
 
 Estas funciones escalares permiten generar los armónicos esféricos vectoriales 
 mediante la construcción anterior. Los campos resultantes se expresan como
-\[
+\begin{equation} 
+\label{Generadores vectoriales}
 \begin{aligned}
 \mathbf{M}_{emn} &= \nabla \times (\psi_{emn}\,\mathbf{r}), 
 \qquad
@@ -325,7 +338,7 @@ mediante la construcción anterior. Los campos resultantes se expresan como
 \qquad
 \mathbf{N}_{omn} &= \frac{1}{k}\,\nabla \times \mathbf{M}_{omn}.
 \end{aligned}
-\]
+\end{equation}
 
 % \textit{y representan modos transversos que forman una base completa y ortogonal en 
 % regiones con simetría esférica. Esta propiedad es esencial en la teoría de Mie: 
@@ -334,47 +347,47 @@ mediante la construcción anterior. Los campos resultantes se expresan como
 % desacoplen los modos para cada par $(n,m)$, lo que permite determinar de forma 
 % directa los coeficientes de Mie.} no me gusta esta frase, pero la dejo por si acaso.
 
-En forma explícita, los armónicos esféricos vectoriales pueden escribirse en 
-componentes angulares y radiales como
+% En forma explícita, los armónicos esféricos vectoriales pueden escribirse en 
+% componentes angulares y radiales como
 
 
-\begin{equation}\label{eq:Memn}
-\mathbf{M}_{emn}
-= -\frac{m}{\sin\theta}\sin m\phi\, P_n^m(\cos\theta)\, z_n(\rho)\,\hat{\boldsymbol{e}}_\theta
-  - \cos m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\, z_n(\rho)\,\hat{\boldsymbol{e}}_\phi ,
-\end{equation}
+% \begin{equation}\label{eq:Memn}
+% \mathbf{M}_{emn}
+% = -\frac{m}{\sin\theta}\sin m\phi\, P_n^m(\cos\theta)\, z_n(\rho)\,\hat{\boldsymbol{e}}_\theta
+%   - \cos m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\, z_n(\rho)\,\hat{\boldsymbol{e}}_\phi ,
+% \end{equation}
 
-\begin{equation}\label{eq:Momn}
-\mathbf{M}_{omn}
-=  \frac{m}{\sin\theta}\cos m\phi\, P_n^m(\cos\theta)\, z_n(\rho)\,\hat{\boldsymbol{e}}_\theta
-  - \sin m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\, z_n(\rho)\,\hat{\boldsymbol{e}}_\phi ,
-\end{equation}
+% \begin{equation}\label{eq:Momn}
+% \mathbf{M}_{omn}
+% =  \frac{m}{\sin\theta}\cos m\phi\, P_n^m(\cos\theta)\, z_n(\rho)\,\hat{\boldsymbol{e}}_\theta
+%   - \sin m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\, z_n(\rho)\,\hat{\boldsymbol{e}}_\phi ,
+% \end{equation}
 
-\begin{equation}\label{eq:Nemn}
-\begin{split}
-\mathbf{N}_{emn} =
-& \frac{z_n(\rho)}{\rho}\cos m\phi\, n(n+1) P_n^m(\cos\theta)\,\hat{\mathbf{e}}_r \\
-& + \cos m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\,
-    \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\theta \\
-& - m\sin m\phi\, \frac{P_n^m(\cos\theta)}{\sin\theta}\,
-    \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\phi ,
-\end{split}
-\end{equation}
+% \begin{equation}\label{eq:Nemn}
+% \begin{split}
+% \mathbf{N}_{emn} =
+% & \frac{z_n(\rho)}{\rho}\cos m\phi\, n(n+1) P_n^m(\cos\theta)\,\hat{\mathbf{e}}_r \\
+% & + \cos m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\,
+%     \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\theta \\
+% & - m\sin m\phi\, \frac{P_n^m(\cos\theta)}{\sin\theta}\,
+%     \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\phi ,
+% \end{split}
+% \end{equation}
 
-\begin{equation}\label{eq:Nomn}
-\begin{split}
-\mathbf{N}_{omn} =
-& \frac{z_n(\rho)}{\rho}\sin m\phi\, n(n+1) P_n^m(\cos\theta)\,\hat{\mathbf{e}}_r \\
-& + \sin m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\,
-    \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\theta \\
-& + m\cos m\phi\, \frac{P_n^m(\cos\theta)}{\sin\theta}\,
-    \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\phi .
-\end{split}
-\end{equation}
+% \begin{equation}\label{eq:Nomn}
+% \begin{split}
+% \mathbf{N}_{omn} =
+% & \frac{z_n(\rho)}{\rho}\sin m\phi\, n(n+1) P_n^m(\cos\theta)\,\hat{\mathbf{e}}_r \\
+% & + \sin m\phi\, \frac{d P_n^m(\cos\theta)}{d\theta}\,
+%     \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\theta \\
+% & + m\cos m\phi\, \frac{P_n^m(\cos\theta)}{\sin\theta}\,
+%     \frac{1}{\rho}\frac{d}{d\rho}\!\left[\rho z_n(\rho)\right]\hat{\mathbf{e}}_\phi .
+% \end{split}
+% \end{equation}
 
 
 Cualquier solución de las ecuaciones de campo puede expandirse como una serie infinita 
-de las funciones (\ref{eq:Memn})–(\ref{eq:Nomn}). En particular, el campo incidente puede 
+de las funciones (\ref{Generadores vectoriales}). En particular, el campo incidente puede 
 escribirse como
 
 \begin{equation}
