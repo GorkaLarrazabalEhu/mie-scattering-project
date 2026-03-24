@@ -31,6 +31,8 @@ if len(sys.argv) > 1:
     Ls = float(sys.argv[-2])
     selected_options = sys.argv[3:-2]  # all but last arg
     save_dir = sys.argv[-1] if len(sys.argv) > 4 else None
+    print(selected_options)
+
 else:
     # Interactive mode
     print("No command-line arguments detected. Switching to interactive mode.\n")
@@ -151,67 +153,149 @@ H_paralel = [paralelH[0] + 1.0j*paralelH[1], paralelH[2] + 1.0j*paralelH[3], par
 E_perp = [perpendE[0] + 1.0j*perpendE[1], perpendE[2] + 1.0j*perpendE[3], perpendE[4] + 1.0j*perpendE[5]]
 H_perp = [perpendH[0] + 1.0j*perpendH[1], perpendH[2] + 1.0j*perpendH[3], perpendH[4] + 1.0j*perpendH[5]]
 
+
+
+
 def poynting_vector(vec1, vec2):
     return 0.5 * np.real(np.cross(vec1, np.conjugate(vec2), axis=0))
 
 
-def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
-    grid_size = int(np.sqrt(len(x)))
-    x = x.reshape((grid_size, grid_size))
-    z = z.reshape((grid_size, grid_size))
-    field_data = field_data.reshape((grid_size, grid_size))
+def field_intensity(E):
+    return np.abs(E[0])**2 + np.abs(E[1])**2 + np.abs(E[2])**2
 
-    contour = ax.contour(x, z, field_data, colors="black",
-                         levels=50, linewidths=0.1)
+
+def plot_poynting_quiver_subplot(ax, x, z, sx, sz, title, spheres, layers,
+                                 step=6, normalize=False):
+    X, Z = make_grid(x, z)
+    SX = reshape_to_grid(sx, x)
+    SZ = reshape_to_grid(sz, x)
+
+    mag = np.sqrt(SX**2 + SZ**2)
+
     contourf = ax.contourf(
-        x, z, field_data, cmap="viridis", levels=100, extend="both")
+        X, Z, mag,
+        cmap="viridis",
+        levels=100,
+        extend="both"
+    )
+
+    U = SX.copy()
+    V = SZ.copy()
+
+    if normalize:
+        denom = np.sqrt(U**2 + V**2)
+        denom[denom == 0] = 1.0
+        U = U / denom
+        V = V / denom
 
 
-    # set the greek letters mu for the units
+    ax.quiver(
+        X[::step, ::step], Z[::step, ::step],
+        U[::step, ::step], V[::step, ::step],
+        angles="xy",
+        scale_units="xy",
+        scale=15,
+        width=0.004,
+        headwidth=4,
+        headlength=6,
+        pivot="middle",
+        color="white",
+        alpha=0.9
+    )
     ax.set_xlabel('x ($\mu$m)', fontsize=LABEL_SIZE)
     ax.set_ylabel('z ($\mu$m)', fontsize=LABEL_SIZE)
     ax.set_title(title, fontsize=TITLE_SIZE)
     ax.tick_params(axis='both', labelsize=TICK_SIZE)
 
     for sphere in spheres:
-        ax.add_patch(patches.Circle(sphere.get_center(), sphere.radius,
-                                    color='black', fill=False))
+        ax.add_patch(
+            patches.Circle(
+                sphere.get_center(),
+                sphere.radius,
+                color='black',
+                fill=False
+            )
+        )
+
     for height in layers:
         ax.axhline(y=height, color='black')
 
+    return contourf
+
+
+def reshape_to_grid(arr, x):
+    grid_size = int(np.sqrt(len(x)))
+    return arr.reshape((grid_size, grid_size))
+
+
+def make_grid(x, z):
+    grid_size = int(np.sqrt(len(x)))
+    X = x.reshape((grid_size, grid_size))
+    Z = z.reshape((grid_size, grid_size))
+    return X, Z
+
+
+def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
+    X, Z = make_grid(x, z)
+    F = reshape_to_grid(field_data, x)
+
+    contour = ax.contour(
+        X, Z, F,
+        colors="black",
+        levels=50,
+        linewidths=0.1
+    )
+    contourf = ax.contourf(
+        X, Z, F,
+        cmap="viridis",
+        levels=100,
+        extend="both"
+    )
+
+    ax.set_xlabel('x ($\mu$m)', fontsize=LABEL_SIZE)
+    ax.set_ylabel('z ($\mu$m)', fontsize=LABEL_SIZE)
+    ax.set_title(title, fontsize=TITLE_SIZE)
+    ax.tick_params(axis='both', labelsize=TICK_SIZE)
+
+    for sphere in spheres:
+        ax.add_patch(
+            patches.Circle(
+                sphere.get_center(),
+                sphere.radius,
+                color='black',
+                fill=False
+            )
+        )
+
+    for height in layers:
+        ax.axhline(y=height, color='black')
 
     return contourf
 
 
 def sort_key(title: str):
-    # Order within each family
-    comp_priority = {"Ex": 0, "Ey": 1, "Ez": 2,
-                     "Hx": 0, "Hy": 1, "Hz": 2,
-                     "Sx": 0, "Sy": 1, "Sz": 2}
+    comp_priority = {
+        "Ex": 0, "Ey": 1, "Ez": 2,
+        "Hx": 0, "Hy": 1, "Hz": 2,
+        "Sx": 0, "Sy": 1, "Sz": 2,
+        "S_quiver": 3
+    }
     ri_priority = {"Re": 0, "Im": 1}
-    pol_priority = {"‖": 0, "⟂": 1, "": 0}  # no pol -> treat as "first"
+    pol_priority = {"‖": 0, "⟂": 1, "": 0}
 
     parts = title.split()
 
-    # Defaults for missing pieces
-    ri = ""      # no Re/Im
-    comp = ""    # component token
-    pol = ""     # no polarization
+    ri = ""
+    comp = ""
+    pol = ""
 
     if len(parts) == 1:
-        # e.g. "Sx", "Sy", "Sz"
         comp = parts[0]
-
     elif len(parts) == 2:
-        # e.g. "Re Sx" (if you ever do this) or "Im Sz"
         ri, comp = parts
-
     else:
-        # e.g. "Re Ex ‖"
         ri, comp, pol = parts[0], parts[1], parts[2]
 
-    # Family priority (optional): put E first, then H, then S (or whatever you want)
-    # Remove if you don't care.
     if comp.startswith("E"):
         family = 0
     elif comp.startswith("H"):
@@ -226,22 +310,39 @@ def sort_key(title: str):
         comp_priority.get(comp, 99),
         ri_priority.get(ri, 99),
         pol_priority.get(pol, 99),
-        title  # final stable tie-breaker
+        title
     )
+
+
+# Intensidades |E|^2
+E2_par = field_intensity(E_paralel)
+E2_perp = field_intensity(E_perp)
+E2_avg = 0.5 * (E2_par + E2_perp)
+
+# Poynting
+S_par = poynting_vector(E_paralel, H_paralel)
+S_perp = poynting_vector(E_perp, H_perp)
+S_avg = 0.5 * (S_par + S_perp)
+
+
 # === Build fields & titles based on selection ===
 fields, titles = [], []
 if field_type == "Poynting":
-    # ESTO NO SE PUEDE PQ NO ES COHERENTE
-    # S = poynting_vector(E, H)
-    
-    S_par = poynting_vector(E_paralel, H_paralel)
-    S_perp = poynting_vector(E_perp, H_perp)
-    S = 0.5 * (S_par + S_perp)
-    component_map = {"Sx": S[0], "Sy": S[1], "Sz": S[2]}
+    # promedio incoherente entre polarizaciones
+    S = S_avg
+
+    component_map = {
+        "Sx": S[0],
+        "Sy": S[1],
+        "Sz": S[2],
+        "S_quiver": (S[0], S[2])   # quiver en el plano x-z
+    }
+
     for opt in selected_options:
         if opt in component_map:
             fields.append(component_map[opt])
             titles.append(opt)
+
 else:
     component_map = {
         # Electric
@@ -305,13 +406,23 @@ for i in range(nrows * ncols):
     ax = axs[i]
 
     if i < nplots:
-        contourf_last = plot_contour_subplot(
-            ax, x_plot, z_plot,
-            fields[i], titles[i],
-            spheres_plot, layers_plot
-        )
+        if titles[i] == "S_quiver":
+            sx, sz = fields[i]
+            contourf_last = plot_poynting_quiver_subplot(
+                ax, x_plot, z_plot,
+                sx, sz,
+                titles[i],
+                spheres_plot, layers_plot,
+                step=4,
+                normalize=True
+            )
+        else:
+            contourf_last = plot_contour_subplot(
+                ax, x_plot, z_plot,
+                fields[i], titles[i],
+                spheres_plot, layers_plot
+            )
 
-        # Only keep labels where they help (layout cleaner, content same)
         r = i % nrows
         c = i // nrows
 
@@ -320,7 +431,6 @@ for i in range(nrows * ncols):
         if c != 0:
             ax.set_ylabel("")
     else:
-        # Hide unused axes so the grid looks tidy
         ax.set_visible(False)
 
 # One shared colorbar (same data as before: last contourf)

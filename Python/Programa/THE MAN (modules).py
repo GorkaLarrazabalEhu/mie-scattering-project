@@ -501,7 +501,7 @@ class MieTheoryApp:
                 self.plot_option_labels.append(label)
 
         elif field_type == "Poynting":
-            for i, comp in enumerate(["Sx", "Sy", "Sz"]):
+            for i, comp in enumerate(["Sx", "Sy", "Sz", "S_quiver"]):
                 var = tk.BooleanVar()
                 cb = tk.Checkbutton(self.frame_plot_options, text=comp, variable=var)
                 cb.grid(row=0, column=i, padx=5, pady=2, sticky="w")
@@ -1329,7 +1329,7 @@ class MieTheoryApp:
             est_points = (side_scaled / step) ** 2
             if est_points > max_points:
                 step = side_scaled / np.sqrt(max_points)
-
+        step = 0.01
         self.near_field_step = step
         self.near_field_stepsize.config(text=f"step size: {step:.4f}")
         return float(step)
@@ -1799,7 +1799,7 @@ class MieTheoryApp:
         length_scale = self.length_scale_entry.get()
         length_scale = length_scale.replace("d0", "").replace("D0", "")
         # Build the command → pass nearfieldplot type + selected components + save_dir
-        args = ["py", python_plot_file, near_field_file, self.plot_type_var.get()] + selected_options + [save_dir]
+        # args = ["py", python_plot_file, near_field_file, self.plot_type_var.get()] + selected_options + [save_dir]
         args = ["py", python_plot_file,
                 near_field_file,
                 self.plot_type_var.get()] \
