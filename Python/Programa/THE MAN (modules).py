@@ -37,6 +37,9 @@ class Config:
             "near_field_stepsize": "",
             "separation": "",
             "geometry": "(none)",
+            "material": "Custom",
+            "custom_n": "",
+            "custom_k": "",
             "wavelength_sweep": {
                 "enabled": False,
                 "min": "",
@@ -149,6 +152,22 @@ class MieTheoryApp:
         self.length_scale_entry = tk.Entry(frame_incident, width=30)
         self.length_scale_entry.grid(row=1, column=1, padx=5)
 
+
+        # ---- Multipole Expansion Order ----
+        tk.Label(frame_incident, text="Multipole Order (n)").grid(row=2, column=0, sticky="w")
+
+        self.multipole_order = tk.StringVar()
+        self.multipole_combo = ttk.Combobox(
+            frame_incident,
+            textvariable=self.multipole_order,
+            values=[str(i) for i in range(20)],  # 0 to 5
+            width=8,
+            state="readonly"
+        )
+        self.multipole_combo.grid(row=2, column=1, padx=5)
+        self.multipole_combo.current(0)  # default = 0
+
+
         # ---- Beam Options (ONLY left-left subcolumn) ----
         frame_beam = tk.LabelFrame(left, text="Beam Options", padx=5, pady=5)
         frame_beam.grid(row=2, column=0, sticky="nsew", padx=10, pady=5)
@@ -247,6 +266,15 @@ class MieTheoryApp:
         self.material_var = tk.StringVar(value="Custom")
         tk.OptionMenu(frame_params, self.material_var, "Au", "Ag",
                     "SiO2", "H2O", "Custom").grid(row=2, column=1, sticky="w")
+        
+        tk.Label(frame_params, text="custom n, k:").grid(row=2, column=2, sticky="w", padx=1)
+        self.custom_n_entry = tk.Entry(frame_params, width=8)
+        self.custom_n_entry.grid(row=2, column=3, sticky="w", padx=1)
+        self.custom_k_entry = tk.Entry(frame_params, width=8)
+        self.custom_k_entry.grid(row=2, column=4, sticky="w", padx=1)
+        self.material_var.trace_add("write", self.on_material_change)
+        self.on_material_change()
+
 
         # Row 3 — Separation (new, own row)
         tk.Label(frame_params, text="Separation (μm):").grid(
@@ -339,6 +367,7 @@ class MieTheoryApp:
         tk.Radiobutton(frame_plot, text="Electric Field", variable=self.plot_type_var, value="Electric", command=self.update_plot_options).grid(row=0, column=0, sticky="w")
         tk.Radiobutton(frame_plot, text="Magnetic Field", variable=self.plot_type_var, value="Magnetic", command=self.update_plot_options).grid(row=0, column=1, sticky="w")
         tk.Radiobutton(frame_plot, text="Poynting Vector", variable=self.plot_type_var, value="Poynting", command=self.update_plot_options).grid(row=0, column=2, sticky="w")
+        tk.Radiobutton(frame_plot, text="|E|²", variable=self.plot_type_var, value="absE", command=self.update_plot_options).grid(row=0, column=3, sticky="w")
 
         self.frame_plot_options = tk.Frame(frame_plot)
         self.frame_plot_options.grid(row=1, column=0, columnspan=3, pady=5)
@@ -378,7 +407,9 @@ class MieTheoryApp:
             if material != "Custom":
                 results = mstm.compute_parameters(r, wl, material=material)
             else:
-                results = mstm.compute_parameters(r, wl)
+                n_real = float(self.custom_n_entry.get().strip())
+                n_imag = float(self.custom_k_entry.get().strip())
+                results = mstm.compute_parameters(r, wl, n_real=n_real, n_imag=n_imag)
             
             
             # Format numeric strings for MSTM friendliness
@@ -469,6 +500,47 @@ class MieTheoryApp:
         return params, geometry
 
 
+    def get_refractive_index_and_length_scale(self, r, wl):
+        material = (self.material_var.get() or "Custom").strip()
+
+        # length scale siempre puede venir de la geometría óptica
+        # si mstm.compute_parameters te da length_scale_factor sin problema, úsalo
+        if material != "Custom":
+            results = mstm.compute_parameters(r, wl, material=material)
+            n = results["refractive_index"]
+            ls = results["length_scale_factor"]
+            size_param = results.get("size_parameter")
+            return n, ls, size_param
+
+        # --- Custom ---
+        n_txt = self.custom_n_entry.get().strip()
+        k_txt = self.custom_k_entry.get().strip()
+
+        if not n_txt or not k_txt:
+            raise ValueError("For Custom material, both n and k must be provided.")
+
+        n_re = float(n_txt)
+        n_im = float(k_txt)
+
+        # Convención típica: m = n + i k
+        # si tu Fortran/MSTM espera absorción como parte imaginaria positiva, esto está bien.
+        # si en tu implementación usan n - i k, aquí habría que cambiarlo.
+        m = complex(n_re, n_im)
+
+        # seguir usando mstm para length_scale y size_parameter si esa parte no depende del material
+        results = mstm.compute_parameters(r, wl)
+        ls = results["length_scale_factor"]
+        size_param = results.get("size_parameter")
+
+        return m, ls, size_param
+
+
+    def on_material_change(self, *args):
+        is_custom = self.material_var.get().strip() == "Custom"
+        state = "normal" if is_custom else "disabled"
+        self.custom_n_entry.config(state=state)
+        self.custom_k_entry.config(state=state)
+
     def update_plot_options(self):
         """Rebuild the plot options based on selected plot type."""
         for widget in self.frame_plot_options.winfo_children():
@@ -502,6 +574,14 @@ class MieTheoryApp:
 
         elif field_type == "Poynting":
             for i, comp in enumerate(["Sx", "Sy", "Sz", "S_quiver"]):
+                var = tk.BooleanVar()
+                cb = tk.Checkbutton(self.frame_plot_options, text=comp, variable=var)
+                cb.grid(row=0, column=i, padx=5, pady=2, sticky="w")
+                self.plot_option_vars.append(var)
+                self.plot_option_labels.append(comp)
+        
+        elif field_type == "absE":
+            for i, comp in enumerate(["|E_avg|^2", "|E‖|^2", "|E⟂|^2"]):
                 var = tk.BooleanVar()
                 cb = tk.Checkbutton(self.frame_plot_options, text=comp, variable=var)
                 cb.grid(row=0, column=i, padx=5, pady=2, sticky="w")
@@ -1229,6 +1309,13 @@ class MieTheoryApp:
         self.radius_entry.insert(0, data.get("sphere_radius", ""))
 
         self.material_var.set(data.get("material", "Custom"))
+
+        self.custom_n_entry.delete(0, "end")
+        self.custom_n_entry.insert(0, data.get("custom_n", ""))
+
+        self.custom_k_entry.delete(0, "end")
+        self.custom_k_entry.insert(0, data.get("custom_k", ""))
+
         self.separation_entry.delete(0, "end")
         self.separation_entry.insert(0, data.get("separation", ""))
 
@@ -1329,7 +1416,7 @@ class MieTheoryApp:
             est_points = (side_scaled / step) ** 2
             if est_points > max_points:
                 step = side_scaled / np.sqrt(max_points)
-        step = 0.01
+        # step = 0.01
         self.near_field_step = step
         self.near_field_stepsize.config(text=f"step size: {step:.4f}")
         return float(step)
@@ -1365,6 +1452,8 @@ class MieTheoryApp:
         self.config.data["wavelength"] = self.wavelength_entry.get()
         self.config.data["sphere_radius"] = self.radius_entry.get()
         self.config.data["material"] = self.material_var.get()
+        self.config.data["custom_n"] = self.custom_n_entry.get().strip()
+        self.config.data["custom_k"] = self.custom_k_entry.get().strip()
         self.config.data["separation"] = self.separation_entry.get().strip()
         self.config.data["geometry"] = self.geometry_var.get().strip()
 
@@ -1422,7 +1511,10 @@ class MieTheoryApp:
                     if material and material != "Custom":
                         res = mstm.compute_parameters(r_ref_um, wl_first, material=material)
                     else:
-                        res = mstm.compute_parameters(r_ref_um, wl_first)
+                        n_real = float(self.custom_n_entry.get().strip())
+                        n_imag = float(self.custom_k_entry.get().strip())
+                        res = mstm.compute_parameters(
+                        r_ref_um, wl_first, n_real=n_real, n_imag=n_imag)
 
 
                     ls = res["length_scale_factor"]
@@ -1473,6 +1565,14 @@ class MieTheoryApp:
                 # Solver epsilon
                 f.write("solution_epsilon\n")
                 f.write("1.d-8\n")
+
+                # Multipole order
+                if int(self.multipole_order.get()):
+                    f.write("max_t_matrix_order\n")
+                    f.write(f"{self.multipole_order.get()}\n")
+                    f.write("t_matrix_convergence_epsilon\n")
+                    f.write("1.d-12\n")
+
 
                 # Gaussian beam (optional)
                 if self.beam_type_var.get() == "Gaussian":
@@ -1571,7 +1671,9 @@ class MieTheoryApp:
                         if material and material != "Custom":
                             res = mstm.compute_parameters(r_ref_um, wl, material=material)
                         else:
-                            res = mstm.compute_parameters(r_ref_um, wl)
+                            n_real = float(self.custom_n_entry.get().strip())
+                            n_imag = float(self.custom_k_entry.get().strip())
+                            res = mstm.compute_parameters(r_ref_um, wl, n_real=n_real, n_imag=n_imag)
 
                         ls = res["length_scale_factor"]
                         n = res["refractive_index"]

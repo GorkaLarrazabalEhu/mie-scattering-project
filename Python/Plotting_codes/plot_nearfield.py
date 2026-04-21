@@ -194,7 +194,7 @@ def plot_poynting_quiver_subplot(ax, x, z, sx, sz, title, spheres, layers,
         U[::step, ::step], V[::step, ::step],
         angles="xy",
         scale_units="xy",
-        scale=15,
+        scale=100,
         width=0.004,
         headwidth=4,
         headlength=6,
@@ -343,6 +343,17 @@ if field_type == "Poynting":
             fields.append(component_map[opt])
             titles.append(opt)
 
+elif field_type == "absE":
+    component_map = {
+        "|E_avg|^2": E2_avg,
+        "|E‖|^2": E2_par,
+        "|E⟂|^2": E2_perp
+    }
+    for opt in selected_options:
+        if opt in component_map:
+            fields.append(component_map[opt])
+            titles.append(opt)
+
 else:
     component_map = {
         # Electric
@@ -367,10 +378,60 @@ else:
 
 # sort everything before plotting
 sorted_pairs = sorted(zip(titles, fields), key=lambda x: sort_key(x[0]))
-titles, fields = zip(*sorted_pairs)
+raw_titles, fields = zip(*sorted_pairs)
 
-titles = list(titles)
+raw_titles = list(raw_titles)
 fields = list(fields)
+
+
+def split_component(comp):
+    if len(comp) >= 2:
+        return comp[0], comp[1:]
+    return comp, ""
+
+
+def format_title(t):
+    if t == "|E_avg|^2":
+        return r"$|E_{\mathrm{avg}}|^2$"
+    if t == "|E‖|^2":
+        return r"$|E_{\parallel}|^2$"
+    if t == "|E⟂|^2" or t == "|E⊥|^2":
+        return r"$|E_{\perp}|^2$"
+
+    if t == "Sx":
+        return r"$S_x$"
+    if t == "Sy":
+        return r"$S_y$"
+    if t == "Sz":
+        return r"$S_z$"
+    if t == "S_quiver":
+        return r"$\mathbf{S}$"
+
+    parts = t.split()
+
+    if len(parts) == 3:
+        ri, comp, pol = parts
+        base, axis = split_component(comp)
+
+        pol_map = {
+            "‖": r"\parallel",
+            "⟂": r"\perp",
+            "⊥": r"\perp"
+        }
+
+        ri_map = {
+            "Re": r"\mathrm{Re}",
+            "Im": r"\mathrm{Im}"
+        }
+
+        if pol in pol_map:
+            return rf"${ri_map.get(ri, ri)}\!\left({base}_{{{axis},{pol_map[pol]}}}\right)$"
+
+    return t
+
+
+titles = [format_title(t) for t in raw_titles]
+print("Selected titles:", titles)
 
 nplots = len(fields)
 
@@ -406,22 +467,27 @@ for i in range(nrows * ncols):
     ax = axs[i]
 
     if i < nplots:
-        if titles[i] == "S_quiver":
+        if raw_titles[i] == "S_quiver":
             sx, sz = fields[i]
-            contourf_last = plot_poynting_quiver_subplot(
+            contourf = plot_poynting_quiver_subplot(
                 ax, x_plot, z_plot,
                 sx, sz,
                 titles[i],
                 spheres_plot, layers_plot,
-                step=4,
+                step=10,
                 normalize=True
             )
         else:
-            contourf_last = plot_contour_subplot(
+            contourf = plot_contour_subplot(
                 ax, x_plot, z_plot,
                 fields[i], titles[i],
                 spheres_plot, layers_plot
             )
+
+        # Colorbar individual para este subplot
+        cbar = fig.colorbar(contourf, ax=ax, pad=0.02)
+        cbar.ax.tick_params(labelsize=TICK_SIZE)
+        # cbar.set_label('Field Magnitude', fontsize=COLORBAR_LABEL_SIZE)
 
         r = i % nrows
         c = i // nrows
@@ -432,11 +498,5 @@ for i in range(nrows * ncols):
             ax.set_ylabel("")
     else:
         ax.set_visible(False)
-
-# One shared colorbar (same data as before: last contourf)
-if contourf_last is not None:
-    cbar = fig.colorbar(contourf_last, ax=axs[:nplots], shrink=0.95, pad=0.02)
-    cbar.set_label('Field Magnitude', fontsize=COLORBAR_LABEL_SIZE)
-    cbar.ax.tick_params(labelsize=TICK_SIZE)
 
 plt.show()

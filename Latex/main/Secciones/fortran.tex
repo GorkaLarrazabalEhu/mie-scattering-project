@@ -1,0 +1,331 @@
+\section{Fortran}
+
+\subsection{Introducción a Fortran}
+\hspace{1em} Fortran es un lenguaje de programación de alto nivel 
+que se utiliza principalmente para cálculos científicos y de 
+ingeniería. Fue desarrollado en la década de 1950 por IBM, pero 
+a día de hoy sigue siendo ampliamente utilizado en la comunidad 
+científica debido a su eficiencia y capacidad para manejar grandes 
+cantidades de cálculos numéricos. En este trabajo, Fortran se emplea 
+para implementar un código numérico destinado al estudio del scattering
+electromagnético basado en expansiones multipolares.
+
+\subsection{Objetivo del programa}
+\hspace{1em} El programa tiene como objetivo simular la 
+interacción de una onda electromagnética con un conjunto de esferas. 
+Este problema incluye tanto el scattering por una sola esfera 
+como la interacción múltiple entre varias partículas. A partir 
+de la solución del problema, el código permite calcular magnitudes 
+físicas de interés tales como las eficiencias de extinción, absorción 
+y scattering, la matriz de scattering, así como el campo electromagnético
+en la región cercana a las partículas (near field).
+
+\subsection{Fundamento físico del método}
+\hspace{1em} El método implementado se basa en la expansión multipolar
+de los campos electromagnéticos. En el caso de una sola esfera, el 
+problema se describe mediante la teoría de Mie, donde los campos se 
+expresan como una suma de modos esféricos caracterizados por 
+coeficientes de scattering. En el caso de múltiples esferas, 
+es necesario tener en cuenta la interacción entre partículas, 
+lo que se realiza mediante la traslación de expansiones multipolares 
+entre distintos sistemas de referencia. Asimismo, el tratamiento de
+la polarización de la onda incidente se realiza mediante la consideración 
+de dos estados ortogonales, que permiten describir cualquier estado de
+polarización.
+
+\subsection{Estructura general del programa}
+
+\subsubsection{Flujo de ejecución}
+\hspace{1em} El funcionamiento del programa puede resumirse en los siguientes pasos:
+\begin{enumerate}
+    \item Lectura de los parámetros de entrada.
+    \item Definición de la geometría del sistema de esferas.
+    \item Cálculo de los coeficientes de Mie para cada esfera.
+    \item Resolución del sistema de ecuaciones que describe la interacción electromagnética.
+    \item Cálculo de las magnitudes físicas de interés.
+    \item Evaluación del campo electromagnético en el espacio cercano.
+\end{enumerate}
+
+\subsubsection{Organización en módulos}
+\hspace{1em} El código está estructurado en distintos módulos, cada uno con una función específica:
+\begin{itemize}
+    \item \texttt{inputinterface}: lectura de datos de entrada y control del flujo del programa.
+    \item \texttt{spheredata}: almacenamiento y gestión de la geometría del sistema.
+    \item \texttt{mie}: cálculo de los coeficientes de scattering de cada esfera.
+    \item \texttt{specialfuncs}: implementación de funciones matemáticas necesarias, 
+                                como funciones de Bessel y coeficientes de rotación.
+    \item \texttt{solver}: resolución numérica del sistema de ecuaciones.
+    \item \texttt{scatprops}: cálculo de magnitudes físicas observables.
+    \item \texttt{nearfield}: cálculo del campo electromagnético en la región cercana.
+\end{itemize}
+
+\subsection{Métodos numéricos empleados}
+
+\subsubsection{Resolución de sistemas lineales: factorización LU}
+\hspace{1em} En el método multipolar empleado, el campo electromagnético total se 
+expresa como una superposición de modos esféricos centrados en cada una de las 
+esferas del sistema. Debido a la interacción entre las partículas, el campo 
+dispersado por una esfera actúa como excitación para las demás, lo que introduce 
+un acoplamiento entre todos los coeficientes multipolares.
+
+\hspace{1em} Como consecuencia, el problema se reduce a la resolución de un sistema 
+de ecuaciones lineales de la forma:
+\[
+A \mathbf{x} = \mathbf{b},
+\]
+donde el vector $\mathbf{x}$ contiene los coeficientes multipolares desconocidos, 
+$\mathbf{b}$ representa la contribución de la onda incidente, y la matriz $A$ 
+describe tanto la respuesta individual de cada esfera como el acoplamiento entre 
+ellas mediante las traslaciones de las expansiones multipolares.
+
+\hspace{1em} La matriz $A$ es, en general, compleja y densa, ya que cada esfera 
+interactúa con todas las demás. Para resolver este sistema se puede emplear un 
+método directo basado en la descomposición LU, en el que la matriz se factoriza como
+\[
+P A = L U,
+\]
+donde $P$ es una matriz de permutación asociada al pivotado parcial, $L$ es una 
+matriz triangular inferior con unos en la diagonal y $U$ una matriz triangular 
+superior.
+
+\hspace{1em} La obtención de $L$ y $U$ se realiza mediante eliminación gaussiana. 
+En cada paso $k$, los elementos por debajo del pivote $a_{kk}$ se eliminan mediante:
+\[
+a_{ij}^{(k+1)} = a_{ij}^{(k)} - 
+\frac{a_{ik}^{(k)}}{a_{kk}^{(k)}} a_{kj}^{(k)}, 
+\quad i>k, \; j \geq k,
+\]
+lo que introduce los coeficientes de $L$ como
+\[
+l_{ik} = \frac{a_{ik}^{(k)}}{a_{kk}^{(k)}}.
+\]
+
+\hspace{1em} Una vez obtenida la factorización, el sistema original se resuelve en 
+dos etapas. Primero se resuelve
+\[
+L \mathbf{y} = P \mathbf{b},
+\]
+mediante sustitución hacia adelante, y posteriormente
+\[
+U \mathbf{x} = \mathbf{y},
+\]
+mediante sustitución hacia atrás.
+
+\hspace{1em} El coste computacional de este método es del orden de 
+$\mathcal{O}(N^3)$, por lo que resulta adecuado únicamente para sistemas de 
+tamaño moderado. En problemas con un gran número de esferas o con órdenes 
+multipolares elevados, se recurre preferentemente a métodos iterativos.
+
+
+\subsubsection{Método de gradiente biconjugado}
+
+\hspace{1em} En el problema de scattering múltiple, el sistema lineal que acopla 
+los coeficientes multipolares puede alcanzar dimensiones elevadas, lo que hace 
+poco práctico el uso de métodos directos como la descomposición LU. Por este 
+motivo, se emplean métodos iterativos, siendo uno de los más utilizados el 
+gradiente biconjugado (BiCG).
+
+\hspace{1em} El sistema a resolver tiene la forma
+\[
+A \mathbf{x} = \mathbf{b},
+\]
+donde $A$ es una matriz compleja y no necesariamente simétrica que describe 
+la interacción entre las esferas. En lugar de construir esta matriz de forma 
+explícita, el método BiCG únicamente requiere evaluar productos del tipo 
+$A \mathbf{v}$, que en este código se obtienen a partir de las interacciones 
+entre esferas.
+
+\hspace{1em} El método parte de una estimación inicial $\mathbf{x}_0$ y calcula 
+el residuo
+\[
+\mathbf{r}_0 = \mathbf{b} - A \mathbf{x}_0.
+\]
+A partir de este residuo, se genera una sucesión de aproximaciones 
+$\mathbf{x}_k$ que se van corrigiendo iterativamente mediante direcciones de 
+búsqueda adecuadas.
+
+\hspace{1em} En cada iteración, la solución se actualiza como
+\[
+\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k,
+\]
+donde $\mathbf{p}_k$ es una dirección de búsqueda y $\alpha_k$ es un coeficiente 
+que se calcula para minimizar el residuo. Este proceso se repite hasta que el 
+error relativo satisface un criterio de convergencia, típicamente
+\[
+\frac{\|\mathbf{r}_k\|}{\|\mathbf{b}\|} < \varepsilon.
+\]
+
+\hspace{1em} Este método presenta un coste computacional por iteración del orden 
+de $\mathcal{O}(N)$, dominado por la evaluación del producto $A \mathbf{v}$, y 
+permite abordar sistemas de gran tamaño de forma eficiente. En el contexto de 
+este código, constituye el método principal para la resolución del problema de 
+scattering múltiple.
+
+
+\subsubsection{Cálculo de derivadas}
+
+\hspace{1em} En la formulación del problema electromagnético mediante expansiones 
+multipolares, aparecen derivadas radiales de funciones especiales, en particular 
+de funciones de Bessel y Hankel esféricas. Estas derivadas son necesarias para 
+imponer las condiciones de contorno en la superficie de las esferas y para 
+construir los coeficientes de scattering.
+
+\hspace{1em} En las partes principales del código, estas derivadas no se calculan 
+mediante métodos numéricos de diferencias finitas, sino utilizando relaciones 
+analíticas y de recurrencia. Por ejemplo, las funciones de Bessel esféricas 
+satisfacen identidades del tipo:
+\[
+\frac{d}{dx}\left[x j_n(x)\right] = x j_{n-1}(x) - n j_n(x),
+\]
+a partir de las cuales se pueden obtener expresiones explícitas para la derivada 
+$j_n'(x)$.
+
+\hspace{1em} De manera análoga, se emplean relaciones similares para las funciones 
+de Hankel, que permiten expresar sus derivadas en términos de funciones del mismo 
+tipo y de órdenes adyacentes. Este enfoque evita la necesidad de aproximaciones 
+numéricas directas y mejora la estabilidad del cálculo.
+
+\hspace{1em} El uso de estas relaciones es especialmente relevante en la evaluación 
+de los coeficientes de scattering y en la construcción de las soluciones 
+multipolares, donde la precisión en las derivadas radiales es fundamental.
+
+
+\subsubsection{Método de Newton-Raphson}
+
+\hspace{1em} En algunos cálculos auxiliares del código es necesario resolver 
+ecuaciones no lineales de la forma
+\[
+f(x)=0,
+\]
+donde $f(x)$ es una función que no puede invertirse de forma directa. Para ello 
+se emplea el método de Newton-Raphson, que permite obtener una solución mediante 
+un proceso iterativo.
+
+\hspace{1em} Partiendo de una estimación inicial $x_0$, el método construye una 
+sucesión de aproximaciones utilizando la relación
+\[
+x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}.
+\]
+Este procedimiento se basa en la aproximación lineal de la función en torno a 
+cada punto, de modo que la siguiente iteración corresponde a la intersección de 
+la recta tangente con el eje horizontal.
+
+\hspace{1em} La convergencia del método depende de la elección del valor inicial 
+y del comportamiento de la función. Cuando se cumplen las condiciones adecuadas, 
+presenta convergencia cuadrática, lo que permite alcanzar una alta precisión en 
+pocas iteraciones.
+
+\hspace{1em} En el contexto de este código, el método se emplea en cálculos 
+auxiliares asociados a la obtención de parámetros efectivos. En estos casos, la 
+derivada $f'(x)$ se evalúa a partir de expresiones analíticas de la función 
+considerada, lo que mejora la estabilidad numérica del procedimiento y evita el 
+uso de aproximaciones por diferencias finitas.
+
+% No se usan integrales en el codigo porque las funciones de green 
+% solo son para el caso de superficies planas, interfaces y sustratos.
+% Fuera del scope de este trabajo
+
+% \subsubsection{Integración numérica: cuadratura de Gauss-Kronrod}
+
+% \hspace{1em} En distintos puntos del código es necesario evaluar integrales 
+% definidas que no admiten una solución analítica sencilla, como ocurre en el 
+% tratamiento de funciones de Green o en la presencia de superficies y capas. 
+% Para ello se emplean métodos de cuadratura numérica.
+
+% \hspace{1em} En particular, se utilizan reglas de Gauss-Kronrod, que constituyen 
+% una extensión de las cuadraturas de Gauss. En estas, una integral en un intervalo 
+% \([a,b]\) se aproxima mediante una combinación lineal de evaluaciones de la función:
+% \[
+% \int_a^b f(x)\,dx \approx \sum_{i=1}^{n} w_i f(x_i),
+% \]
+% donde los puntos \(x_i\) y los pesos \(w_i\) se eligen de forma óptima para 
+% maximizar el orden de precisión de la aproximación.
+
+% \hspace{1em} La característica principal de la regla de Gauss-Kronrod es que 
+% permite obtener simultáneamente dos aproximaciones de distinto orden, una basada 
+% en la cuadratura de Gauss y otra en la extensión de Kronrod. La diferencia entre 
+% ambas proporciona una estimación del error de la integración sin necesidad de 
+% evaluaciones adicionales de la función.
+
+% \hspace{1em} Este tipo de cuadratura resulta especialmente adecuado en este 
+% contexto, ya que combina alta precisión con una estimación fiable del error, 
+% lo que permite controlar la calidad del resultado de forma eficiente.
+
+% \subsubsection{Integración adaptativa}
+
+% \hspace{1em} Para mejorar la precisión en la evaluación de integrales, el código 
+% emplea esquemas de integración adaptativa. Estos métodos utilizan la estimación 
+% del error proporcionada por la cuadratura de Gauss-Kronrod para decidir si es 
+% necesario refinar la discretización del intervalo.
+
+% \hspace{1em} Dado un intervalo \([a,b]\), si el error estimado supera una 
+% tolerancia prefijada, el intervalo se subdivide en dos subintervalos:
+% \[
+% \int_a^b f(x)\,dx = \int_a^c f(x)\,dx + \int_c^b f(x)\,dx,
+% \]
+% donde \(c = (a+b)/2\). Este proceso se aplica de forma recursiva en cada 
+% subintervalo hasta que la estimación del error es suficientemente pequeña.
+
+% \hspace{1em} De este modo, el método concentra el esfuerzo computacional en 
+% aquellas regiones donde la función presenta variaciones más acusadas, como 
+% pueden ser cambios bruscos o comportamientos cercanos a singularidades, mientras 
+% que en regiones suaves se emplea un número reducido de evaluaciones.
+
+% \hspace{1em} Este enfoque permite obtener una buena precisión global con un coste 
+% computacional controlado, lo que resulta especialmente útil en problemas donde 
+% la función a integrar presenta un comportamiento no uniforme.
+
+
+\subsection{Cálculo del campo cercano}
+\subsubsection{Definición}
+\hspace{1em} El campo cercano corresponde al campo electromagnético total en 
+una región espacial próxima al sistema de esferas. Este campo incluye tanto 
+la contribución de la onda incidente como la de los campos dispersados por las partículas.
+
+\subsubsection{Implementación en el código}
+\hspace{1em} El cálculo del campo cercano se realiza evaluando el campo 
+electromagnético en una malla de puntos definida en el espacio. Para 
+cada punto, se calcula el campo eléctrico y magnético a partir de la 
+solución multipolar obtenida previamente.
+
+\subsubsection{Tratamiento de la polarización}
+\hspace{1em} El programa considera dos polarizaciones ortogonales de la 
+onda incidente, resolviendo el problema para cada una de ellas de forma 
+independiente. Como resultado, el campo cercano se obtiene para ambas 
+polarizaciones por separado.
+
+\subsubsection{Formato de salida}
+\hspace{1em} El archivo de salida del campo cercano contiene un total de 27 
+columnas, organizadas de la siguiente forma:
+\begin{itemize}
+    \item 3 columnas correspondientes a las coordenadas espaciales.
+    \item 6 columnas para las componentes real e imaginaria del campo eléctrico de la primera polarización.
+    \item 6 columnas para el campo magnético de la primera polarización.
+    \item 6 columnas para el campo eléctrico de la segunda polarización.
+    \item 6 columnas para el campo magnético de la segunda polarización.
+\end{itemize}
+Esto puede expresarse de forma compacta como:
+\[
+3 + 2 \times 3 \times 2 \times 2 = 27
+\]
+
+\subsection{Interpretación de resultados}
+\hspace{1em} Para el caso de luz no polarizada, no es correcto sumar 
+directamente los campos electromagnéticos obtenidos para cada polarización. 
+En su lugar, se deben promediar las magnitudes cuadráticas, como la intensidad 
+del campo eléctrico o el vector de Poynting. De este modo, la intensidad 
+media puede expresarse como:
+\[
+\langle |E|^2 \rangle = \frac{|E_1|^2 + |E_2|^2}{2}
+\]
+
+\subsection{Conclusión}
+\hspace{1em} El programa analizado implementa un método basado en expansiones 
+multipolares para la simulación del scattering electromagnético en sistemas 
+de múltiples esferas. Su estructura modular permite separar claramente las 
+distintas etapas del cálculo, desde la definición del problema hasta la 
+obtención de magnitudes físicas y la evaluación del campo cercano. El tratamiento 
+explícito de la polarización y el uso de métodos numéricos eficientes lo 
+convierten en una herramienta adecuada para el estudio de fenómenos de 
+scattering en sistemas complejos.
+
