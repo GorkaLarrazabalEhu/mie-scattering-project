@@ -2,11 +2,11 @@
     "output_file": "pruebas3.dat",
     "num_spheres": "1",
     "positions": [
-        "0.d0, 0.d0, 0.d0, 0.6d0, (1.3000000000d0, 0.0000000000d0)"
+        "0.d0, 0.d0, 0.d0, 0.05d0, (0.6351200000d0, 2.0720720000d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
-    "length_scale": "10.4719755120d0",
+    "length_scale": "12.0830486677d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
     "near_field": true,
@@ -14,17 +14,21 @@
     "nearfieldplot": "",
     "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\pruebas",
     "plot_type": "absE",
-    "plot_options": [],
-    "wavelength": "0.6",
-    "sphere_radius": "0.6",
-    "material": "Custom",
+    "plot_options": [
+        "|E_avg|^2",
+        "|E\u2016|^2",
+        "|E\u27c2|^2"
+    ],
+    "wavelength": "0.520",
+    "sphere_radius": "0.050",
+    "material": "Au",
     "separation": "0.5",
     "geometry": "(none)",
     "wavelength_sweep": {
-        "enabled": true,
-        "min": "0.3",
-        "max": "1.4",
-        "n": "100"
+        "enabled": false,
+        "min": "450",
+        "max": "600",
+        "n": "150"
     },
     "radius_sweep": {
         "enabled": false,
@@ -32,6 +36,8 @@
         "max": "0.5",
         "n": "10"
     },
-    "custom_n": "1.3",
-    "custom_k": "10"
+    "custom_n": "",
+    "custom_k": "",
+    "near_field_stepsize": "0.008d0",
+    "near_field_stepsize_auto": false
 }

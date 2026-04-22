@@ -277,55 +277,99 @@ uso de aproximaciones por diferencias finitas.
 
 
 \subsection{Cálculo del campo cercano}
+
 \subsubsection{Definición}
 \hspace{1em} El campo cercano corresponde al campo electromagnético total en 
 una región espacial próxima al sistema de esferas. Este campo incluye tanto 
-la contribución de la onda incidente como la de los campos dispersados por las partículas.
+la contribución de la onda incidente como la de los campos dispersados por 
+las partículas. A diferencia del campo lejano, que se estudia en el límite 
+asintótico y se relaciona principalmente con magnitudes globales como la 
+sección eficaz de scattering o la matriz de scattering, el campo cercano 
+permite analizar la distribución espacial local del campo electromagnético 
+en el entorno inmediato de las esferas.
+
+\hspace{1em} Desde el punto de vista teórico, el campo total puede escribirse como
+\[
+\mathbf{E}(\mathbf{r})=
+\mathbf{E}_{\mathrm{inc}}(\mathbf{r})+
+\mathbf{E}_{\mathrm{scat}}(\mathbf{r}),
+\]
+y de forma análoga para el campo magnético. En el formalismo multipolar, 
+la contribución dispersada se expresa como una combinación de funciones 
+vectoriales esféricas. Estas funciones dependen de la posición espacial, 
+por lo que la expansión no proporciona únicamente coeficientes globales, 
+sino una expresión del campo válida en cualquier punto del espacio donde 
+la expansión converja.
+
+\hspace{1em} Aunque en la formulación analítica el campo se expresa de forma 
+natural en coordenadas esféricas \((r,\theta,\phi)\), su evaluación numérica 
+se realiza sobre puntos definidos en coordenadas cartesianas \((x,y,z)\). 
+Por tanto, el cálculo del campo cercano consiste esencialmente en evaluar 
+la expansión multipolar del campo en una colección de puntos del espacio.
 
 \subsubsection{Implementación en el código}
-\hspace{1em} El cálculo del campo cercano se realiza evaluando el campo 
-electromagnético en una malla de puntos definida en el espacio. Para 
-cada punto, se calcula el campo eléctrico y magnético a partir de la 
-solución multipolar obtenida previamente.
+\hspace{1em} En el código, el cálculo del campo cercano se lleva a cabo 
+mediante la subrutina \texttt{near\_field\_calculation}, que recibe como 
+entrada la solución multipolar ya obtenida y evalúa los campos eléctrico 
+y magnético sobre una malla espacial. Esta malla queda definida mediante 
+una región de cálculo y un número de puntos en cada dirección, de modo que 
+cada punto del mallado queda asociado a una posición \(\mathbf{r}=(x,y,z)\). 
 
-\subsubsection{Tratamiento de la polarización}
-\hspace{1em} El programa considera dos polarizaciones ortogonales de la 
-onda incidente, resolviendo el problema para cada una de ellas de forma 
-independiente. Como resultado, el campo cercano se obtiene para ambas 
-polarizaciones por separado.
-
-\subsubsection{Formato de salida}
-\hspace{1em} El archivo de salida del campo cercano contiene un total de 27 
-columnas, organizadas de la siguiente forma:
-\begin{itemize}
-    \item 3 columnas correspondientes a las coordenadas espaciales.
-    \item 6 columnas para las componentes real e imaginaria del campo eléctrico de la primera polarización.
-    \item 6 columnas para el campo magnético de la primera polarización.
-    \item 6 columnas para el campo eléctrico de la segunda polarización.
-    \item 6 columnas para el campo magnético de la segunda polarización.
-\end{itemize}
-Esto puede expresarse de forma compacta como:
+\hspace{1em} Para cada punto del mallado, el programa construye primero su 
+posición cartesiana y, a continuación, calcula el campo correspondiente 
+sumando distintas contribuciones. Por un lado, se evalúa el campo dispersado 
+por las esferas a partir de los coeficientes multipolares ya calculados. 
+Para ello, el campo en cada punto se expresa en función de la posición 
+relativa respecto al centro de cada esfera, es decir, en términos de
 \[
-3 + 2 \times 3 \times 2 \times 2 = 27
+\mathbf{r}-\mathbf{r}_j,
 \]
+donde \(\mathbf{r}_j\) es la posición de la esfera \(j\). Sobre esa posición 
+relativa se evalúan las funciones vectoriales esféricas, obteniendo así la 
+contribución de cada modo multipolar al campo local.
+
+\hspace{1em} Además del campo dispersado, el código añade la contribución 
+del campo incidente y, cuando corresponde, también la contribución asociada 
+a superficies planas o capas. De este modo, el valor final almacenado en 
+cada punto del mallado es el campo total, y no únicamente la parte dispersada. 
+
+\hspace{1em} El programa realiza este proceso para dos polarizaciones 
+ortogonales de la onda incidente, almacenando por separado las componentes 
+del campo eléctrico y magnético correspondientes a cada una de ellas. Por 
+ello, la salida del campo cercano contiene, para cada punto del mallado, 
+las coordenadas espaciales y los valores complejos de los campos para ambas 
+polarizaciones.
+
+
+% \subsubsection{Formato de salida}
+% \hspace{1em} El archivo de salida del campo cercano contiene un total de 27 
+% columnas, organizadas de la siguiente forma:
+% \begin{itemize}
+%     \item 3 columnas correspondientes a las coordenadas espaciales.
+%     \item 6 columnas para las componentes real e imaginaria del campo eléctrico de la primera polarización.
+%     \item 6 columnas para el campo magnético de la primera polarización.
+%     \item 6 columnas para el campo eléctrico de la segunda polarización.
+%     \item 6 columnas para el campo magnético de la segunda polarización.
+% \end{itemize}
+% Esto puede expresarse de forma compacta como:
+% \[
+% 3 + 2 \times 3 \times 2 \times 2 = 27
+% \]
 
 \subsection{Interpretación de resultados}
-\hspace{1em} Para el caso de luz no polarizada, no es correcto sumar 
-directamente los campos electromagnéticos obtenidos para cada polarización. 
-En su lugar, se deben promediar las magnitudes cuadráticas, como la intensidad 
-del campo eléctrico o el vector de Poynting. De este modo, la intensidad 
-media puede expresarse como:
-\[
-\langle |E|^2 \rangle = \frac{|E_1|^2 + |E_2|^2}{2}
-\]
+\hspace{1em} En el caso de luz no polarizada, el análisis de los resultados 
+se realiza a partir del promedio de las contribuciones asociadas a dos 
+polarizaciones ortogonales de la onda incidente. Dado que estas polarizaciones 
+son incoherentes entre sí, la combinación adecuada se lleva a cabo sobre 
+magnitudes cuadráticas del campo electromagnético, como la intensidad del 
+campo eléctrico o el vector de Poynting.
 
-\subsection{Conclusión}
-\hspace{1em} El programa analizado implementa un método basado en expansiones 
-multipolares para la simulación del scattering electromagnético en sistemas 
-de múltiples esferas. Su estructura modular permite separar claramente las 
-distintas etapas del cálculo, desde la definición del problema hasta la 
-obtención de magnitudes físicas y la evaluación del campo cercano. El tratamiento 
-explícito de la polarización y el uso de métodos numéricos eficientes lo 
-convierten en una herramienta adecuada para el estudio de fenómenos de 
-scattering en sistemas complejos.
+\hspace{1em} De este modo, la intensidad media del campo puede expresarse como:
+\[
+\langle |E|^2 \rangle = \frac{|E_\parallel|^2 + |E_\perp|^2}{2},
+\]
+donde $E_1$ y $E_2$ representan las contribuciones correspondientes a cada 
+polarización. Este procedimiento permite obtener una descripción física 
+consistente del comportamiento del sistema bajo iluminación no polarizada.
+
 

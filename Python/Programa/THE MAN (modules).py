@@ -34,7 +34,9 @@ class Config:
             "gaussian_beam_constant": "0.1d0",
             "is_gaussian_beam": False,
             "near_field": False,
+            "near_field_file": "",
             "near_field_stepsize": "",
+            "near_field_stepsize_auto": True,
             "separation": "",
             "geometry": "(none)",
             "material": "Custom",
@@ -186,13 +188,32 @@ class MieTheoryApp:
         frame_near.grid(row=3, column=0, sticky="nsew", padx=10, pady=5)
 
         self.near_field_var = tk.BooleanVar()
-        tk.Checkbutton(frame_near, text="Calculate Near Field", variable=self.near_field_var).grid(row=0, column=0, sticky="w")
+        tk.Checkbutton(
+            frame_near,
+            text="Calculate Near Field",
+            variable=self.near_field_var
+        ).grid(row=0, column=0, sticky="w")
+
         tk.Label(frame_near, text="Near Field Output File").grid(row=1, column=0, sticky="w")
         self.near_field_file_entry = tk.Entry(frame_near, width=20)
         self.near_field_file_entry.grid(row=1, column=1, sticky="w")
-        self.near_field_stepsize = tk.Label(frame_near, text="step size: ")
-        self.near_field_stepsize.grid(row=1, column=2, sticky="w", padx=5)
 
+        self.near_field_stepsize_auto_var = tk.BooleanVar(value=True)
+        tk.Checkbutton(
+            frame_near,
+            text="Auto step size",
+            variable=self.near_field_stepsize_auto_var,
+            command=self.toggle_near_field_stepsize_mode
+        ).grid(row=2, column=0, sticky="w")
+
+        tk.Label(frame_near, text="Near Field Step Size").grid(row=3, column=0, sticky="w")
+        self.near_field_stepsize_entry = tk.Entry(frame_near, width=12)
+        self.near_field_stepsize_entry.grid(row=3, column=1, sticky="w")
+
+        self.near_field_stepsize_label = tk.Label(frame_near, text="Calculated: --")
+        self.near_field_stepsize_label.grid(row=3, column=2, sticky="w", padx=5)
+
+        self.toggle_near_field_stepsize_mode()
 
         # ---- Scattering Matrix plot options (LEFT container, right subcolumn) ----
         frame_scattering = tk.LabelFrame(left, text="Scattering Matrix Plot Options", padx=5, pady=5)
@@ -540,6 +561,20 @@ class MieTheoryApp:
         state = "normal" if is_custom else "disabled"
         self.custom_n_entry.config(state=state)
         self.custom_k_entry.config(state=state)
+
+
+    def toggle_near_field_stepsize_mode(self):
+        """Enable manual step input only when auto mode is disabled."""
+        if self.near_field_stepsize_auto_var.get():
+            self.near_field_stepsize_entry.config(state="disabled")
+            current = self.near_field_stepsize_entry.get().strip()
+            if current:
+                self.near_field_stepsize_label.config(text=f"Calculated: {current}")
+            else:
+                self.near_field_stepsize_label.config(text="Calculated automatically")
+        else:
+            self.near_field_stepsize_entry.config(state="normal")
+            self.near_field_stepsize_label.config(text="Manual value will be written")
 
     def update_plot_options(self):
         """Rebuild the plot options based on selected plot type."""
@@ -1296,6 +1331,14 @@ class MieTheoryApp:
         self.near_field_file_entry.delete(0, "end")
         self.near_field_file_entry.insert(0, data["near_field_file"])
 
+        self.near_field_stepsize_auto_var.set(data.get("near_field_stepsize_auto", True))
+
+        self.near_field_stepsize_entry.config(state="normal")
+        self.near_field_stepsize_entry.delete(0, "end")
+        self.near_field_stepsize_entry.insert(0, data.get("near_field_stepsize", ""))
+        self.toggle_near_field_stepsize_mode()
+
+
         # --- Restore plotting settings ---
         self.plot_type_var.set(data.get("plot_type", "Poynting"))
         self.update_plot_options()
@@ -1418,7 +1461,18 @@ class MieTheoryApp:
                 step = side_scaled / np.sqrt(max_points)
         # step = 0.01
         self.near_field_step = step
-        self.near_field_stepsize.config(text=f"step size: {step:.4f}")
+
+        entry_was_disabled = str(self.near_field_stepsize_entry.cget("state")) == "disabled"
+        if entry_was_disabled:
+            self.near_field_stepsize_entry.config(state="normal")
+
+        self.near_field_stepsize_entry.delete(0, "end")
+        self.near_field_stepsize_entry.insert(0, f"{step:.6f}d0")
+
+        if entry_was_disabled:
+            self.near_field_stepsize_entry.config(state="disabled")
+
+        self.near_field_stepsize_label.config(text=f"Calculated: {step:.4f}")
         return float(step)
 
 
@@ -1444,6 +1498,10 @@ class MieTheoryApp:
         self.config.data["near_field_file"] = (
             self.near_field_file_entry.get() if self.config.data["near_field"] else "f"
         )
+        self.config.data["near_field_stepsize"] = self.near_field_stepsize_entry.get(
+        ).strip()
+        self.config.data["near_field_stepsize_auto"] = self.near_field_stepsize_auto_var.get()
+
 
         self.config.data["plot_type"] = self.plot_type_var.get()
         self.config.data["plot_options"] = [
@@ -1639,17 +1697,26 @@ class MieTheoryApp:
                     side_scaled = length_scale * side
 
 
-                    step = self.compute_near_field_step(
-                        coords=coords,
-                        length_scale=length_scale,
-                        side_scaled=side_scaled,
-                        ppw=50,         # 50 → suave (si quieres más rápido baja a 30-40)
-                        nrad=25,        # 25 puntos por radio mínimo
-                        ngap=12,        # 12 puntos en el gap mínimo
-                        max_points=2_000_000,
-                        step_min=0.002,
-                        step_max=0.15
-                    )
+                    if self.near_field_stepsize_auto_var.get():
+                        step = self.compute_near_field_step(
+                            coords=coords,
+                            length_scale=length_scale,
+                            side_scaled=side_scaled,
+                            ppw=50,
+                            nrad=25,
+                            ngap=12,
+                            max_points=2_000_000,
+                            step_min=0.002,
+                            step_max=0.15
+                        )
+                    else:
+                        manual_step_txt = self.near_field_stepsize_entry.get().strip()
+                        if not manual_step_txt:
+                            raise ValueError("Near-field manual step size is empty.")
+                        step = to_float(manual_step_txt)
+                        if step <= 0:
+                            raise ValueError("Near-field manual step size must be positive.")
+                        self.near_field_stepsize_label.config(text=f"Manual: {step:.8f}")
 
 
                     f.write("near_field_step_size\n")

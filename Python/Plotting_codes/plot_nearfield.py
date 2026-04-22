@@ -147,6 +147,7 @@ paralelE, paralelH, perpendE, perpendH = getFields(data)
 # H1 = np.array(paralelH) + np.array(perpendH)
 # E = [E1[0] + 1.0j*E1[1], E1[2] + 1.0j*E1[3], E1[4] + 1.0j*E1[5]]
 # H = [H1[0] + 1.0j*H1[1], H1[2] + 1.0j*H1[3], H1[4] + 1.0j*H1[5]]
+
 E_paralel = [paralelE[0] + 1.0j*paralelE[1], paralelE[2] + 1.0j*paralelE[3], paralelE[4] + 1.0j*paralelE[5]]
 H_paralel = [paralelH[0] + 1.0j*paralelH[1], paralelH[2] + 1.0j*paralelH[3], paralelH[4] + 1.0j*paralelH[5]]
 
@@ -161,6 +162,8 @@ def poynting_vector(vec1, vec2):
 
 
 def field_intensity(E):
+    # E = [Ex, Ey, Ez] 
+    # Ex = Re Ex + i Im Ex 
     return np.abs(E[0])**2 + np.abs(E[1])**2 + np.abs(E[2])**2
 
 

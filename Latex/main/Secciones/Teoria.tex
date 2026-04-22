@@ -71,6 +71,75 @@ Esta propiedad justifica que la teoría de Mie resuelva únicamente el problema
 para dos polarizaciones independientes, ya que cualquier polarización del campo 
 incidente puede expresarse como una suma lineal de ambas.
 
+\subsection{Condiciones de contorno y matriz de amplitud de dispersión}
+
+El problema de la dispersión consiste en resolver la ecuación de onda en 
+dos dominios: el interior de la esfera, caracterizado por un índice de 
+refracción $m$, y el exterior, caracterizado por el índice del medio 
+circundante. Las soluciones en ambos dominios deben satisfacer las 
+condiciones de contorno en la superficie $r = a$, que exigen la 
+continuidad de las componentes tangenciales de los campos eléctrico y 
+magnético:
+
+\begin{equation}
+  \left.(E_\theta^{(i)} + E_\theta^{(s)})\right|_{r=a} 
+  = \left.E_\theta^{(\mathrm{int})}\right|_{r=a},
+  \qquad
+  \left.(H_\theta^{(i)} + H_\theta^{(s)})\right|_{r=a} 
+  = \left.H_\theta^{(\mathrm{int})}\right|_{r=a},
+\end{equation}
+
+y análogamente para las componentes azimutales $\phi$. 
+
+Dado que tanto las ecuaciones de Maxwell como estas condiciones de contorno 
+son lineales en los campos, el campo dispersado en cualquier punto del 
+espacio debe depender linealmente del campo incidente. En la zona de campo 
+lejano ($kr \gg 1$), el campo dispersado adopta la forma de 
+onda esférica saliente Jackson 1975 pag 270:
+
+\begin{equation}
+  \mathbf{E}^{(s)} \;\xrightarrow{kr \to \infty}\; 
+  \frac{e^{ikr}}{-ikr}\,\mathbf{f}(\theta,\phi),
+\end{equation}
+
+donde $\mathbf{f}$ es la amplitud vectorial de dispersión. Combinando la 
+linealidad con esta estructura de campo lejano, la relación entre las 
+componentes de polarización del campo incidente y del campo dispersado debe 
+ser de la forma matricial:
+
+\begin{equation}
+\label{eq:amplitudematrix}
+  \begin{pmatrix}
+    E_{\parallel}^{(s)} \\[4pt]
+    E_{\perp}^{(s)}
+  \end{pmatrix}
+  =
+  \frac{e^{ikr}}{-ikr}
+  \begin{pmatrix}
+    S_{2}(\theta,\phi) & S_{3}(\theta,\phi) \\[4pt]
+    S_{4}(\theta,\phi) & S_{1}(\theta,\phi)
+  \end{pmatrix}
+  \begin{pmatrix}
+    E_{\parallel}^{(i)} \\[4pt]
+    E_{\perp}^{(i)}
+  \end{pmatrix}.
+\end{equation}
+
+Aquí, $E_{\parallel}^{(i)}$ y $E_{\perp}^{(i)}$ son las componentes paralela y perpendicular
+del campo eléctrico incidente (paralelo y perpendicular respecto al plano de incidencia), 
+mientras que $E_{\parallel}^{(s)}$ y $E_{\perp}^{(s)}$ son las
+componentes correspondientes del campo dispersado (\textit{scattered}). 
+Los elementos $S_1, S_2, S_3, S_4$ dependen del ángulo de dispersión 
+$\theta$ y del ángulo azimutal $\phi$, y quedan completamente determinados 
+por las condiciones de contorno sobre la superficie de la partícula. Para 
+una esfera homogénea e isotrópica, la simetría azimutal impone $S_3 = S_4 = 0$, 
+de modo que los modos de polarización paralelo y perpendicular se dispersan 
+de forma independiente.
+
+
+============================================
+
+
 La formulación estándar introduce así la matriz de amplitud de dispersión 
 (\ref{eq:amplitudematrix}), que relaciona de forma lineal los campos incidente 
 y dispersado y permite caracterizar completamente la interacción entre 
@@ -591,7 +660,7 @@ $c_{n}$ y $d_{n}$ son los coeficientes de campo interno.
 \end{equation}
 donde los superíndices $(3)$ indican que la dependencia radial está dada por las 
 funciones de Hankel esféricas de primera especie/tipo, y $a_{n}$ y $b_{n}$ son los
-coeficientes de scattering.
+coeficientes de scattering. 
 
 \subsubsection{Coeficientes de scattering}
 El siguiente paso nos lleva a conseguir las expresiones explícitas de los coeficientes
@@ -680,32 +749,392 @@ b_n &=
 
 \subsection{Concepto físico de dispersión}
 
-\hspace{1em}Desde un punto de vista físico, la dispersión puede interpretarse como la rerradiación 
-de energía electromagnética por parte de las cargas ligadas y corrientes de polarización 
-inducidas en la partícula por el campo incidente. 
-Es decir, La dispersión se define como la reemisión de radiación electromagnética por 
-parte de cargas aceleradas en una partícula tras interactuar con un campo incidente
-
-La onda incidente excita dipolos % (y multipolos de orden superior) 
-en el interior de la partícula, que a su vez emiten radiación en todas las direcciones.
-Dispersión$=$Excitación+Re-radiación.
-
-En medios disipativos, parte de la energía electromagnética se transforma en energía interna 
-del material, lo que da lugar a la absorción.
-
-
-
-El balance energético de la interacción se expresa mediante la relación
+\hspace{1em}Desde un punto de vista físico, la dispersión puede interpretarse 
+como la rerradiación de energía electromagnética por parte de las cargas ligadas 
+y corrientes de polarización inducidas en la partícula por el campo incidente. 
+La onda incidente excita momentos multipolares en el interior de la partícula, 
+que a su vez emiten radiación en todas las direcciones. En medios disipativos, 
+parte de la energía electromagnética se transforma en energía interna del 
+material, dando lugar a la absorción. El balance energético de la interacción 
+se expresa mediante la relación
 
 \begin{equation}
   C_{\text{ext}} = C_{\text{sca}} + C_{\text{abs}},
 \end{equation}
 
-donde $C_{\text{ext}}$ es la sección eficaz de extinción, $C_{\text{sca}}$ la sección eficaz 
-de dispersión y $C_{\text{abs}}$ la de absorción. Estas magnitudes cuantifican el área efectiva 
-que presenta la partícula frente al haz incidente. La extinción es una medida de toda la pérdida 
-de luz que ocurre a medida que la luz viaja a través de un medio, por lo tanto, el coeficiente de extinción 
-es la suma de los efectos de absorción y dispersión.
+donde $C_{\text{ext}}$ es la sección eficaz de extinción, $C_{\text{sca}}$ la 
+de dispersión y $C_{\text{abs}}$ la de absorción. Estas magnitudes cuantifican 
+el área efectiva que presenta la partícula frente al haz incidente.
+
+
+%====================================================================%
+\subsection{Secciones eficaces}
+%====================================================================%
+
+\hspace{1em}Las secciones eficaces se obtienen aplicando el teorema óptico y 
+el teorema de Poynting al campo total. El flujo de energía dispersada y 
+extinguida por la partícula se calcula integrando el vector de Poynting sobre 
+una superficie esférica que la rodea, y proyectando sobre las expansiones 
+modales de los campos. Gracias a la ortogonalidad de los armónicos esféricos 
+vectoriales, estas integrales se reducen a sumas sobre los coeficientes de 
+Mie, dando lugar a las expresiones
+
+\begin{equation}
+  C_{\text{sca}} = \frac{2\pi}{k^2}
+  \sum_{n=1}^{\infty} (2n+1)
+  \left( |a_n|^2 + |b_n|^2 \right),
+\end{equation}
+
+\begin{equation}
+  C_{\text{ext}} = \frac{2\pi}{k^2}
+  \sum_{n=1}^{\infty} (2n+1)
+  \,\mathrm{Re}(a_n + b_n),
+\end{equation}
+
+\begin{equation}
+  C_{\text{abs}} = C_{\text{ext}} - C_{\text{sca}}.
+\end{equation}
+
+La sección eficaz de extinción sigue el \textit{teorema óptico}: está 
+determinada únicamente por la amplitud de dispersión en la dirección hacia 
+adelante ($\theta = 0$), lo que refleja la interferencia destructiva entre 
+el campo incidente y el dispersado que produce la sombra de la partícula.
+
+Es habitual introducir las eficiencias adimensionales, definidas como las 
+secciones eficaces normalizadas por el área geométrica de la partícula 
+$G = \pi a^2$:
+
+\begin{equation}
+  Q_{\text{sca}} = \frac{C_{\text{sca}}}{\pi a^2}, \qquad
+  Q_{\text{ext}} = \frac{C_{\text{ext}}}{\pi a^2}, \qquad
+  Q_{\text{abs}} = \frac{C_{\text{abs}}}{\pi a^2}.
+\end{equation}
+
+En el límite de partícula grande ($x \gg 1$), $Q_{\text{ext}} \to 2$, 
+resultado conocido como la \textit{paradoja de extinción}: la partícula 
+extingue el doble de la energía que intercepta geométricamente, debido 
+a la difracción en su borde.
+
+
+%====================================================================%
+\subsection{Elementos de la matriz de amplitud de dispersión}
+%====================================================================%
+
+\hspace{1em}A partir de los coeficientes de Mie $a_n$ y $b_n$ se obtienen 
+los elementos de la matriz de amplitud de dispersión introducida en 
+(\ref{eq:amplitudematrix}). Para ello se evalúa el campo dispersado 
+(ref{}) en la zona de campo lejano y se proyectan sus componentes de 
+polarización. El resultado son las funciones
+
+\begin{equation}
+\label{eq:S1S2}
+  S_1(\theta) = \sum_{n=1}^{\infty} \frac{2n+1}{n(n+1)}
+  \left[ a_n\, \pi_n(\cos\theta) + b_n\, \tau_n(\cos\theta) \right],
+\end{equation}
+
+\begin{equation}
+  S_2(\theta) = \sum_{n=1}^{\infty} \frac{2n+1}{n(n+1)}
+  \left[ b_n\, \pi_n(\cos\theta) + a_n\, \tau_n(\cos\theta) \right],
+\end{equation}
+
+donde las \textit{funciones angulares de Mie} se definen como
+
+\begin{equation}
+  \pi_n(\cos\theta) = \frac{P_n^1(\cos\theta)}{\sin\theta},
+  \qquad
+  \tau_n(\cos\theta) = \frac{d\,P_n^1(\cos\theta)}{d\theta},
+\end{equation}
+
+siendo $P_n^1$ el polinomio de Legendre asociado de orden $m=1$. Estas 
+funciones satisfacen las relaciones de recurrencia
+
+\begin{equation}
+  \pi_n = \frac{2n-1}{n-1}\cos\theta\,\pi_{n-1} - \frac{n}{n-1}\pi_{n-2},
+  \qquad
+  \tau_n = n\cos\theta\,\pi_n - (n+1)\pi_{n-1},
+\end{equation}
+
+con valores iniciales $\pi_0 = 0$, $\pi_1 = 1$, que permiten su evaluación 
+numérica eficiente.
+
+Para una esfera homogénea e isotrópica, $S_3 = S_4 = 0$ por simetría 
+azimutal, de modo que la matriz de amplitud es diagonal y los modos de 
+polarización paralelo y perpendicular se dispersan de forma independiente. 
+En el límite de dispersión hacia adelante ($\theta = 0$) se recupera 
+el teorema óptico en su forma explícita:
+
+\begin{equation}
+  C_{\text{ext}} = \frac{4\pi}{k^2}\,\mathrm{Re}\left[S_1(0)\right]
+                 = \frac{4\pi}{k^2}\,\mathrm{Re}\left[S_2(0)\right],
+\end{equation}
+
+siendo $S_1(0) = S_2(0)$ por la isotropía de la esfera.
+
+
+%====================================================================%
+\subsection{Matriz de Mueller}
+%====================================================================%
+
+\hspace{1em}Para relacionar las \textit{intensidades} y el estado de 
+polarización del campo dispersado con los del campo incidente, se introduce 
+la \textit{matriz de Mueller} $\mathbf{M}(\theta)$, que actúa sobre el 
+vector de Stokes $(I, Q, U, V)^T$:
+
+\begin{equation}
+  \begin{pmatrix} I^{(s)} \\ Q^{(s)} \\ U^{(s)} \\ V^{(s)} \end{pmatrix}
+  =
+  \frac{1}{k^2 r^2}
+  \begin{pmatrix}
+    S_{11} & S_{12} & 0      & 0      \\
+    S_{12} & S_{11} & 0      & 0      \\
+    0      & 0      & S_{33} & S_{34} \\
+    0      & 0      &-S_{34} & S_{33}
+  \end{pmatrix}
+  \begin{pmatrix} I^{(i)} \\ Q^{(i)} \\ U^{(i)} \\ V^{(i)} \end{pmatrix}.
+\end{equation}
+
+Los elementos de la matriz de Mueller se construyen como productos bilineales 
+de $S_1$ y $S_2$:
+
+\begin{equation}
+  S_{11} = \tfrac{1}{2}\left(|S_2|^2 + |S_1|^2\right), \qquad
+  S_{12} = \tfrac{1}{2}\left(|S_2|^2 - |S_1|^2\right),
+\end{equation}
+
+\begin{equation}
+  S_{33} = \tfrac{1}{2}\left(S_2 S_1^* + S_2^* S_1\right), \qquad
+  S_{34} = \tfrac{i}{2}\left(S_1 S_2^* - S_2 S_1^*\right).
+\end{equation}
+
+La estructura en bloque de la matriz refleja la simetría de la esfera: 
+los bloques diagonales $2\times 2$ de $U$ y $V$ están desacoplados de $I$ 
+y $Q$. El elemento $S_{11}(\theta)$ es la \textit{función de fase}, que 
+describe la distribución angular de la energía dispersada y es directamente 
+medible. La relación $S_{11}^2 \geq S_{12}^2 + S_{33}^2 + S_{34}^2$ 
+garantiza la positividad física de la matriz.
+
+
+%====================================================================%
+\subsection{Función de fase y normalización}
+%====================================================================%
+
+\hspace{1em}El elemento $S_{11}(\theta)$ de la matriz de Mueller describe 
+la distribución angular de la energía dispersada. Se define 
+la \textit{función de fase} $p(\theta)$ como
+
+\begin{equation}
+  p(\theta) = \frac{4\pi}{k^2\, C_{\text{sca}}}\, S_{11}(\theta),
+\end{equation}
+
+
+y es la distribución angular normalizada 
+de la potencia dispersada por unidad de ángulo sólido. Satisface la 
+condición de normalización
+
+\begin{equation}
+  \frac{1}{4\pi} \int_{4\pi} p(\theta)\, d\Omega 
+  = \frac{1}{2} \int_0^{\pi} p(\theta)\sin\theta\, d\theta = 1,
+\end{equation}
+
+de modo que $p(\theta)\,d\Omega / 4\pi$ representa la fracción de la 
+potencia total dispersada que se redistribuye en el elemento de ángulo 
+sólido $d\Omega$ en torno a la dirección $\theta$. Esta normalización 
+facilita la comparación entre partículas de distinto tamaño y constituye 
+la forma estándar de caracterizar la anisotropía angular de la dispersión.
+
+
+%====================================================================%
+\subsection{Parámetro de asimetría}
+%====================================================================%
+
+\hspace{1em}La función de fase contiene toda la información angular de la 
+dispersión, pero en muchas aplicaciones resulta útil resumirla en un único 
+parámetro escalar. El \textit{parámetro de asimetría} $g$ se define como 
+el valor medio del coseno del ángulo de dispersión ponderado por la función 
+de fase:
+
+\begin{equation}
+  g = \langle \cos\theta \rangle 
+    = \frac{1}{2}\int_0^{\pi} p(\theta)\cos\theta\sin\theta\, d\theta
+    = \frac{\int_0^\pi S_{11}(\theta)\cos\theta\sin\theta\,d\theta}
+           {\int_0^\pi S_{11}(\theta)\sin\theta\,d\theta}.
+\end{equation}
+
+El parámetro $g$ toma valores en el intervalo $[-1, 1]$. Un valor $g > 0$ 
+indica que la partícula dispersa preferentemente en la dirección hacia 
+adelante, mientras que $g < 0$ corresponde a dispersión preferente hacia 
+atrás. El caso $g = 0$ corresponde a dispersión isótropa. En términos 
+de los coeficientes de Mie, $g$ puede expresarse analíticamente como
+
+\begin{equation}
+  g = \frac{4}{Q_{\text{sca}}\,x^2}
+  \left[
+    \sum_{n=1}^{\infty}
+    \frac{n(n+2)}{n+1}\,\mathrm{Re}(a_n a_{n+1}^* + b_n b_{n+1}^*)
+    +
+    \sum_{n=1}^{\infty}
+    \frac{2n+1}{n(n+1)}\,\mathrm{Re}(a_n b_n^*)
+  \right].
+\end{equation}
+
+Para partículas pequeñas en el régimen de Rayleigh ($x \ll 1$), la 
+dispersión tiende a ser casi isótropa y $g \approx 0$. A medida que 
+el parámetro de tamaño aumenta, la dispersión se vuelve cada vez más 
+anisótropa hacia adelante y $g \to 1$.
+
+
+%====================================================================%
+\subsection{Albedo de dispersión simple}
+%====================================================================%
+
+\hspace{1em}De la energía total extinguida por la partícula, una fracción 
+es redistribuida espacialmente mediante dispersión y el resto es absorbida 
+y convertida en energía interna. El \textit{albedo de dispersión simple} 
+$\omega_0$ cuantifica esta fracción:
+
+\begin{equation}
+  \omega_0 = \frac{C_{\text{sca}}}{C_{\text{ext}}} 
+           = \frac{Q_{\text{sca}}}{Q_{\text{ext}}}.
+\end{equation}
+
+Por definición, $\omega_0 \in [0,1]$. El límite $\omega_0 = 1$ corresponde 
+a una partícula puramente dispersora (sin absorción, $C_{\text{abs}} = 0$), 
+mientras que $\omega_0 = 0$ corresponde a una partícula puramente absorbente. 
+En términos del índice de refracción, una parte imaginaria nula del índice 
+($k = 0$, medio transparente) conduce a $\omega_0 = 1$, mientras que una 
+parte imaginaria elevada implica $\omega_0 \ll 1$.
+
+Los tres parámetros $\{Q_{\text{ext}},\, \omega_0,\, g\}$ constituyen la 
+descripción óptica mínima de una partícula individual y son precisamente 
+las magnitudes de entrada que requiere la ecuación de transporte radiativo 
+para describir un medio dispersor.
+
+
+%====================================================================%
+\subsection{Regímenes de dispersión}
+%====================================================================%
+
+\hspace{1em}El comportamiento óptico de una partícula esférica depende 
+fundamentalmente del \textit{parámetro de tamaño} $x = 2\pi a / \lambda$, 
+que compara la circunferencia de la partícula con la longitud de onda 
+incidente. En función del valor de $x$ se distinguen tres regímenes 
+cualitativamente distintos.
+
+\subsubsection{Régimen de Rayleigh ($x \ll 1$)}
+
+Cuando la partícula es mucho más pequeña que la longitud de onda, el campo 
+incidente varía poco sobre su volumen y la respuesta queda dominada por el 
+término dipolar ($n=1$). En este límite, los coeficientes de Mie se 
+aproximan por
+
+\begin{equation}
+  a_1 \approx -\frac{2i x^3}{3}\frac{m^2-1}{m^2+2}, 
+  \qquad
+  b_1 \approx 0,
+\end{equation}
+
+y los de orden superior son despreciables. Las secciones eficaces escalan como
+
+\begin{equation}
+  C_{\text{sca}} \propto x^4 \propto \lambda^{-4},
+  \qquad
+  C_{\text{abs}} \propto x \propto \lambda^{-1},
+\end{equation}
+
+lo que explica el color azul del cielo: la dispersión preferente de las 
+longitudes de onda cortas por las moléculas de aire (partículas en régimen 
+de Rayleigh) da lugar a la dispersión $\propto \lambda^{-4}$.
+La dispersión es casi isótropa ($g \approx 0$) con un débil lóbulo 
+hacia adelante y hacia atrás simétricos.
+
+\subsubsection{Régimen de Mie ($x \sim 1$)}
+
+Cuando el tamaño de la partícula es comparable a la longitud de onda, 
+múltiples órdenes multipolares contribuyen de forma significativa. 
+Las secciones eficaces presentan oscilaciones resonantes en función de $x$, 
+conocidas como \textit{resonancias de Mie}, asociadas a los modos 
+electromagnéticos del interior de la esfera. La dispersión se vuelve 
+marcadamente anisótropa hacia adelante ($g \to 1$) y la función de fase 
+desarrolla lóbulos bien definidos. Este es el régimen de mayor riqueza 
+fenomenológica y el que requiere el tratamiento completo de la teoría de Mie.
+
+\subsubsection{Régimen de óptica geométrica ($x \gg 1$)}
+
+Cuando la partícula es mucho mayor que la longitud de onda, los efectos 
+de difracción se concentran en un ángulo muy estrecho alrededor de la 
+dirección de propagación y la interacción puede describirse mediante 
+rayos geométricos. En este límite, la eficiencia de extinción converge a
+
+\begin{equation}
+  Q_{\text{ext}} \xrightarrow{x \to \infty} 2,
+\end{equation}
+
+resultado conocido como la \textit{paradoja de extinción}: la partícula 
+extingue el doble de la energía que intercepta geométricamente. El factor 
+adicional proviene de la difracción de Fraunhofer en el borde de la 
+partícula, que desvía energía fuera del haz hacia adelante con la misma 
+magnitud que la energía interceptada.
+
+
+%====================================================================%
+\subsection{Parámetros de Stokes y grado de polarización}
+%====================================================================%
+
+\hspace{1em}El estado de polarización de una onda electromagnética queda 
+completamente caracterizado por los \textit{parámetros de Stokes}, definidos 
+en términos de las componentes del campo eléctrico como
+
+\begin{equation}
+\begin{aligned}
+  I &= \langle E_\parallel E_\parallel^* \rangle 
+     + \langle E_\perp    E_\perp^*    \rangle, \\
+  Q &= \langle E_\parallel E_\parallel^* \rangle 
+     - \langle E_\perp    E_\perp^*    \rangle, \\
+  U &= \langle E_\parallel E_\perp^*    \rangle 
+     + \langle E_\perp    E_\parallel^* \rangle, \\
+  V &= i\left(
+         \langle E_\perp    E_\parallel^* \rangle 
+       - \langle E_\parallel E_\perp^*   \rangle
+       \right),
+\end{aligned}
+\end{equation}
+
+donde los corchetes indican promedio temporal. A diferencia de los campos, 
+los parámetros de Stokes son magnitudes reales y directamente medibles 
+mediante combinaciones de polarizadores y retardadores. Satisfacen la 
+relación
+
+\begin{equation}
+  I^2 \geq Q^2 + U^2 + V^2,
+\end{equation}
+
+donde la igualdad se cumple para luz completamente polarizada. El 
+\textit{grado de polarización total} se define como
+
+\begin{equation}
+  P = \frac{\sqrt{Q^2 + U^2 + V^2}}{I},
+\end{equation}
+
+y toma valores en $[0,1]$. Para luz natural (no polarizada), $Q = U = V = 0$ 
+y $P = 0$. Para cuantificar únicamente la componente lineal de la 
+polarización se introduce el \textit{grado de polarización lineal}
+
+\begin{equation}
+  P_L = \frac{\sqrt{Q^2 + U^2}}{I}.
+\end{equation}
+
+En el caso particular de luz incidente no polarizada que interactúa con 
+una esfera homogénea, $U = V = 0$ en el campo dispersado y el grado de 
+polarización lineal toma la forma
+
+\begin{equation}
+  P_L(\theta) = -\frac{S_{12}(\theta)}{S_{11}(\theta)},
+\end{equation}
+
+que es directamente medible experimentalmente y proporciona información 
+sobre la composición y el tamaño de las partículas independientemente de 
+su concentración.
+
 
 \cite{Bohren}\cite{Mishchenko}\cite{Bohren,Mishchenko} (prueba, funcionan las citas)
 \cite{Bohren}
