@@ -1,375 +1,250 @@
-\section{Fortran}
+\section{Implementación numérica}
 
-\subsection{Introducción a Fortran}
-\hspace{1em} Fortran es un lenguaje de programación de alto nivel 
-que se utiliza principalmente para cálculos científicos y de 
-ingeniería. Fue desarrollado en la década de 1950 por IBM, pero 
-a día de hoy sigue siendo ampliamente utilizado en la comunidad 
-científica debido a su eficiencia y capacidad para manejar grandes 
-cantidades de cálculos numéricos. En este trabajo, Fortran se emplea 
-para implementar un código numérico destinado al estudio del scattering
-electromagnético basado en expansiones multipolares.
+\subsection{Introducción}
 
-\subsection{Objetivo del programa}
-\hspace{1em} El programa tiene como objetivo simular la 
-interacción de una onda electromagnética con un conjunto de esferas. 
-Este problema incluye tanto el scattering por una sola esfera 
-como la interacción múltiple entre varias partículas. A partir 
-de la solución del problema, el código permite calcular magnitudes 
-físicas de interés tales como las eficiencias de extinción, absorción 
-y scattering, la matriz de scattering, así como el campo electromagnético
-en la región cercana a las partículas (near field).
+\hspace{1em}El código empleado en este trabajo es MSTM (\textit{Multiple 
+Sphere T-Matrix}), una implementación en Fortran desarrollada por Mackowski 
+\cite{Mackowski_code} del formalismo de la T-matrix para el scattering 
+electromagnético por agregados de esferas. El código resuelve de forma 
+autoconsistente el sistema de Foldy-Lax (\ref{eq:foldy-lax}), calcula la 
+T-matrix del agregado y proporciona las magnitudes observables: secciones 
+eficaces, matriz de Mueller y campo cercano.
 
-\subsection{Fundamento físico del método}
-\hspace{1em} El método implementado se basa en la expansión multipolar
-de los campos electromagnéticos. En el caso de una sola esfera, el 
-problema se describe mediante la teoría de Mie, donde los campos se 
-expresan como una suma de modos esféricos caracterizados por 
-coeficientes de scattering. En el caso de múltiples esferas, 
-es necesario tener en cuenta la interacción entre partículas, 
-lo que se realiza mediante la traslación de expansiones multipolares 
-entre distintos sistemas de referencia. Asimismo, el tratamiento de
-la polarización de la onda incidente se realiza mediante la consideración 
-de dos estados ortogonales, que permiten describir cualquier estado de
-polarización.
+Una característica central del código es que trabaja completamente en 
+unidades adimensionales. La longitud de onda de la radiación incidente no 
+aparece de forma explícita: todas las longitudes se expresan en unidades del 
+número de onda $k = 2\pi/\lambda$ del medio circundante. En consecuencia, 
+los radios de las esferas se introducen directamente como parámetros de 
+tamaño $x_j = k a_j$, y las posiciones de los centros se expresan en las 
+mismas unidades. Esta convención implica que un cambio en la longitud de onda 
+es equivalente a un reescalado simultáneo de todas las dimensiones geométricas 
+del sistema. Cuando se desea trabajar con unidades físicas, el código 
+proporciona el parámetro \texttt{length\_scale\_factor}, que reescala 
+internamente todas las posiciones y radios antes de comenzar el cálculo.
+
 
 \subsection{Estructura general del programa}
 
 \subsubsection{Flujo de ejecución}
-\hspace{1em} El funcionamiento del programa puede resumirse en los siguientes pasos:
+
+\hspace{1em}El funcionamiento del programa sigue directamente la cadena 
+lógica del formalismo de la T-matrix descrito en la sección anterior:
+
 \begin{enumerate}
-    \item Lectura de los parámetros de entrada.
-    \item Definición de la geometría del sistema de esferas.
-    \item Cálculo de los coeficientes de Mie para cada esfera.
-    \item Resolución del sistema de ecuaciones que describe la interacción electromagnética.
-    \item Cálculo de las magnitudes físicas de interés.
-    \item Evaluación del campo electromagnético en el espacio cercano.
+  \item Lectura de los parámetros de entrada: parámetros de tamaño 
+        $x_j = ka_j$, posiciones $\{\mathbf{r}_j\}$ e índices de refracción 
+        complejos $\{m_j\}$ de las esferas.
+  \item Inicialización de la geometría del sistema: cálculo de los vectores 
+        de separación $\mathbf{d}_{jl} = \mathbf{r}_j - \mathbf{r}_l$ y 
+        determinación del radio de circunscripción del agregado.
+  \item Cálculo de los coeficientes de Mie para cada esfera, que determinan 
+        su T-matrix individual $\mathbb{T}_j$ (\ref{eq:miecoeffs}). El orden 
+        multipolar $n_{max}$ se determina automáticamente mediante el criterio 
+        de Wiscombe $n_{max} \approx x + 4x^{1/3} + 5$. Aunque en este 
+        trabajo todas las esferas son idénticas ($\mathbb{T}_j = \mathbb{T}$), 
+        el código calcula la T-matrix de forma independiente para cada partícula.
+  \item Cálculo de los coeficientes de traslación $\mathbb{H}_{jl}$, que 
+        permiten expresar el campo dispersado por la esfera $l$ en el sistema 
+        de referencia de la esfera $j$.
+  \item Construcción y resolución del sistema lineal de Foldy-Lax 
+        (\ref{eq:foldy-lax}), que proporciona los coeficientes multipolares 
+        $\{\mathbf{p}_j\}$ de forma autoconsistente para dos polarizaciones 
+        ortogonales de la onda incidente de forma simultánea.
+  \item Construcción de la T-matrix del agregado $\mathbb{T}^{cluster}$ y 
+        cálculo de los observables: secciones eficaces, elementos de la 
+        matriz de Mueller y parámetro de asimetría.
+  \item Evaluación opcional del campo electromagnético en la región cercana 
+        al sistema de esferas.
 \end{enumerate}
 
 \subsubsection{Organización en módulos}
-\hspace{1em} El código está estructurado en distintos módulos, cada uno con una función específica:
+
+\hspace{1em}El código está organizado en módulos, cada uno responsable de 
+una etapa del cálculo:
+
 \begin{itemize}
-    \item \texttt{inputinterface}: lectura de datos de entrada y control del flujo del programa.
-    \item \texttt{spheredata}: almacenamiento y gestión de la geometría del sistema.
-    \item \texttt{mie}: cálculo de los coeficientes de scattering de cada esfera.
-    \item \texttt{specialfuncs}: implementación de funciones matemáticas necesarias, 
-                                como funciones de Bessel y coeficientes de rotación.
-    \item \texttt{solver}: resolución numérica del sistema de ecuaciones.
-    \item \texttt{scatprops}: cálculo de magnitudes físicas observables.
-    \item \texttt{nearfield}: cálculo del campo electromagnético en la región cercana.
+  \item \texttt{numconstants}: constantes matemáticas y coeficientes 
+        precalculados que son reutilizados a lo largo del programa, como 
+        los coeficientes binomiales $\binom{n+l}{n}^{1/2}$ y los coeficientes 
+        de las funciones vectoriales de onda esférica.
+  \item \texttt{specialfuncs}: implementación de las funciones especiales 
+        necesarias: funciones de Riccati-Bessel $\psi_n$ y Riccati-Hankel 
+        $\xi_n$, polinomios de Legendre asociados, funciones angulares 
+        $\pi_n$ y $\tau_n$, y coeficientes de traslación $\mathbb{H}_{jl}$.
+  \item \texttt{spheredata}: almacenamiento y gestión de la geometría del 
+        sistema: posiciones, radios, índices de refracción y jerarquía de 
+        esferas anidadas.
+  \item \texttt{mie}: cálculo de los coeficientes de Mie $a_n$, $b_n$ y 
+        construcción de la T-matrix individual de cada esfera, con soporte 
+        para medios ópticamente activos.
+  \item \texttt{translation}: implementación del teorema de adición de las 
+        VSWF y cálculo de los operadores de traslación $\mathbb{H}_{jl}$ 
+        entre pares de esferas.
+  \item \texttt{solver}: construcción y resolución numérica del sistema de 
+        Foldy-Lax, mediante factorización LU o método iterativo de gradiente 
+        biconjugado.
+  \item \texttt{scatprops}: cálculo de los observables a partir de la 
+        T-matrix del agregado: secciones eficaces, elementos de la matriz 
+        de Mueller, parámetro de asimetría $g$ y albedo $\omega_0$.
+  \item \texttt{nearfield}: evaluación del campo electromagnético total en 
+        una malla espacial en la región cercana al sistema de esferas.
+  \item \texttt{inputinterface}: lectura de parámetros de entrada, control 
+        del flujo de ejecución y escritura de resultados.
 \end{itemize}
+
 
 \subsection{Métodos numéricos empleados}
 
-\subsubsection{Resolución de sistemas lineales: factorización LU}
-\hspace{1em} En el método multipolar empleado, el campo electromagnético total se 
-expresa como una superposición de modos esféricos centrados en cada una de las 
-esferas del sistema. Debido a la interacción entre las partículas, el campo 
-dispersado por una esfera actúa como excitación para las demás, lo que introduce 
-un acoplamiento entre todos los coeficientes multipolares.
+\subsubsection{Evaluación de funciones especiales y orden multipolar}
 
-\hspace{1em} Como consecuencia, el problema se reduce a la resolución de un sistema 
-de ecuaciones lineales de la forma:
-\[
-A \mathbf{x} = \mathbf{b},
-\]
-donde el vector $\mathbf{x}$ contiene los coeficientes multipolares desconocidos, 
-$\mathbf{b}$ representa la contribución de la onda incidente, y la matriz $A$ 
-describe tanto la respuesta individual de cada esfera como el acoplamiento entre 
-ellas mediante las traslaciones de las expansiones multipolares.
+\hspace{1em}La construcción de los coeficientes de Mie (\ref{eq:miecoeffs}), 
+de las funciones angulares $\pi_n$ y $\tau_n$ (\ref{eq:S1S2}) y de los 
+coeficientes de traslación $\mathbb{H}_{jl}$ requiere evaluar las funciones 
+de Riccati-Bessel $\psi_n$ y Riccati-Hankel $\xi_n$ y sus derivadas. Estas 
+derivadas se calculan a partir de las relaciones de recurrencia analíticas 
+que satisfacen, como
 
-\hspace{1em} La matriz $A$ es, en general, compleja y densa, ya que cada esfera 
-interactúa con todas las demás. Para resolver este sistema se puede emplear un 
-método directo basado en la descomposición LU, en el que la matriz se factoriza como
-\[
-P A = L U,
-\]
-donde $P$ es una matriz de permutación asociada al pivotado parcial, $L$ es una 
-matriz triangular inferior con unos en la diagonal y $U$ una matriz triangular 
-superior.
+\begin{equation}
+  \frac{d}{d\rho}\left[\rho\,j_n(\rho)\right] 
+  = \rho\,j_{n-1}(\rho) - n\,j_n(\rho),
+\end{equation}
 
-\hspace{1em} La obtención de $L$ y $U$ se realiza mediante eliminación gaussiana. 
-En cada paso $k$, los elementos por debajo del pivote $a_{kk}$ se eliminan mediante:
-\[
-a_{ij}^{(k+1)} = a_{ij}^{(k)} - 
-\frac{a_{ik}^{(k)}}{a_{kk}^{(k)}} a_{kj}^{(k)}, 
-\quad i>k, \; j \geq k,
-\]
-lo que introduce los coeficientes de $L$ como
-\[
-l_{ik} = \frac{a_{ik}^{(k)}}{a_{kk}^{(k)}}.
-\]
+y relaciones análogas para las funciones de Hankel. El uso de recurrencias 
+en lugar de aproximaciones por diferencias finitas garantiza la estabilidad 
+numérica del cálculo incluso para órdenes elevados. De forma análoga, las 
+funciones angulares $\pi_n$ y $\tau_n$ se evalúan mediante sus relaciones 
+de recurrencia a partir de los valores iniciales $\pi_0 = 0$, $\pi_1 = 1$.
 
-\hspace{1em} Una vez obtenida la factorización, el sistema original se resuelve en 
-dos etapas. Primero se resuelve
-\[
-L \mathbf{y} = P \mathbf{b},
-\]
-mediante sustitución hacia adelante, y posteriormente
-\[
-U \mathbf{x} = \mathbf{y},
-\]
-mediante sustitución hacia atrás.
+El orden multipolar máximo $n_{max}$ retenido en la expansión se determina 
+automáticamente para cada esfera mediante el criterio de Wiscombe:
 
-\hspace{1em} El coste computacional de este método es del orden de 
-$\mathcal{O}(N^3)$, por lo que resulta adecuado únicamente para sistemas de 
-tamaño moderado. En problemas con un gran número de esferas o con órdenes 
-multipolares elevados, se recurre preferentemente a métodos iterativos.
+\begin{equation}
+  n_{max} \approx x + 4\,x^{1/3} + 5,
+\end{equation}
+
+que garantiza la convergencia de la serie para cualquier valor del parámetro 
+de tamaño $x$. La dimensión del sistema de Foldy-Lax es entonces 
+$N \times 2n_{max}(n_{max}+2)$ por esfera.
 
 
-\subsubsection{Método de gradiente biconjugado}
+\subsubsection{Resolución del sistema de Foldy-Lax}
 
-\hspace{1em} En el problema de scattering múltiple, el sistema lineal que acopla 
-los coeficientes multipolares puede alcanzar dimensiones elevadas, lo que hace 
-poco práctico el uso de métodos directos como la descomposición LU. Por este 
-motivo, se emplean métodos iterativos, siendo uno de los más utilizados el 
-gradiente biconjugado (BiCG).
+\hspace{1em}El sistema de Foldy-Lax (\ref{eq:foldy-lax}) adopta la forma 
+de un sistema lineal
 
-\hspace{1em} El sistema a resolver tiene la forma
-\[
-A \mathbf{x} = \mathbf{b},
-\]
-donde $A$ es una matriz compleja y no necesariamente simétrica que describe 
-la interacción entre las esferas. En lugar de construir esta matriz de forma 
-explícita, el método BiCG únicamente requiere evaluar productos del tipo 
-$A \mathbf{v}$, que en este código se obtienen a partir de las interacciones 
-entre esferas.
+\begin{equation}
+  \mathbb{M}_{sys}\,\mathbf{p} = \mathbf{b},
+\end{equation}
 
-\hspace{1em} El método parte de una estimación inicial $\mathbf{x}_0$ y calcula 
-el residuo
-\[
-\mathbf{r}_0 = \mathbf{b} - A \mathbf{x}_0.
-\]
-A partir de este residuo, se genera una sucesión de aproximaciones 
-$\mathbf{x}_k$ que se van corrigiendo iterativamente mediante direcciones de 
-búsqueda adecuadas.
+donde $\mathbf{p}$ contiene los coeficientes multipolares de todos los 
+campos dispersados, $\mathbf{b}$ recoge las contribuciones del campo 
+incidente sobre cada esfera, y $\mathbb{M}_{sys}$ incorpora la respuesta 
+individual de cada esfera a través de su T-matrix y el acoplamiento entre 
+partículas a través de los operadores de traslación $\mathbb{H}_{jl}$. La 
+matriz es compleja, densa y de dimensión $N \times 2n_{max}(n_{max}+2)$.
 
-\hspace{1em} En cada iteración, la solución se actualiza como
-\[
-\mathbf{x}_{k+1} = \mathbf{x}_k + \alpha_k \mathbf{p}_k,
-\]
-donde $\mathbf{p}_k$ es una dirección de búsqueda y $\alpha_k$ es un coeficiente 
-que se calcula para minimizar el residuo. Este proceso se repite hasta que el 
-error relativo satisface un criterio de convergencia, típicamente
-\[
-\frac{\|\mathbf{r}_k\|}{\|\mathbf{b}\|} < \varepsilon.
-\]
+El código implementa dos métodos de resolución, seleccionables por el 
+usuario. Para sistemas de tamaño moderado se emplea la \textit{factorización 
+LU}, que descompone la matriz como
 
-\hspace{1em} Este método presenta un coste computacional por iteración del orden 
-de $\mathcal{O}(N)$, dominado por la evaluación del producto $A \mathbf{v}$, y 
-permite abordar sistemas de gran tamaño de forma eficiente. En el contexto de 
-este código, constituye el método principal para la resolución del problema de 
-scattering múltiple.
+\begin{equation}
+  P\,\mathbb{M}_{sys} = L\,U,
+\end{equation}
 
+donde $P$ es una matriz de permutación asociada al pivotado parcial, $L$ es 
+triangular inferior con unos en la diagonal y $U$ es triangular superior. 
+La descomposición se obtiene mediante eliminación gaussiana,
 
-\subsubsection{Cálculo de derivadas}
+\begin{equation}
+  a_{ij}^{(k+1)} = a_{ij}^{(k)} - 
+  \frac{a_{ik}^{(k)}}{a_{kk}^{(k)}}\,a_{kj}^{(k)}, 
+  \quad i > k,\; j \geq k,
+\end{equation}
 
-\hspace{1em} En la formulación del problema electromagnético mediante expansiones 
-multipolares, aparecen derivadas radiales de funciones especiales, en particular 
-de funciones de Bessel y Hankel esféricas. Estas derivadas son necesarias para 
-imponer las condiciones de contorno en la superficie de las esferas y para 
-construir los coeficientes de scattering.
+y el sistema se resuelve en dos etapas de sustitución hacia adelante y hacia 
+atrás. El coste computacional es $\mathcal{O}(N^3)$.
 
-\hspace{1em} En las partes principales del código, estas derivadas no se calculan 
-mediante métodos numéricos de diferencias finitas, sino utilizando relaciones 
-analíticas y de recurrencia. Por ejemplo, las funciones de Bessel esféricas 
-satisfacen identidades del tipo:
-\[
-\frac{d}{dx}\left[x j_n(x)\right] = x j_{n-1}(x) - n j_n(x),
-\]
-a partir de las cuales se pueden obtener expresiones explícitas para la derivada 
-$j_n'(x)$.
+Para sistemas de mayor tamaño se emplea el método iterativo del 
+\textit{gradiente biconjugado} (BiCG), que no requiere construir 
+explícitamente $\mathbb{M}_{sys}$, sino únicamente evaluar productos 
+matriz-vector $\mathbb{M}_{sys}\,\mathbf{v}$, calculados directamente 
+a partir de las interacciones entre esferas mediante los operadores de 
+traslación. La solución se actualiza iterativamente como
 
-\hspace{1em} De manera análoga, se emplean relaciones similares para las funciones 
-de Hankel, que permiten expresar sus derivadas en términos de funciones del mismo 
-tipo y de órdenes adyacentes. Este enfoque evita la necesidad de aproximaciones 
-numéricas directas y mejora la estabilidad del cálculo.
+\begin{equation}
+  \mathbf{p}_{k+1} = \mathbf{p}_k + \alpha_k\,\mathbf{d}_k,
+\end{equation}
 
-\hspace{1em} El uso de estas relaciones es especialmente relevante en la evaluación 
-de los coeficientes de scattering y en la construcción de las soluciones 
-multipolares, donde la precisión en las derivadas radiales es fundamental.
+donde $\mathbf{d}_k$ es una dirección de búsqueda y $\alpha_k$ minimiza 
+el residuo en cada paso, hasta satisfacer el criterio de convergencia
 
+\begin{equation}
+  \frac{\|\mathbf{r}_k\|}{\|\mathbf{b}\|} < \varepsilon,
+\end{equation}
 
-\subsubsection{Método de Newton-Raphson}
+con un coste por iteración de $\mathcal{O}(N)$.
 
-\hspace{1em} En algunos cálculos auxiliares del código es necesario resolver 
-ecuaciones no lineales de la forma
-\[
-f(x)=0,
-\]
-donde $f(x)$ es una función que no puede invertirse de forma directa. Para ello 
-se emplea el método de Newton-Raphson, que permite obtener una solución mediante 
-un proceso iterativo.
-
-\hspace{1em} Partiendo de una estimación inicial $x_0$, el método construye una 
-sucesión de aproximaciones utilizando la relación
-\[
-x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}.
-\]
-Este procedimiento se basa en la aproximación lineal de la función en torno a 
-cada punto, de modo que la siguiente iteración corresponde a la intersección de 
-la recta tangente con el eje horizontal.
-
-\hspace{1em} La convergencia del método depende de la elección del valor inicial 
-y del comportamiento de la función. Cuando se cumplen las condiciones adecuadas, 
-presenta convergencia cuadrática, lo que permite alcanzar una alta precisión en 
-pocas iteraciones.
-
-\hspace{1em} En el contexto de este código, el método se emplea en cálculos 
-auxiliares asociados a la obtención de parámetros efectivos. En estos casos, la 
-derivada $f'(x)$ se evalúa a partir de expresiones analíticas de la función 
-considerada, lo que mejora la estabilidad numérica del procedimiento y evita el 
-uso de aproximaciones por diferencias finitas.
-
-% No se usan integrales en el codigo porque las funciones de green 
-% solo son para el caso de superficies planas, interfaces y sustratos.
-% Fuera del scope de este trabajo
-
-% \subsubsection{Integración numérica: cuadratura de Gauss-Kronrod}
-
-% \hspace{1em} En distintos puntos del código es necesario evaluar integrales 
-% definidas que no admiten una solución analítica sencilla, como ocurre en el 
-% tratamiento de funciones de Green o en la presencia de superficies y capas. 
-% Para ello se emplean métodos de cuadratura numérica.
-
-% \hspace{1em} En particular, se utilizan reglas de Gauss-Kronrod, que constituyen 
-% una extensión de las cuadraturas de Gauss. En estas, una integral en un intervalo 
-% \([a,b]\) se aproxima mediante una combinación lineal de evaluaciones de la función:
-% \[
-% \int_a^b f(x)\,dx \approx \sum_{i=1}^{n} w_i f(x_i),
-% \]
-% donde los puntos \(x_i\) y los pesos \(w_i\) se eligen de forma óptima para 
-% maximizar el orden de precisión de la aproximación.
-
-% \hspace{1em} La característica principal de la regla de Gauss-Kronrod es que 
-% permite obtener simultáneamente dos aproximaciones de distinto orden, una basada 
-% en la cuadratura de Gauss y otra en la extensión de Kronrod. La diferencia entre 
-% ambas proporciona una estimación del error de la integración sin necesidad de 
-% evaluaciones adicionales de la función.
-
-% \hspace{1em} Este tipo de cuadratura resulta especialmente adecuado en este 
-% contexto, ya que combina alta precisión con una estimación fiable del error, 
-% lo que permite controlar la calidad del resultado de forma eficiente.
-
-% \subsubsection{Integración adaptativa}
-
-% \hspace{1em} Para mejorar la precisión en la evaluación de integrales, el código 
-% emplea esquemas de integración adaptativa. Estos métodos utilizan la estimación 
-% del error proporcionada por la cuadratura de Gauss-Kronrod para decidir si es 
-% necesario refinar la discretización del intervalo.
-
-% \hspace{1em} Dado un intervalo \([a,b]\), si el error estimado supera una 
-% tolerancia prefijada, el intervalo se subdivide en dos subintervalos:
-% \[
-% \int_a^b f(x)\,dx = \int_a^c f(x)\,dx + \int_c^b f(x)\,dx,
-% \]
-% donde \(c = (a+b)/2\). Este proceso se aplica de forma recursiva en cada 
-% subintervalo hasta que la estimación del error es suficientemente pequeña.
-
-% \hspace{1em} De este modo, el método concentra el esfuerzo computacional en 
-% aquellas regiones donde la función presenta variaciones más acusadas, como 
-% pueden ser cambios bruscos o comportamientos cercanos a singularidades, mientras 
-% que en regiones suaves se emplea un número reducido de evaluaciones.
-
-% \hspace{1em} Este enfoque permite obtener una buena precisión global con un coste 
-% computacional controlado, lo que resulta especialmente útil en problemas donde 
-% la función a integrar presenta un comportamiento no uniforme.
+El sistema se resuelve simultáneamente para dos polarizaciones ortogonales 
+de la onda incidente, de modo que en una sola ejecución se obtienen los 
+coeficientes $\{\mathbf{p}_j\}$ correspondientes a ambas polarizaciones, 
+lo que permite construir directamente todos los elementos de la matriz de 
+Mueller.
 
 
 \subsection{Cálculo del campo cercano}
 
 \subsubsection{Definición}
-\hspace{1em} El campo cercano corresponde al campo electromagnético total en 
-una región espacial próxima al sistema de esferas. Este campo incluye tanto 
-la contribución de la onda incidente como la de los campos dispersados por 
-las partículas. A diferencia del campo lejano, que se estudia en el límite 
-asintótico y se relaciona principalmente con magnitudes globales como la 
-sección eficaz de scattering o la matriz de scattering, el campo cercano 
-permite analizar la distribución espacial local del campo electromagnético 
-en el entorno inmediato de las esferas.
 
-\hspace{1em} Desde el punto de vista teórico, el campo total puede escribirse como
-\[
-\mathbf{E}(\mathbf{r})=
-\mathbf{E}_{\mathrm{inc}}(\mathbf{r})+
-\mathbf{E}_{\mathrm{scat}}(\mathbf{r}),
-\]
-y de forma análoga para el campo magnético. En el formalismo multipolar, 
-la contribución dispersada se expresa como una combinación de funciones 
-vectoriales esféricas. Estas funciones dependen de la posición espacial, 
-por lo que la expansión no proporciona únicamente coeficientes globales, 
-sino una expresión del campo válida en cualquier punto del espacio donde 
-la expansión converja.
+\hspace{1em}Una vez resuelto el sistema de Foldy-Lax, los coeficientes 
+$\{\mathbf{p}_j\}$ permiten evaluar el campo electromagnético en cualquier 
+punto del espacio. El campo total se descompone como
 
-\hspace{1em} Aunque en la formulación analítica el campo se expresa de forma 
-natural en coordenadas esféricas \((r,\theta,\phi)\), su evaluación numérica 
-se realiza sobre puntos definidos en coordenadas cartesianas \((x,y,z)\). 
-Por tanto, el cálculo del campo cercano consiste esencialmente en evaluar 
-la expansión multipolar del campo en una colección de puntos del espacio.
+\begin{equation}
+  \mathbf{E}(\mathbf{r}) = \mathbf{E}^{inc}(\mathbf{r}) 
+  + \sum_{j=1}^{N} \mathbf{E}^{sca}_j(\mathbf{r}),
+\end{equation}
+
+donde cada contribución dispersada se evalúa mediante la expansión en VSWF 
+centrada en $\mathbf{r}_j$. A diferencia del campo lejano, donde se toma 
+el límite $kr \to \infty$ y las funciones de Hankel se aproximan por ondas 
+esféricas salientes, en el campo cercano las funciones de Hankel esféricas 
+deben evaluarse en su forma completa, sin ninguna aproximación asintótica. 
+Esto permite analizar la distribución espacial local de la energía 
+electromagnética en el entorno inmediato de las esferas, incluyendo 
+fenómenos como la concentración de campo en las zonas de contacto entre 
+partículas adyacentes.
 
 \subsubsection{Implementación en el código}
-\hspace{1em} En el código, el cálculo del campo cercano se lleva a cabo 
-mediante la subrutina \texttt{near\_field\_calculation}, que recibe como 
-entrada la solución multipolar ya obtenida y evalúa los campos eléctrico 
-y magnético sobre una malla espacial. Esta malla queda definida mediante 
-una región de cálculo y un número de puntos en cada dirección, de modo que 
-cada punto del mallado queda asociado a una posición \(\mathbf{r}=(x,y,z)\). 
 
-\hspace{1em} Para cada punto del mallado, el programa construye primero su 
-posición cartesiana y, a continuación, calcula el campo correspondiente 
-sumando distintas contribuciones. Por un lado, se evalúa el campo dispersado 
-por las esferas a partir de los coeficientes multipolares ya calculados. 
-Para ello, el campo en cada punto se expresa en función de la posición 
-relativa respecto al centro de cada esfera, es decir, en términos de
-\[
-\mathbf{r}-\mathbf{r}_j,
-\]
-donde \(\mathbf{r}_j\) es la posición de la esfera \(j\). Sobre esa posición 
-relativa se evalúan las funciones vectoriales esféricas, obteniendo así la 
-contribución de cada modo multipolar al campo local.
+\hspace{1em}El cálculo del campo cercano se lleva a cabo mediante el módulo 
+\texttt{nearfield}, que evalúa los campos eléctrico y magnético sobre una 
+malla espacial cartesiana definida por el usuario. Para cada punto 
+$\mathbf{r} = (x,y,z)$ de la malla, el programa calcula la posición 
+relativa respecto al centro de cada esfera, $\mathbf{r} - \mathbf{r}_j$, 
+evalúa las VSWF en esa posición y suma las contribuciones de todos los 
+modos multipolares y todas las esferas, añadiendo la contribución del campo 
+incidente para obtener el campo total. El proceso se realiza de forma 
+independiente para las dos polarizaciones ortogonales, de modo que la salida 
+contiene, para cada punto de la malla, las tres componentes complejas de los 
+campos eléctrico y magnético para cada polarización.
 
-\hspace{1em} Además del campo dispersado, el código añade la contribución 
-del campo incidente y, cuando corresponde, también la contribución asociada 
-a superficies planas o capas. De este modo, el valor final almacenado en 
-cada punto del mallado es el campo total, y no únicamente la parte dispersada. 
-
-\hspace{1em} El programa realiza este proceso para dos polarizaciones 
-ortogonales de la onda incidente, almacenando por separado las componentes 
-del campo eléctrico y magnético correspondientes a cada una de ellas. Por 
-ello, la salida del campo cercano contiene, para cada punto del mallado, 
-las coordenadas espaciales y los valores complejos de los campos para ambas 
-polarizaciones.
-
-
-% \subsubsection{Formato de salida}
-% \hspace{1em} El archivo de salida del campo cercano contiene un total de 27 
-% columnas, organizadas de la siguiente forma:
-% \begin{itemize}
-%     \item 3 columnas correspondientes a las coordenadas espaciales.
-%     \item 6 columnas para las componentes real e imaginaria del campo eléctrico de la primera polarización.
-%     \item 6 columnas para el campo magnético de la primera polarización.
-%     \item 6 columnas para el campo eléctrico de la segunda polarización.
-%     \item 6 columnas para el campo magnético de la segunda polarización.
-% \end{itemize}
-% Esto puede expresarse de forma compacta como:
-% \[
-% 3 + 2 \times 3 \times 2 \times 2 = 27
-% \]
 
 \subsection{Interpretación de resultados}
-\hspace{1em} En el caso de luz no polarizada, el análisis de los resultados 
-se realiza a partir del promedio de las contribuciones asociadas a dos 
-polarizaciones ortogonales de la onda incidente. Dado que estas polarizaciones 
-son incoherentes entre sí, la combinación adecuada se lleva a cabo sobre 
-magnitudes cuadráticas del campo electromagnético, como la intensidad del 
-campo eléctrico o el vector de Poynting.
 
-\hspace{1em} De este modo, la intensidad media del campo puede expresarse como:
-\[
-\langle |E|^2 \rangle = \frac{|E_\parallel|^2 + |E_\perp|^2}{2},
-\]
-donde $E_1$ y $E_2$ representan las contribuciones correspondientes a cada 
-polarización. Este procedimiento permite obtener una descripción física 
-consistente del comportamiento del sistema bajo iluminación no polarizada.
+\hspace{1em}Para luz no polarizada, los observables se obtienen promediando 
+las contribuciones de las dos polarizaciones ortogonales calculadas. Dado 
+que estas polarizaciones son incoherentes entre sí, la combinación se 
+realiza sobre magnitudes cuadráticas. Para el campo cercano, la intensidad 
+media se expresa como
 
+\begin{equation}
+  \langle |\mathbf{E}|^2 \rangle = 
+  \frac{|\mathbf{E}_\parallel|^2 + |\mathbf{E}_\perp|^2}{2}.
+\end{equation}
 
+Para las magnitudes de campo lejano, el elemento $S_{11}(\theta)$ de la 
+matriz de Mueller obtenido directamente del código corresponde ya al 
+promedio sobre ambas polarizaciones, mientras que los demás elementos 
+$S_{12}$, $S_{33}$ y $S_{34}$ permiten caracterizar el estado de 
+polarización del campo dispersado a través del grado de polarización lineal 
+$P_L(\theta) = -S_{12}(\theta)/S_{11}(\theta)$.

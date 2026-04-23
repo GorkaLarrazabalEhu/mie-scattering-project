@@ -951,7 +951,7 @@ la forma estándar de caracterizar la anisotropía angular de la dispersión.
 dispersión, pero en muchas aplicaciones resulta útil resumirla en un único 
 parámetro escalar. El \textit{parámetro de asimetría} $g$ se define como 
 el valor medio del coseno del ángulo de dispersión ponderado por la función 
-de fase:
+de fase [Bohren pagina 120]:
 
 \begin{equation}
   g = \langle \cos\theta \rangle 
@@ -1136,5 +1136,247 @@ sobre la composición y el tamaño de las partículas independientemente de
 su concentración.
 
 
-\cite{Bohren}\cite{Mishchenko}\cite{Bohren,Mishchenko} (prueba, funcionan las citas)
-\cite{Bohren}
+
+
+%====================================================================%
+\subsection{Dispersión independiente y dispersión múltiple}
+%====================================================================%
+
+\hspace{1em}La teoría de Mie desarrollada en las secciones anteriores 
+describe la interacción de una onda electromagnética con una única partícula 
+esférica aislada. Cuando el medio contiene $N$ partículas, el campo total 
+es la superposición del campo incidente y de los campos dispersados por 
+cada una de ellas:
+
+\begin{equation}
+  \mathbf{E}^{tot} = \mathbf{E}^{inc} + \sum_{j=1}^{N} \mathbf{E}^{sca}_j.
+\end{equation}
+
+La pregunta central es qué campo excita a cada partícula. En el límite de 
+\textit{dispersión independiente}, se asume que las partículas están 
+suficientemente separadas como para que el campo que incide sobre cada una 
+sea únicamente el campo incidente original, sin contribuciones de las demás. 
+En este caso, las secciones eficaces del conjunto son simplemente 
+$N$ veces las de una partícula individual y no hay interferencia entre 
+partículas.
+
+Sin embargo, cuando las partículas están suficientemente próximas entre sí, 
+el campo dispersado por cada partícula alcanza a las demás con una amplitud 
+no despreciable. El campo que excita a la partícula $j$ es entonces
+
+\begin{equation}
+  \mathbf{E}^{exc}_j = \mathbf{E}^{inc} 
+  + \sum_{\substack{l=1 \\ l \neq j}}^{N} \mathbf{E}^{sca}_l,
+\end{equation}
+
+lo que acopla las respuestas de todas las partículas entre sí. Este es el 
+régimen de \textit{dispersión múltiple}, cuya solución requiere un 
+tratamiento autoconsistente. El formalismo de Foldy-Lax, descrito en las 
+secciones siguientes, proporciona dicha solución de forma exacta dentro 
+de la teoría electromagnética clásica.
+
+
+%====================================================================%
+\subsection{T-matrix para una esfera individual}
+%====================================================================%
+
+\hspace{1em}El punto de partida del formalismo de scattering múltiple es 
+expresar la respuesta de cada partícula individual de forma compacta. 
+Para una partícula arbitraria, los coeficientes del campo dispersado se 
+relacionan linealmente con los coeficientes del campo excitante a través 
+de la \textit{matriz de transición} o \textit{T-matrix}:
+
+\begin{equation}
+  \mathbf{p}_j = \mathbb{T}_j\, \mathbf{q}_j,
+\end{equation}
+
+donde $\mathbf{p}_j$ es el vector de coeficientes del campo dispersado 
+por la partícula $j$, $\mathbf{q}_j$ el vector de coeficientes del campo 
+excitante sobre ella, y $\mathbb{T}_j$ su T-matrix. En el caso general, 
+$\mathbb{T}_j$ es una matriz densa que mezcla todos los modos multipolares 
+y depende de la forma, el tamaño y el índice de refracción de la partícula.
+
+Para una esfera homogénea e isotrópica, la simetría del sistema impone que 
+los modos TM y TE no se mezclan, de modo que la T-matrix es 
+\textit{diagonal}:
+
+\begin{equation}
+  \mathbb{T}_j = \mathrm{diag}(\ldots,\, a_n^{(j)},\, b_n^{(j)},\, \ldots),
+\end{equation}
+
+donde $a_n^{(j)}$ y $b_n^{(j)}$ son precisamente los coeficientes de Mie 
+de la partícula $j$ derivados en la sección \ref{eq:miecoeffs}. Esta 
+propiedad es exclusiva de la geometría esférica y simplifica 
+considerablemente el problema de scattering múltiple, ya que la T-matrix 
+queda completamente determinada por la solución de Mie.
+
+
+En el caso particular estudiado en este trabajo, todas las partículas son 
+esferas idénticas, por lo que $\mathbb{T}_j = \mathbb{T}$ para todo $j$. 
+Aunque esta igualdad podría en principio explotarse para reducir el coste 
+computacional, la implementación numérica utilizada en este trabajo 
+\cite{Mackowski_code} calcula la T-matrix de forma independiente para cada 
+partícula.
+
+
+%====================================================================%
+\subsection{Teorema de adición de las funciones vectoriales de onda esférica}
+%====================================================================%
+
+\hspace{1em}Para formular el acoplamiento entre partículas es necesario 
+expresar el campo dispersado por la partícula $l$, descrito en su propio 
+sistema de coordenadas centrado en $\mathbf{r}_l$, en el sistema de 
+coordenadas de la partícula $j$, centrado en $\mathbf{r}_j$. Esta 
+operación es posible gracias al \textit{teorema de adición} de las 
+funciones vectoriales de onda esférica, que establece que una onda saliente 
+centrada en $\mathbf{r}_l$ puede reexpresarse como una serie de ondas 
+regulares centradas en $\mathbf{r}_j$:
+
+\begin{equation}
+  \mathbf{M}_{mn}^{(3)}(\mathbf{r} - \mathbf{r}_l) = 
+  \sum_{m'n'} \left[
+    A_{mn}^{m'n'}(\mathbf{r}_j - \mathbf{r}_l)\,\mathbf{M}_{m'n'}^{(1)}(\mathbf{r} - \mathbf{r}_j)
+  + B_{mn}^{m'n'}(\mathbf{r}_j - \mathbf{r}_l)\,\mathbf{N}_{m'n'}^{(1)}(\mathbf{r} - \mathbf{r}_j)
+  \right],
+\end{equation}
+
+válido para $|\mathbf{r} - \mathbf{r}_j| < |\mathbf{r}_l - \mathbf{r}_j|$, 
+y análogamente para $\mathbf{N}_{mn}^{(3)}$. Los \textit{coeficientes de 
+traslación} $A_{mn}^{m'n'}$ y $B_{mn}^{m'n'}$ dependen únicamente del 
+vector de separación $\mathbf{d}_{jl} = \mathbf{r}_j - \mathbf{r}_l$ entre 
+los centros de las dos partículas, y pueden calcularse analíticamente en 
+términos de funciones de Hankel esféricas y coeficientes de Clebsch-Gordan. 
+En forma matricial compacta se agrupan en el \textit{operador de traslación}:
+
+\begin{equation}
+  \mathbb{H}_{jl} = 
+  \begin{pmatrix} A^{jl} & B^{jl} \\ B^{jl} & A^{jl} \end{pmatrix},
+\end{equation}
+
+que traslada los coeficientes modales del sistema de referencia de $l$ 
+al de $j$. El teorema de adición es el ingrediente matemático central 
+del formalismo de scattering múltiple: sin él no sería posible expresar 
+el campo dispersado por una partícula en términos de las funciones base 
+de otra.
+
+
+%====================================================================%
+\subsection{Ecuaciones de Foldy-Lax}
+%====================================================================%
+
+\hspace{1em}Combinando la T-matrix de cada partícula con el teorema de 
+adición, el campo excitante sobre la partícula $j$ expresado en su sistema 
+local adopta la forma
+
+\begin{equation}
+  \mathbf{q}_j = \mathbf{q}_j^{inc} 
+  + \sum_{\substack{l=1\\l\neq j}}^{N} \mathbb{H}_{jl}\, \mathbf{p}_l,
+\end{equation}
+
+donde $\mathbf{q}_j^{inc}$ son los coeficientes del campo incidente 
+proyectados sobre el sistema de la partícula $j$. Sustituyendo la relación 
+$\mathbf{p}_j = \mathbb{T}_j\,\mathbf{q}_j$, se obtiene el sistema 
+acoplado de \textit{Foldy-Lax}:
+
+\begin{equation}
+\label{eq:foldy-lax}
+  \mathbf{p}_j - \mathbb{T}_j \sum_{\substack{l=1\\l\neq j}}^{N} 
+  \mathbb{H}_{jl}\, \mathbf{p}_l 
+  = \mathbb{T}_j\, \mathbf{q}_j^{inc}, 
+  \qquad j = 1, \ldots, N,
+\end{equation}
+
+que en forma matricial global se escribe como
+
+\begin{equation}
+  \underbrace{
+  \begin{pmatrix}
+    \mathbb{I}             & -\mathbb{T}_1\mathbb{H}_{12} & \cdots & -\mathbb{T}_1\mathbb{H}_{1N} \\
+    -\mathbb{T}_2\mathbb{H}_{21} & \mathbb{I}             & \cdots & -\mathbb{T}_2\mathbb{H}_{2N} \\
+    \vdots                 &                        & \ddots & \vdots                       \\
+    -\mathbb{T}_N\mathbb{H}_{N1} & \cdots           &        & \mathbb{I}
+  \end{pmatrix}
+  }_{\mathbb{M}_{sys}}
+  \begin{pmatrix}\mathbf{p}_1\\\mathbf{p}_2\\\vdots\\\mathbf{p}_N\end{pmatrix}
+  =
+  \begin{pmatrix}
+    \mathbb{T}_1\mathbf{q}_1^{inc}\\
+    \mathbb{T}_2\mathbf{q}_2^{inc}\\
+    \vdots\\
+    \mathbb{T}_N\mathbf{q}_N^{inc}
+  \end{pmatrix}.
+\end{equation}
+
+La solución del sistema (\ref{eq:foldy-lax}) proporciona los coeficientes 
+$\{\mathbf{p}_j\}$ de todos los campos dispersados de forma autoconsistente, 
+incorporando los efectos de scattering múltiple a todos los órdenes. La 
+dimensión del sistema es $N \times N_{mult}$, donde $N_{mult}$ es el número 
+de modos multipolares retenidos en la expansión, habitualmente determinado 
+por la condición $n_{max} \sim x + 4x^{1/3} + 2$. Para el caso particular 
+de $N$ esferas idénticas con $\mathbb{T}_j = \mathbb{T}$, la estructura 
+del sistema se simplifica y puede explotarse para reducir el coste 
+computacional de su resolución.
+
+
+%====================================================================%
+\subsection{T-matrix del agregado y observables}
+%====================================================================%
+
+\hspace{1em}Una vez resuelto el sistema de Foldy-Lax, los campos dispersados 
+de cada partícula individual son conocidos. Para calcular los observables 
+del conjunto (secciones eficaces, matriz de Mueller) es conveniente 
+construir la \textit{T-matrix efectiva del agregado}, que relaciona los 
+coeficientes del campo incidente con los del campo dispersado total 
+referidos a un origen común $O$:
+
+\begin{equation}
+  \mathbf{p}^{tot} = \mathbb{T}^{cluster}\, \mathbf{q}^{inc}.
+\end{equation}
+
+Para trasladar los campos dispersados de cada partícula al origen $O$ se 
+aplica de nuevo el teorema de adición, ahora con el operador de traslación 
+de ondas salientes $\mathbb{J}_{Oj}$:
+
+\begin{equation}
+  \mathbf{p}^{tot} = \sum_{j=1}^{N} \mathbb{J}_{Oj}\, \mathbf{p}_j,
+\end{equation}
+
+de modo que la T-matrix del cluster adopta la forma
+
+\begin{equation}
+  \mathbb{T}^{cluster} = \sum_{j=1}^{N} \mathbb{J}_{Oj}\, \mathbf{p}_j\, 
+  (\mathbf{q}^{inc})^{-1}.
+\end{equation}
+
+La T-matrix del agregado tiene exactamente la misma estructura que la de 
+una partícula individual, lo que permite calcular los observables del 
+conjunto mediante las mismas expresiones ya derivadas para la partícula 
+única. En particular, las secciones eficaces del agregado se obtienen como
+
+\begin{equation}
+  C_{\text{ext}} = -\frac{2\pi}{k^2}\,\mathrm{Re}
+  \sum_{n,m} \left(p_{mn}^{TM} + p_{mn}^{TE}\right),
+  \qquad
+  C_{\text{sca}} = \frac{2\pi}{k^2}
+  \sum_{n,m} \left(|p_{mn}^{TM}|^2 + |p_{mn}^{TE}|^2\right),
+\end{equation}
+
+donde la suma recorre todos los modos multipolares del campo dispersado 
+total. La matriz de Mueller del conjunto se construye a partir de las 
+amplitudes de dispersión totales $S_1^{tot}(\theta,\phi)$ y 
+$S_2^{tot}(\theta,\phi)$, que se obtienen sumando coherentemente las 
+contribuciones de cada partícula con sus fases relativas:
+
+\begin{equation}
+  S_\alpha^{tot}(\theta,\phi) = 
+  \sum_{j=1}^{N} e^{i\mathbf{k}^{sca}\cdot\mathbf{r}_j}\, 
+  S_\alpha^{(j)}(\theta,\phi), \qquad \alpha = 1, 2.
+\end{equation}
+
+El factor de fase $e^{i\mathbf{k}^{sca}\cdot\mathbf{r}_j}$ incorpora la 
+información de las posiciones relativas de las partículas y es el 
+responsable de los efectos de interferencia entre ellas. Es precisamente 
+este término el que distingue el tratamiento de scattering múltiple de 
+la simple adición incoherente de contribuciones individuales, y el que 
+da lugar a patrones de interferencia en la función de fase y en el grado 
+de polarización del conjunto.
