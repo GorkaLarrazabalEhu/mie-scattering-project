@@ -1,4 +1,3 @@
-
 \section{Fundamento teórico}
 
 \subsection{Ecuaciones de Maxwell en medios lineales}
@@ -44,7 +43,7 @@ $N$ el índice de refracción del medio circundante. En materiales absorbentes, 
 % [CAMBIO: antes «m = n + ik»; se renombra a \tilde{m} y la parte imaginaria
 %  de «k» a «\kappa» para evitar el conflicto con el número de onda k.]
 $\tilde{m} = N + i\kappa$,
-y la parte imaginaria $\kappa$ da cuenta de la absorción interna.
+y la parte imaginaria $\kappa$ da cuenta de la absorción interna \cite[cap.~1]{Bohren1983}.
 
 El problema de la dispersión de la luz por una partícula esférica consiste en
 resolver la ecuación de onda en dos dominios: el interior de la esfera,
@@ -57,6 +56,7 @@ componentes tangenciales de los campos eléctrico y magnético.
 Gracias a la linealidad de las ecuaciones de Maxwell y de las condiciones de
 contorno, cualquier solución física del problema puede construirse como una
 superposición de soluciones fundamentales. Esto justifica que la teoría de Mie
+% \cite{Bohren1983}
 resuelva únicamente el problema para dos polarizaciones independientes, ya que
 cualquier polarización del campo incidente puede expresarse como combinación
 lineal de ambas.
@@ -146,7 +146,8 @@ teoría de Mie, resulta natural buscar soluciones separables en coordenadas
 esféricas que puedan combinarse para reproducir los campos incidente, interno y
 dispersado.
 
-Un punto de partida consiste en introducir los campos vectoriales
+Un punto de partida consiste en introducir los campos 
+vectoriales \cite[cap.~4]{Bohren1983}\cite[cap.~7]{Stratton1941}
 \[
   \mathbf{M} = \nabla \times (\psi\,\mathbf{r}),
   \qquad
@@ -291,7 +292,7 @@ a
 \end{equation}
 
 donde el superíndice $(1)$ indica dependencia radial en $j_n(kr)$. Evaluando
-las integrales \cite[p.~92]{Bohren1983} se obtiene la expansión del campo
+las integrales \cite[p.~91-92]{Bohren1983} se obtiene la expansión del campo
 incidente:
 
 \begin{equation}
@@ -386,7 +387,7 @@ donde $a_{n}$ y $b_{n}$ son los coeficientes de dispersión de Mie.
 
 Las expresiones explícitas de los coeficientes $a_{n}$, $b_{n}$, $c_{n}$ y $d_{n}$ 
 se obtienen imponiendo la continuidad de las componentes 
-tangenciales de los campos en $r = a$:
+tangenciales de los campos en $r = a$ \cite{Bohren1983}:
 
 \[
 \begin{aligned}
@@ -408,10 +409,9 @@ expresa en términos del parámetro de tamaño y el índice de refracción relat
   m = \frac{k_1}{k} = \frac{N_1}{N}.
 \end{equation}
 
-Nótese que aquí $m$ denota el índice de refracción relativo (cociente entre el
+Aquí $m$ denota el índice de refracción relativo (cociente entre el
 índice de la partícula y el del medio), distinto del índice azimutal $m$ de la
-sección anterior; el contexto distingue ambos usos, en consonancia con la
-convención estándar de Bohren \& Huffman.
+sección anterior.
 
 Los coeficientes de campo interno son
 
@@ -463,7 +463,8 @@ b_n &=
 
 Desde un punto de vista físico, la dispersión puede interpretarse como la
 rerradiación de energía electromagnética por parte de las cargas ligadas y
-corrientes de polarización inducidas en la partícula por el campo incidente. La
+corrientes de polarización inducidas en la partícula por el campo incidente
+\cite[cap.~3]{Bohren1983}. La
 onda incidente excita momentos multipolares en el interior de la partícula, que
 a su vez emiten radiación en todas las direcciones. En medios disipativos,
 parte de la energía electromagnética se transforma en energía interna del
@@ -483,7 +484,7 @@ el área efectiva que presenta la partícula frente al haz incidente.
 % =========================================================================
 
 Las secciones eficaces se obtienen aplicando el teorema óptico y el teorema de
-Poynting al campo total. El punto de partida es el vector de Poynting promediado
+Poynting al campo total \cite{Bohren1983}. El punto de partida es el vector de Poynting promediado
 en el tiempo
 
 \begin{equation}
@@ -550,7 +551,7 @@ por lo que
   |\mathbf{E}_{sca}|^2\sin\theta\;d\theta\,d\phi.
 \end{equation}
 
-Al sustituir la expansión modal del campo dispersado y aplicar la
+Al sustituir la expansión del campo dispersado y aplicar la
 ortogonalidad de los armónicos esféricos vectoriales, los productos cruzados
 entre modos distintos se anulan y las integrales se reducen a sumas de
 normas individuales. Usando $|E_n|^2 = |E_0|^2(2n+1)^2/[n(n+1)]^2$ y
@@ -575,14 +576,14 @@ expresión de $W_{sca}/I_i$ se simplifica a
   C_{\text{abs}} = C_{\text{ext}} - C_{\text{sca}}.
 \end{equation}
 
-La sección eficaz de extinción sigue el \textit{teorema óptico}: está
+La sección eficaz de extinción sigue el \textit{teorema óptico} \cite{Bohren1983}: está
 determinada únicamente por la amplitud de dispersión en la dirección hacia
 adelante ($\theta = 0$), lo que refleja la interferencia destructiva entre el
 campo incidente y el dispersado que produce la sombra de la partícula.
 
 Es habitual introducir las eficiencias adimensionales, definidas como las
 secciones eficaces normalizadas por el área geométrica de la partícula
-$G = \pi a^2$:
+$\pi a^2$:
 
 \begin{equation}
   Q_{\text{sca}} = \frac{C_{\text{sca}}}{\pi a^2},
@@ -593,8 +594,8 @@ $G = \pi a^2$:
 \end{equation}
 
 En el límite de partícula grande ($x \gg 1$) se cumple $Q_{\text{ext}} \to 2$,
-resultado conocido como la \textit{paradoja de extinción}, que se discute con
-más detalle en la sección~\ref{sec:geom_optics}.
+resultado conocido como la \textit{paradoja de extinción} \cite[p.~107]{vandeHulst1981},
+\cite{Bohren1983}, que se discute con más detalle en la sección~\ref{sec:geom_optics}.
 
 % =========================================================================
 \subsection{Elementos de la matriz de amplitud de dispersión}
@@ -654,7 +655,7 @@ isotropía de la esfera, se recupera el teorema óptico en su forma explícita:
 
 Para relacionar las intensidades y el estado de polarización del campo
 dispersado con los del campo incidente se introduce la \textit{matriz de
-Mueller} $\mathbf{M}(\theta)$, que actúa sobre el vector de Stokes
+Mueller} $\mathbf{M}(\theta)$ \cite{Bohren1983,Mishchenko2002}, que actúa sobre el vector de Stokes
 $(I, Q, U, V)^T$:
 
 \begin{equation}
@@ -704,7 +705,8 @@ luz completamente polarizada.
 % =========================================================================
 
 Se define la \textit{función de fase} $p(\theta)$ como la distribución angular
-normalizada de la potencia dispersada por unidad de ángulo sólido:
+normalizada de la potencia dispersada por unidad de ángulo sólido
+\cite[cap.~2]{Mishchenko2002}:
 
 \begin{equation}
   p(\theta) = \frac{4\pi}{k^2\,C_{\text{sca}}}\,S_{11}(\theta).
@@ -730,7 +732,8 @@ caracterizar la anisotropía angular de la dispersión.
 La función de fase contiene toda la información angular de la dispersión, pero
 en muchas aplicaciones resulta útil resumirla en un único parámetro escalar. El
 \textit{parámetro de asimetría} $g$ se define como el valor medio del coseno del
-ángulo de dispersión ponderado por la función de fase \cite[p.~120]{Bohren1983}:
+ángulo de dispersión ponderado por la función de fase \cite[p.~120]{Bohren1983}
+\cite[cap.~2]{Mishchenko2002}:
 
 \begin{equation}
   g = \langle\cos\theta\rangle
@@ -779,10 +782,14 @@ corresponde a una partícula puramente absorbente. Una parte imaginaria nula del
 índice ($\kappa = 0$, medio transparente) conduce a $\omega_0 = 1$, mientras
 que una parte imaginaria elevada implica $\omega_0 \ll 1$.
 
+% Los tres parámetros $\{Q_{\text{ext}},\,\omega_0,\,g\}$ constituyen la
+% descripción óptica mínima de una partícula individual y son las magnitudes de
+% entrada que requiere la ecuación de transporte radiativo para describir un
+% medio dispersor.
+
 Los tres parámetros $\{Q_{\text{ext}},\,\omega_0,\,g\}$ constituyen la
-descripción óptica mínima de una partícula individual y son las magnitudes de
-entrada que requiere la ecuación de transporte radiativo para describir un
-medio dispersor.
+descripción óptica de una partícula individual.
+
 
 % =========================================================================
 \subsection{Regímenes de dispersión}
@@ -797,7 +804,7 @@ del valor de $x$ se distinguen tres regímenes cualitativamente distintos.
 
 Cuando la partícula es mucho más pequeña que la longitud de onda, el campo
 incidente varía poco sobre su volumen y la respuesta queda dominada por el
-término dipolar ($n = 1$). En este límite, los coeficientes de Mie se
+término dipolar ($n = 1$) \cite[cap.~5]{Bohren1983}. En este límite, los coeficientes de Mie se
 aproximan por
 
 \begin{equation}
@@ -846,7 +853,8 @@ este límite, la eficiencia de extinción converge a
 resultado conocido como la \textit{paradoja de extinción}: la partícula
 extingue el doble de la energía que intercepta geométricamente. El factor
 adicional proviene de la difracción de Fraunhofer en el borde de la partícula,
-que desvía hacia adelante una cantidad de energía igual a la interceptada.
+que desvía hacia adelante una cantidad de energía igual a la interceptada
+\cite{vandeHulst1981,Bohren1983}.
 
 % =========================================================================
 \subsection{Parámetros de Stokes y grado de polarización}
@@ -854,7 +862,8 @@ que desvía hacia adelante una cantidad de energía igual a la interceptada.
 \label{sec:stokes}
 
 El estado de polarización de una onda electromagnética queda completamente
-caracterizado por los \textit{parámetros de Stokes}, definidos en términos de
+caracterizado por los \textit{parámetros de Stokes} \cite{Bohren1983,BornWolf1999,Mishchenko2002},
+definidos en términos de
 las componentes del campo eléctrico como
 
 \begin{equation}
@@ -937,7 +946,7 @@ campo excitante sobre la partícula $j$ es entonces
 lo que acopla las respuestas de todas las partículas entre sí. Este es el
 régimen de \textit{dispersión múltiple}, cuya solución requiere un tratamiento
 autoconsistente, es decir, resolver todas esas interdependencias simultáneamente.
-El formalismo de Foldy-Lax, descrito en las secciones
+El formalismo de Foldy-Lax \cite{Foldy1945,Lax1951}, descrito en las secciones
 siguientes, proporciona dicha solución de forma exacta dentro de la teoría
 electromagnética clásica.
 
@@ -949,7 +958,7 @@ El punto de partida del formalismo de dispersión múltiple es expresar la
 respuesta de cada partícula individual de forma compacta. Para una partícula
 arbitraria, los coeficientes del campo dispersado se relacionan linealmente con
 los coeficientes del campo excitante a través de la \textit{matriz de
-transición} o \textit{T-matrix}:
+transición} o \textit{T-matrix} \cite{Waterman1965,Waterman1971,Mishchenko2002}:
 
 \begin{equation}
   \mathbf{p}_j = \mathbb{T}_j\,\mathbf{q}_j,
@@ -987,7 +996,8 @@ Para formular el acoplamiento entre partículas es necesario expresar el campo
 dispersado por la partícula $l$, descrito en su propio sistema de coordenadas
 centrado en $\mathbf{r}_l$, en el sistema de coordenadas de la partícula $j$,
 centrado en $\mathbf{r}_j$. Esta operación es posible gracias al
-\textit{teorema de adición} de las funciones vectoriales de onda esférica, que
+\textit{teorema de adición} de las funciones vectoriales de onda esférica
+\cite{Stein1961,Cruzan1962,Mackowski1991}, que
 establece que una onda saliente centrada en $\mathbf{r}_l$ puede reexpresarse
 como una serie de ondas regulares centradas en $\mathbf{r}_j$:
 
@@ -1006,7 +1016,7 @@ y análogamente para $\mathbf{N}_{mn}^{(3)}$. Los \textit{coeficientes de
 traslación} $A_{mn}^{m'n'}$ y $B_{mn}^{m'n'}$ dependen únicamente del vector
 de separación $\mathbf{d}_{jl} = \mathbf{r}_j - \mathbf{r}_l$ y pueden
 calcularse analíticamente en términos de funciones de Hankel esféricas y
-coeficientes de Clebsch-Gordan. En forma matricial compacta se agrupan en el
+coeficientes de Clebsch-Gordan \cite{Edmonds1957,Mackowski1991}. En forma matricial compacta se agrupan en el
 \textit{operador de traslación}:
 
 \begin{equation}
@@ -1034,7 +1044,7 @@ excitante sobre la partícula $j$ expresado en su sistema local adopta la forma
 donde $\mathbf{q}_j^{inc}$ son los coeficientes del campo incidente proyectados
 sobre el sistema de la partícula $j$. Sustituyendo la relación
 $\mathbf{p}_j = \mathbb{T}_j\,\mathbf{q}_j$ se obtiene el sistema acoplado de
-\textit{Foldy-Lax}:
+\textit{Foldy-Lax} \cite{Foldy1945,Lax1951,Mackowski1996}:
 
 \begin{equation}
 \label{eq:foldy-lax}
@@ -1071,7 +1081,7 @@ $\{\mathbf{p}_j\}$ de todos los campos dispersados de forma autoconsistente,
 incorporando los efectos de dispersión múltiple a todos los órdenes. La
 dimensión del sistema es $N \times N_{mult}$, donde $N_{mult}$ es el número de
 modos multipolares retenidos en la expansión, cuyo valor se analiza
-en la sección \ref{}
+en la sección \ref{sec:funcesp}
 
 % =========================================================================
 \subsection{T-matrix del agregado y observables}
@@ -1080,7 +1090,7 @@ en la sección \ref{}
 Una vez resuelto el sistema de Foldy-Lax, los campos dispersados de cada
 partícula individual son conocidos. Para calcular los observables del conjunto
 (secciones eficaces, matriz de Mueller) es conveniente construir la
-\textit{T-matrix efectiva del agregado}, que relaciona los coeficientes del
+\textit{T-matrix efectiva del agregado} \cite{Mackowski1994,Mackowski1996}, que relaciona los coeficientes del
 campo incidente con los del campo dispersado total referidos a un origen común
 $O$:
 
@@ -1105,7 +1115,8 @@ de modo que la T-matrix del cluster adopta la forma
 
 La T-matrix del agregado tiene exactamente la misma estructura que la de una
 partícula individual, lo que permite calcular los observables del conjunto
-mediante las mismas expresiones ya derivadas para la partícula única. En
+mediante las mismas expresiones ya derivadas para la partícula única
+\cite{Mackowski1994,Mackowski1996}. En
 particular, las secciones eficaces del agregado se obtienen como
 
 \begin{equation}
@@ -1131,7 +1142,7 @@ fases relativas:
 
 El factor de fase $e^{i\mathbf{k}^{sca}\cdot\mathbf{r}_j}$ incorpora la
 información de las posiciones relativas de las partículas y es el responsable
-de los efectos de interferencia entre ellas. Es precisamente este término el
+de los efectos de interferencia entre ellas \cite{Mackowski1996,Mishchenko2002}. Es precisamente este término el
 que distingue el tratamiento de dispersión múltiple de la simple adición
 incoherente de contribuciones individuales, y el que da lugar a patrones de
 interferencia en la función de fase y en el grado de polarización del conjunto.
