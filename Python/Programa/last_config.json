@@ -1,9 +1,8 @@
 {
     "output_file": "pruebas3.dat",
-    "num_spheres": "2",
+    "num_spheres": "1",
     "positions": [
-        "-0.65d0, 0d0, 0.0d0, 0.55d0, (0.6351200000d0, 2.0720720000d0)",
-        "0.65d0, 0d0, 0.0d0, 0.55d0, (0.6351200000d0, 2.0720720000d0)"
+        "0.d0, 0.d0, 0.d0, 0.55d0, (0.6351200000d0, 2.0720720000d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
@@ -22,7 +21,7 @@
     "sphere_radius": "0.550",
     "material": "Au",
     "separation": "0.2",
-    "geometry": "2 in line (EW)",
+    "geometry": "(none)",
     "wavelength_sweep": {
         "enabled": false,
         "min": "450",

@@ -659,6 +659,7 @@ Mueller} $\mathbf{M}(\theta)$ \cite{Bohren1983,Mishchenko2002}, que actúa sobre
 $(I, Q, U, V)^T$:
 
 \begin{equation}
+  \label{eq:MuellerMatrix}
   \begin{pmatrix} I^{(s)} \\ Q^{(s)} \\ U^{(s)} \\ V^{(s)} \end{pmatrix}
   =
   \frac{1}{k^2 r^2}
@@ -674,12 +675,14 @@ $(I, Q, U, V)^T$:
 Los elementos de la matriz de Mueller se construyen desde $S_1$ y $S_2$:
 
 \begin{equation}
+  \label{eq:MuellerElements}
   S_{11} = \tfrac{1}{2}\bigl(|S_2|^2 + |S_1|^2\bigr),
   \qquad
   S_{12} = \tfrac{1}{2}\bigl(|S_2|^2 - |S_1|^2\bigr),
 \end{equation}
 
 \begin{equation}
+  \label{eq:MuellerElements2}
   S_{33} = \tfrac{1}{2}\bigl(S_2 S_1^* + S_2^* S_1\bigr),
   \qquad
   S_{34} = \tfrac{i}{2}\bigl(S_1 S_2^* - S_2 S_1^*\bigr).
@@ -958,7 +961,7 @@ El punto de partida del formalismo de dispersión múltiple es expresar la
 respuesta de cada partícula individual de forma compacta. Para una partícula
 arbitraria, los coeficientes del campo dispersado se relacionan linealmente con
 los coeficientes del campo excitante a través de la \textit{matriz de
-transición} o \textit{T-matrix} \cite{Waterman1965,Waterman1971,Mishchenko2002}:
+transición} o \textit{T-matrix} \cite{Mackowski1991,Mackowski1996}:
 
 \begin{equation}
   \mathbf{p}_j = \mathbb{T}_j\,\mathbf{q}_j,
@@ -984,9 +987,10 @@ de dispersión múltiple.
 
 En el caso particular estudiado en este trabajo, todas las partículas son
 esferas idénticas, por lo que $\mathbb{T}_j = \mathbb{T}$ para todo $j$.
-Aunque esta igualdad podría explotarse para reducir el coste computacional, la
+Aunque esta igualdad podría usarse para reducir el coste computacional, la
 implementación numérica utilizada \cite{Mackowski_code} calcula la T-matrix de
-forma independiente para cada partícula.
+forma independiente para cada partícula sin verificar si las esferas
+son idénticas de antemano.
 
 % =========================================================================
 \subsection{Teorema de adición de las funciones vectoriales de onda esférica}
@@ -996,8 +1000,8 @@ Para formular el acoplamiento entre partículas es necesario expresar el campo
 dispersado por la partícula $l$, descrito en su propio sistema de coordenadas
 centrado en $\mathbf{r}_l$, en el sistema de coordenadas de la partícula $j$,
 centrado en $\mathbf{r}_j$. Esta operación es posible gracias al
-\textit{teorema de adición} de las funciones vectoriales de onda esférica
-\cite{Stein1961,Cruzan1962,Mackowski1991}, que
+\textit{teorema de adición} de las funciones vectoriales de onda esférica 
+\cite[p.~156]{Mishchenko2002},\cite{Stein1961},\cite{Cruzan1962},\cite{Mackowski1994}, que
 establece que una onda saliente centrada en $\mathbf{r}_l$ puede reexpresarse
 como una serie de ondas regulares centradas en $\mathbf{r}_j$:
 
@@ -1016,7 +1020,7 @@ y análogamente para $\mathbf{N}_{mn}^{(3)}$. Los \textit{coeficientes de
 traslación} $A_{mn}^{m'n'}$ y $B_{mn}^{m'n'}$ dependen únicamente del vector
 de separación $\mathbf{d}_{jl} = \mathbf{r}_j - \mathbf{r}_l$ y pueden
 calcularse analíticamente en términos de funciones de Hankel esféricas y
-coeficientes de Clebsch-Gordan \cite{Edmonds1957,Mackowski1991}. En forma matricial compacta se agrupan en el
+coeficientes de Clebsch-Gordan \cite{Mackowski_code}. En forma matricial compacta se agrupan en el
 \textit{operador de traslación}:
 
 \begin{equation}
@@ -1132,17 +1136,22 @@ La matriz de Mueller del conjunto se construye a partir de las amplitudes de
 dispersión totales $S_1^{tot}(\theta,\phi)$ y $S_2^{tot}(\theta,\phi)$,
 obtenidas sumando coherentemente las contribuciones de cada partícula con sus
 fases relativas:
-
+ 
 \begin{equation}
   S_\alpha^{tot}(\theta,\phi) =
   \sum_{j=1}^{N} e^{i\mathbf{k}^{sca}\cdot\mathbf{r}_j}\,
   S_\alpha^{(j)}(\theta,\phi),
   \qquad \alpha = 1, 2.
 \end{equation}
-
+ 
 El factor de fase $e^{i\mathbf{k}^{sca}\cdot\mathbf{r}_j}$ incorpora la
 información de las posiciones relativas de las partículas y es el responsable
-de los efectos de interferencia entre ellas \cite{Mackowski1996,Mishchenko2002}. Es precisamente este término el
-que distingue el tratamiento de dispersión múltiple de la simple adición
-incoherente de contribuciones individuales, y el que da lugar a patrones de
-interferencia en la función de fase y en el grado de polarización del conjunto.
+de los efectos de interferencia entre ellas.
+ 
+Puesto que cada esfera constituyente satisface $S_3^{(j)} = S_4^{(j)} = 0$
+por simetría, y el factor de fase $e^{i\mathbf{k}^{sca}\cdot\mathbf{r}_j}$ es
+un escalar que no mezcla polarizaciones, la suma coherente hereda esta propiedad:
+$S_3^{tot} = S_4^{tot} = 0$. Los cuatro elementos de la matriz de
+Mueller del agregado quedan así completamente determinados por $S_1^{tot}$ y
+$S_2^{tot}$, mediante las mismas expresiones que para la esfera individual
+(\ref{eq:MuellerMatrix},\ref{eq:MuellerElements},\ref{eq:MuellerElements2}).
