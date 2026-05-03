@@ -1,26 +1,29 @@
 \section{Implementación numérica}
-
-\subsection{El código MSTM}
 \label{sec:mstm}
 
+\subsection{El código MSTM}
+
 El código empleado en este trabajo es MSTM (\textit{Multiple Sphere
-T-Matrix}), una implementación en Fortran desarrollada por Mackowski
-\cite{Mackowski_code} del formalismo de la T-matrix descrito en la sección
-anterior. El programa construye la T-matrix de cada esfera, calcula los
-operadores de traslación $\mathbb{H}_{jl}$, resuelve el sistema
-autoconsistente de Foldy-Lax (\ref{eq:foldy-lax}) y, a partir de la
-solución, evalúa los observables del agregado: secciones eficaces, matriz
-de Mueller, parámetro de asimetría y campo cercano.
+T-Matrix}), una implementación en Fortran desarrollada por
+Mackowski~\cite{Mackowski_code} del formalismo de la T-matrix descrito en
+la sección anterior. El programa calcula los coeficientes de Mie de cada
+esfera (que conforman la T-matrix diagonal $\bar{\mathbb{T}}_j$),
+construye los operadores de traslación $\mathbb{H}^{jl}$ que materializan
+el teorema de adición, resuelve el sistema autoconsistente de Foldy--Lax
+(\ref{eq:foldy-lax}) y, a partir de la solución
+$\{\mathbf{a}^{j}\}$, evalúa los observables del agregado: secciones
+eficaces, matriz de amplitud y de Mueller, parámetro de asimetría y
+campo cercano.
 
 Una característica práctica del código es que trabaja completamente en
-unidades adimensionales: las longitudes se expresan en unidades del número
-de onda $k = 2\pi/\lambda$ del medio circundante, de modo que los radios se
-introducen directamente como parámetros de tamaño $x_j = k a_j$ y las
-posiciones de los centros en las mismas unidades. Un cambio de longitud de
-onda equivale, por tanto, a un reescalado simultáneo de toda la geometría.
-Cuando se desea trabajar con unidades físicas, el parámetro
-\texttt{length\_scale\_factor} reescala internamente todas las posiciones y
-radios antes de comenzar el cálculo.
+unidades adimensionales: las longitudes se expresan en unidades del
+número de onda $k = 2\pi/\lambda$ del medio circundante, de modo que los
+radios se introducen directamente como parámetros de tamaño $x^j = k a^j$
+y las posiciones de los centros $\mathbf{r}^j$ en las mismas unidades.
+Un cambio de longitud de onda equivale, por tanto, a un reescalado
+simultáneo de toda la geometría. Cuando se desea trabajar con unidades
+físicas, el parámetro \texttt{length\_scale\_factor} reescala
+internamente todas las posiciones y radios antes de comenzar el cálculo.
 
 
 \subsection{Estructura general del programa}
@@ -32,283 +35,356 @@ formalismo de la T-matrix:
 
 \begin{enumerate}
   \item Lectura de los parámetros de entrada: parámetros de tamaño
-        $x_j = ka_j$, posiciones $\{\mathbf{r}_j\}$ e índices de refracción
-        complejos $\{m_j\}$ de las esferas.
-  \item Inicialización de la geometría del sistema: cálculo de los vectores
-        de separación $\mathbf{d}_{jl} = \mathbf{r}_j - \mathbf{r}_l$ y
+        $x^j = k a^j$, posiciones $\{\mathbf{r}^j\}$ e índices de
+        refracción complejos $\{m^j\}$ de las $N_S$ esferas.
+  \item Inicialización de la geometría del sistema: cálculo de los
+        vectores de separación $\mathbf{r}^j - \mathbf{r}^l$ y
         determinación del radio de circunscripción del agregado.
-  \item Cálculo de los coeficientes de Mie de cada esfera, derivados en la
-        sección~\ref{sec:miecoeffs}, a partir de los cuales se construye la
-        T-matrix individual $\mathbb{T}_j$. El orden multipolar máximo
-        $n_{max}$ se determina automáticamente para cada esfera
-        (véase~\ref{sec:funcesp}).
-  \item Cálculo de los coeficientes de traslación $\mathbb{H}_{jl}$ entre
-        cada par de esferas, que materializan el teorema de adición de las
-        VSWF y permiten reexpresar el campo dispersado por la esfera $l$ en
-        el sistema de referencia de la esfera $j$.
-  \item Construcción y resolución del sistema lineal de Foldy-Lax
-        (\ref{eq:foldy-lax}), que proporciona los coeficientes multipolares
-        $\{\mathbf{p}_j\}$ de forma autoconsistente
-        (véase~\ref{sec:solver}).
-  \item Construcción de la T-matrix del agregado $\mathbb{T}^{cluster}$ y
-        cálculo de los observables: secciones eficaces, elementos de la
-        matriz de Mueller y parámetro de asimetría.
-  \item Evaluación opcional del campo electromagnético en la región cercana
-        al sistema de esferas (véase~\ref{sec:nearfield}).
+  \item Cálculo de los coeficientes de Mie $\bar a_n^{j}$ y
+        $\bar b_n^{j}$ de cada esfera (sección~\ref{sec:miecoeffs}), que
+        conforman directamente la T-matrix individual diagonal
+        $\bar{\mathbb{T}}_j$. El orden multipolar $n_{max}^{j}$ se
+        determina automáticamente para cada esfera mediante el criterio
+        de Wiscombe (sección~\ref{sec:funcesp}).
+  \item Cálculo de los operadores de traslación $\mathbb{H}^{jl}$ entre
+        cada par de esferas, que materializan el teorema de adición
+        (\ref{eq:addition}) y permiten reexpresar el campo dispersado
+        por la esfera $l$ en el sistema de referencia de la esfera $j$.
+  \item Construcción y resolución del sistema lineal de Foldy--Lax
+        (\ref{eq:foldy-lax-global}), que proporciona los coeficientes
+        $\{\mathbf{a}^{j}\}$ de los campos dispersados de forma
+        autoconsistente (sección~\ref{sec:solver}).
+  \item Cálculo de los observables del agregado a partir de
+        $\{\mathbf{a}^{j}\}$: secciones eficaces, elementos de la matriz
+        de Mueller y parámetro de asimetría. Si se solicita
+        explícitamente, el programa construye además la T-matrix del
+        cluster $\mathbb{T}^{cluster}$ definida en (\ref{eq:Tcluster}).
+      %   , necesaria para los promedios sobre orientaciones aleatorias.
+  \item Evaluación opcional del campo electromagnético en la región
+        cercana al agregado (sección~\ref{sec:nearfield}).
 \end{enumerate}
 
 \subsubsection{Organización en módulos}
 
-El código se estructura en módulos, cada uno responsable de una etapa del
-cálculo:
+El código se estructura en módulos, cada uno responsable de una etapa
+del cálculo. Los módulos relevantes para los cálculos de este trabajo
+son:
 
 \begin{itemize}
   \item \texttt{numconstants}: constantes matemáticas y coeficientes
-        precalculados que son reutilizados a lo largo del programa, como
-        los coeficientes binomiales $\binom{n+l}{n}^{1/2}$ y los
-        coeficientes de las funciones vectoriales de onda esférica.
+        precalculados que son reutilizados a lo largo del programa,
+        como los coeficientes binomiales y los coeficientes asociados a
+        las funciones vectoriales de onda esférica.
   \item \texttt{specialfuncs}: implementación de las funciones especiales
-        necesarias: funciones de Riccati-Bessel $\psi_n$ y Riccati-Hankel
-        $\xi_n$, polinomios de Legendre asociados, funciones angulares
-        $\pi_n$ y $\tau_n$, y coeficientes de traslación $\mathbb{H}_{jl}$.
-  \item \texttt{spheredata}: almacenamiento y gestión de la geometría del
-        sistema: posiciones, radios, índices de refracción y jerarquía de
-        esferas anidadas.
-  \item \texttt{mie}: cálculo de los coeficientes de Mie $a_n$, $b_n$ y
-        construcción de la T-matrix individual de cada esfera, con soporte
-        para medios ópticamente activos.
-  \item \texttt{translation}: implementación del teorema de adición de las
-        VSWF y cálculo de los operadores de traslación $\mathbb{H}_{jl}$
-        entre pares de esferas.
-  \item \texttt{solver}: construcción y resolución numérica del sistema de
-        Foldy-Lax, mediante factorización LU o método iterativo de
-        gradiente biconjugado.
-  \item \texttt{scatprops}: cálculo de los observables a partir de la
-        T-matrix del agregado: secciones eficaces, elementos de la matriz
-        de Mueller, parámetro de asimetría $g$ y albedo $\omega_0$.
-  \item \texttt{nearfield}: evaluación del campo electromagnético total en
-        una malla espacial en la región cercana al sistema de esferas.
-  \item \texttt{inputinterface}: lectura de parámetros de entrada, control
-        del flujo de ejecución y escritura de resultados.
+        necesarias: funciones de Riccati--Bessel $\psi_n$ y
+        Riccati--Hankel $\xi_n$, polinomios de Legendre asociados,
+        funciones angulares $\pi_n,\,\tau_n$ (y sus generalizaciones
+        $\pi_{mn},\,\tau_{mn}$), y rotaciones de Wigner.
+  \item \texttt{spheredata}: almacenamiento y gestión de la geometría
+        del sistema: posiciones $\mathbf{r}^j$, radios $a^j$, índices
+        de refracción $m^j$ y jerarquía de esferas anidadas.
+  \item \texttt{mie}: cálculo de los coeficientes de Mie $\bar a_n^j$,
+        $\bar b_n^j$ que constituyen la T-matrix diagonal
+        $\bar{\mathbb{T}}_j$ de cada esfera, con soporte para medios
+        ópticamente activos. La rutina \texttt{multmiecoeffmult} aplica
+        el operador $\bar{\mathbb{T}}_j$ a un vector dado.
+  \item \texttt{translation}: implementación del teorema de adición de
+        las VSWF y cálculo de los operadores de traslación
+        $\mathbb{H}^{jl}$ entre pares de esferas; la rutina central es
+        \texttt{gentranmatrix}, que ensambla los coeficientes
+        $A_{mn}^{kl}$ y $B_{mn}^{kl}$ definidos en
+        (\ref{eq:addition}).
+  \item \texttt{solver}: construcción y resolución numérica del
+        sistema de Foldy--Lax mediante factorización LU
+        (\texttt{direct\_solver}) o método iterativo de gradiente
+        biconjugado complejo (\texttt{cbicg}). En el modo iterativo,
+        cada producto matriz--vector $\mathbb{M}_{sys}\,\mathbf{v}$ se
+        descompone en la aplicación sucesiva de los operadores
+        $\mathbb{H}^{jl}$ y $\bar{\mathbb{T}}_j$, sin necesidad de
+        almacenar $\mathbb{M}_{sys}$ explícitamente.
+  \item \texttt{scatprops}: cálculo de los observables a partir de los
+        $\{\mathbf{a}^{j}\}$ obtenidos: secciones eficaces, elementos 
+        de la matriz de Mueller, parámetro de asimetría $g$ y albedo $\omega_0$.
+  \item \texttt{nearfield}: evaluación del campo electromagnético total
+        sobre una malla espacial en la región cercana al sistema de
+        esferas (sección~\ref{sec:nearfield}).
+  \item \texttt{inputinterface}: lectura de parámetros de entrada,
+        control del flujo de ejecución y escritura de resultados.
 \end{itemize}
+
+El código incluye además módulos para configuraciones que quedan fuera
+del alcance de este trabajo (\texttt{surface\_subroutines} y
+\texttt{periodic\_lattice\_subroutines} para problemas con interfaces
+planas o redes 2D, \texttt{fft\_translation} para acelerar la traslación
+en sistemas grandes mediante FFT, y \texttt{random\_sphere\_configuration}
+para generar configuraciones aleatorias de esferas).
 
 
 \subsection{Métodos numéricos empleados}
- 
+
 \subsubsection{Evaluación de funciones especiales y orden multipolar}
 \label{sec:funcesp}
- 
-La construcción de los coeficientes de Mie de la
-sección~\ref{sec:miecoeffs}, de las funciones angulares $\pi_n$ y $\tau_n$
-(\ref{eq:S1S2}) y de los coeficientes de traslación $\mathbb{H}_{jl}$
-requiere evaluar las funciones de Riccati-Bessel $\psi_n$ y Riccati-Hankel
-$\xi_n$ y sus derivadas. Estas derivadas se calculan a partir de las
-relaciones de recurrencia analíticas que satisfacen, como
- 
+
+La construcción de los coeficientes de Mie $\bar a_n^j,\bar b_n^j$
+(sección~\ref{sec:miecoeffs}), de las funciones angulares
+$\pi_n,\,\tau_n$ que aparecen en (\ref{eq:S1S2}) y de los coeficientes
+de adición que componen $\mathbb{H}^{jl}$ requiere evaluar las funciones
+de Riccati--Bessel $\psi_n$ y Riccati--Hankel $\xi_n$ y sus derivadas.
+Estas derivadas se calculan a partir de las relaciones de recurrencia
+analíticas que satisfacen, como
+
 \begin{equation}
   \frac{d}{d\rho}\left[\rho\,j_n(\rho)\right]
   = \rho\,j_{n-1}(\rho) - n\,j_n(\rho),
 \end{equation}
- 
-y relaciones análogas para las funciones de Hankel. El uso de recurrencias
-en lugar de aproximaciones por diferencias finitas garantiza la estabilidad
-numérica del cálculo incluso para órdenes elevados. De forma análoga, las
-funciones angulares $\pi_n$ y $\tau_n$ se evalúan mediante sus relaciones
-de recurrencia a partir de los valores iniciales $\pi_0 = 0$, $\pi_1 = 1$.
- 
-El orden multipolar máximo $n_{max}$ retenido en la expansión se determina
-automáticamente para cada esfera mediante el criterio de Wiscombe:
- 
+
+y relaciones análogas para las funciones de Hankel. El uso de
+recurrencias en lugar de aproximaciones por diferencias finitas
+garantiza la estabilidad numérica del cálculo incluso para órdenes
+elevados. De forma análoga, las funciones angulares $\pi_n,\,\tau_n$
+se evalúan mediante sus relaciones de recurrencia a partir de los
+valores iniciales $\pi_0 = 0$, $\pi_1 = 1$.
+
+El orden multipolar máximo $n_{max}^{j}$ retenido en la expansión se
+determina automáticamente para cada esfera mediante el criterio de
+Wiscombe:
+
 \begin{equation}
 \label{eq:wiscombe}
-  n_{max} \approx x + 4\,x^{1/3} + 5,
+  n_{max}^{j} \approx x^{j} + 4\,(x^{j})^{1/3} + 5,
 \end{equation}
- 
+
 que garantiza la convergencia de la serie para cualquier valor del
-parámetro de tamaño $x$. La dimensión del sistema lineal asociado a
-Foldy-Lax es entonces $N \times 2n_{max}(n_{max}+2)$.
- 
- 
-\subsubsection{Resolución del sistema de Foldy-Lax}
-\label{sec:solver}
- 
-El sistema de Foldy-Lax (\ref{eq:foldy-lax}) adopta la forma de un sistema
-lineal
- 
+parámetro de tamaño $x^{j}$. La dimensión total del sistema lineal
+asociado a Foldy--Lax es entonces
+
 \begin{equation}
-  \mathbb{M}_{sys}\,\mathbf{p} = \mathbf{b},
+\label{eq:Neq}
+  N_{eq} = \sum_{j=1}^{N_S} 2\,n_{max}^{j}\bigl(n_{max}^{j}+2\bigr),
 \end{equation}
- 
-donde $\mathbf{p}$ contiene los coeficientes multipolares de todos los
-campos dispersados, $\mathbf{b}$ recoge las contribuciones del campo
-incidente sobre cada esfera, y $\mathbb{M}_{sys}$ incorpora la respuesta
-individual de cada esfera a través de su T-matrix y el acoplamiento entre
-partículas a través de los operadores de traslación $\mathbb{H}_{jl}$. La
-matriz es cuadrada, compleja y densa, de dimensión
-$N\cdot 2n_{max}(n_{max}+2)$. Como $n_{max}$ depende solo del tamaño
-individual de cada esfera y no del número de partículas, en el análisis
-del coste lo tratamos como constante y expresamos los escalados como
-potencias del número de esferas $N$, única variable que controla el
-crecimiento del sistema. El código implementa dos métodos de resolución
-con propiedades muy distintas en términos de coste y memoria.
- 
-\paragraph{Factorización LU.}
+
+donde el factor $2$ contabiliza los dos modos de polarización (TM y TE),
+y el segundo factor el número de pares $(m,n)$ con $1 \le n \le n_{max}^{j}$
+y $-n \le m \le n$. Cuando todas las esferas son idénticas
+($n_{max}^{j} = n_{max}$ para todo $j$), la dimensión se reduce a
+$N_{eq} = 2\,N_S\,n_{max}(n_{max}+2)$.
+
+
+\subsubsection{Resolución del sistema de Foldy--Lax}
+\label{sec:solver}
+
+El sistema de Foldy--Lax (\ref{eq:foldy-lax-global}) adopta la forma de
+un sistema lineal denso, complejo y cuadrado
+
+\begin{equation}
+  \mathbb{M}_{sys}\,\mathbf{a} = \bar{\mathbb{T}}\,\mathbf{p},
+\end{equation}
+
+donde $\mathbf{a} = (\mathbf{a}^1,\ldots,\mathbf{a}^{N_S})^{\mathsf{T}}$
+contiene los coeficientes multipolares de los campos dispersados por
+todas las esferas, $\mathbf{p}$ recoge las contribuciones del campo
+incidente sobre cada una, y $\mathbb{M}_{sys}$ incorpora la respuesta
+individual de cada esfera mediante $\bar{\mathbb{T}}_j$ y el
+acoplamiento entre partículas mediante los $\mathbb{H}^{jl}$. La
+dimensión $N_{eq}$ viene dada por (\ref{eq:Neq}). Como $n_{max}$ depende
+solo del tamaño individual de cada esfera y no del número de partículas,
+en el análisis del coste lo tratamos como constante y expresamos los
+escalados como potencias del número de esferas $N_S$, única variable que
+controla el crecimiento del sistema. El código implementa dos métodos
+de resolución con propiedades muy distintas en términos de coste y
+memoria.
+
+\paragraph{Factorización LU (\texttt{direct\_solver}).}
 Para sistemas de tamaño moderado se emplea la \textit{factorización LU},
 que descompone la matriz como
- 
+
 \begin{equation}
   P\,\mathbb{M}_{sys} = L\,U,
 \end{equation}
- 
+
 con $L$ triangular inferior (con unos en la diagonal) y $U$ triangular
-superior. La matriz de permutación $P$ recoge los intercambios entre filas
-que el algoritmo realiza durante la eliminación: cuando el elemento de la
-diagonal por el que toca dividir es muy pequeño o nulo, se permuta esa
-fila con otra que tenga un elemento mayor en la misma columna, evitando
-la amplificación de errores numéricos. Una vez construida la
-descomposición, el sistema se resuelve mediante dos sustituciones
-triangulares encadenadas, $L\,\mathbf{y} = P\,\mathbf{b}$ y
-$U\,\mathbf{p} = \mathbf{y}$, ambas con coste $\mathcal{O}(N^2)$.
- 
+superior. La matriz de permutación $P$ recoge los intercambios entre
+filas que el algoritmo realiza durante la eliminación: cuando el
+elemento de la diagonal por el que toca dividir es muy pequeño o nulo,
+se permuta esa fila con otra que tenga un elemento mayor en la misma
+columna, evitando la amplificación de errores numéricos. Una vez
+construida la descomposición (rutina \texttt{lu\_decomposition} en
+MSTM), el sistema se resuelve mediante dos sustituciones triangulares
+encadenadas (\texttt{lu\_backsubstitution}),
+$L\,\mathbf{y} = P\,\bar{\mathbb{T}}\mathbf{p}$ y
+$U\,\mathbf{a} = \mathbf{y}$, ambas con coste $\mathcal{O}(N_S^2)$.
+
 El coste dominante está en construir la factorización. El algoritmo
-procede columna a columna y, en cada una de las $\sim N$ columnas, anula
-del orden de $N$ elementos por debajo de la diagonal; cada uno de esos
-ceros se obtiene combinando linealmente dos filas, lo que modifica $\sim
-N$ entradas de la matriz. El producto de los tres factores da el escalado
-cúbico
- 
+procede columna a columna y, en cada una de las $\sim N_S$ columnas,
+anula del orden de $N_S$ elementos por debajo de la diagonal; cada uno
+de esos ceros se obtiene combinando linealmente dos filas, lo que
+modifica $\sim N_S$ entradas de la matriz. El producto de los tres
+factores da el escalado cúbico
+
 \begin{equation}
-  C_{LU} \;\sim\; \frac{N^3}{3}
-         \;=\; \mathcal{O}(N^3),
+  C_{LU} \;\sim\; \frac{N_S^{\,3}}{3} \;=\; \mathcal{O}(N_S^{\,3}),
 \end{equation}
- 
+
 de modo que duplicar el número de esferas multiplica el coste por ocho.
 Este crecimiento es el que limita en la práctica el uso de LU para
-clusters grandes y motiva el empleo del método iterativo en ese régimen.
- 
-\paragraph{Gradiente biconjugado.}
-Para sistemas mayores se emplea el método iterativo del \textit{gradiente
-biconjugado} (BiCG), que evita las dos limitaciones de LU: ni factoriza
-la matriz ni siquiera la construye explícitamente en memoria. Solo
-necesita ser capaz de evaluar productos matriz-vector
-$\mathbb{M}_{sys}\,\mathbf{v}$, que el código obtiene directamente a
-partir de las T-matrices individuales y los operadores de traslación
-entre esferas. Partiendo de una estimación inicial $\mathbf{p}_0$, la
-solución se actualiza iterativamente como
- 
+clusters grandes y motiva el empleo del método iterativo en ese
+régimen. El método requiere además almacenar $\mathbb{M}_{sys}$
+completamente en memoria, con coste $\mathcal{O}(N_S^{\,2})$.
+
+\paragraph{Gradiente biconjugado complejo (\texttt{cbicg}).}
+Para sistemas mayores se emplea el método iterativo del
+\textit{gradiente biconjugado} (BiCG), que evita las dos limitaciones
+de LU: ni factoriza la matriz ni siquiera la construye explícitamente
+en memoria. Solo necesita ser capaz de evaluar productos
+matriz--vector $\mathbb{M}_{sys}\,\mathbf{v}$, que en el código se
+obtienen de la propia estructura de
+(\ref{eq:foldy-lax-global}): aplicación de los operadores de traslación
+$\mathbb{H}^{jl}$ (rutina \texttt{sphereinteraction}, que internamente
+llama a \texttt{gentranmatrix}) seguida de la aplicación del operador
+de Mie $\bar{\mathbb{T}}_j$ (rutina \texttt{multmiecoeffmult}). Partiendo
+de una estimación inicial $\mathbf{a}_0$, la solución se actualiza
+iterativamente como
+
 \begin{equation}
-  \mathbf{p}_{k+1} = \mathbf{p}_k + \alpha_k\,\mathbf{d}_k,
+  \mathbf{a}_{k+1} = \mathbf{a}_k + \alpha_k\,\mathbf{d}_k,
 \end{equation}
- 
-donde $\mathbf{d}_k$ es una dirección de búsqueda construida a partir del
-residuo $\mathbf{r}_k = \mathbf{b} - \mathbb{M}_{sys}\,\mathbf{p}_k$, y
-$\alpha_k$ un coeficiente que minimiza dicho residuo a lo largo de esa
-dirección. El proceso continúa hasta satisfacer el criterio de convergencia
- 
+
+donde $\mathbf{d}_k$ es una dirección de búsqueda construida a partir
+del residuo
+$\mathbf{r}_k = \bar{\mathbb{T}}\mathbf{p} - \mathbb{M}_{sys}\,\mathbf{a}_k$,
+y $\alpha_k$ un coeficiente que minimiza dicho residuo a lo largo de
+esa dirección. El proceso continúa hasta satisfacer el criterio de
+convergencia
+
 \begin{equation}
-  \frac{\|\mathbf{r}_k\|}{\|\mathbf{b}\|} < \varepsilon,
+  \frac{\|\mathbf{r}_k\|}{\|\bar{\mathbb{T}}\mathbf{p}\|} < \varepsilon,
 \end{equation}
- 
-con $\varepsilon$ una tolerancia prefijada (por defecto $10^{-6}$ en MSTM).
- 
-El coste por iteración está dominado por el producto matriz-vector
-$\mathbb{M}_{sys}\,\mathbf{v}$. Multiplicar una matriz
-de tamaño $N\times N$ por un vector requiere recorrer todas las filas
-y, para cada fila, sumar las contribuciones de todas las columnas:
-en total, $\mathcal{O}(N^2)$ operaciones aritméticas. El resto del
-trabajo de cada iteración ---productos escalares, combinaciones lineales
-y actualización de $\alpha_k$ y $\mathbf{d}_k$--- solo involucra
-vectores de longitud $N$ y es por tanto $\mathcal{O}(N)$, despreciable
-frente al producto matriz-vector.
- Si el método converge en $K$ iteraciones, el coste total es
- 
+
+con $\varepsilon$ una tolerancia prefijada (por defecto $10^{-6}$ en
+MSTM).
+
+El coste por iteración está dominado por el producto matriz--vector
+$\mathbb{M}_{sys}\,\mathbf{v}$. Multiplicar una matriz de tamaño
+$N_S \times N_S$ (en bloques) por un vector requiere recorrer todas las
+filas y, para cada fila, sumar las contribuciones de todas las
+columnas: en total, $\mathcal{O}(N_S^{\,2})$ operaciones aritméticas.
+El resto del trabajo de cada iteración --- productos escalares,
+combinaciones lineales y actualización de $\alpha_k$ y $\mathbf{d}_k$
+--- solo involucra vectores de longitud $N_S$ y es por tanto
+$\mathcal{O}(N_S)$, despreciable frente al producto matriz--vector. Si
+el método converge en $K$ iteraciones, el coste total es
+
 \begin{equation}
-  C_{BiCG} \;\sim\; K\,N^2.
+  C_{BiCG} \;\sim\; K\,N_S^{\,2}.
 \end{equation}
- 
-El número $K$ depende del condicionamiento de $\mathbb{M}_{sys}$ —es
-decir, de la geometría del agregado y de los índices de refracción de las
-partículas— pero no del tamaño del sistema, por lo que el escalado
-efectivo del método es $\mathcal{O}(N^2)$. Para clusters grandes esta
-ganancia de un orden en $N$ frente a LU resulta determinante.
- 
+
+El número $K$ depende del condicionamiento de $\mathbb{M}_{sys}$ ---es
+decir, de la geometría del agregado y de los índices de refracción de
+las partículas--- pero no del tamaño del sistema, por lo que el
+escalado efectivo del método es $\mathcal{O}(N_S^{\,2})$. Para clusters
+grandes esta ganancia de un orden en $N_S$ frente a LU resulta
+determinante.
+
 \paragraph{Aprovechamiento de la linealidad.}
-Como ya se argumentó al introducir las ecuaciones de Maxwell, la linealidad
-del problema permite expresar cualquier polarización del campo incidente
-como combinación lineal de dos polarizaciones independientes. El código
-explota esta propiedad y resuelve el sistema simultáneamente para dos
-polarizaciones ortogonales, de modo que en una sola ejecución se obtienen
-los coeficientes $\{\mathbf{p}_j\}$ correspondientes a ambas. Esto permite
-construir directamente todos los elementos de la matriz de Mueller a partir
-de los productos cruzados de las amplitudes de dispersión, sin necesidad de
-una segunda resolución del sistema.
- 
+Como ya se argumentó al introducir las ecuaciones de Maxwell, la
+linealidad del problema permite expresar cualquier polarización del
+campo incidente como combinación lineal de dos polarizaciones
+independientes. El código explota esta propiedad y resuelve el sistema
+simultáneamente para dos polarizaciones ortogonales (parámetro
+\texttt{nrhs}~$=2$ en las rutinas del solver), de modo que en una sola
+ejecución se obtienen los coeficientes $\{\mathbf{a}^{j}\}$
+correspondientes a ambas. Esto permite construir directamente todos
+los elementos de la matriz de Mueller a partir de los productos
+cruzados de las amplitudes de dispersión, sin necesidad de una segunda
+resolución del sistema.
+
 
 \subsection{Cálculo del campo cercano}
 \label{sec:nearfield}
 
 \subsubsection{Definición}
 
-Una vez resuelto el sistema de Foldy-Lax, los coeficientes
-$\{\mathbf{p}_j\}$ permiten evaluar el campo electromagnético en cualquier
-punto del espacio. El campo total se descompone como
+Una vez resuelto el sistema de Foldy--Lax, los coeficientes
+$\{\mathbf{a}^{j}\}$ permiten evaluar el campo electromagnético en
+cualquier punto del espacio. El campo total se descompone como
 
 \begin{equation}
-  \mathbf{E}(\mathbf{r}) = \mathbf{E}^{inc}(\mathbf{r})
-  + \sum_{j=1}^{N} \mathbf{E}^{sca}_j(\mathbf{r}),
+  \mathbf{E}(\mathbf{r})
+  = \mathbf{E}^{inc}(\mathbf{r})
+  + \sum_{j=1}^{N_S} \mathbf{E}_s^{j}(\mathbf{r}),
 \end{equation}
 
-donde cada contribución dispersada se evalúa mediante la expansión en VSWF
-centrada en $\mathbf{r}_j$. A diferencia del campo lejano, donde se toma el
-límite $kr \to \infty$ y las funciones de Hankel se aproximan por ondas
-esféricas salientes, en el campo cercano las funciones de Hankel esféricas
-deben evaluarse en su forma completa, sin ninguna aproximación asintótica.
-Esto permite analizar la distribución espacial local de la energía
-electromagnética en el entorno inmediato de las esferas, incluyendo
-fenómenos como la concentración de campo en las zonas de contacto entre
-partículas adyacentes.
+donde cada contribución dispersada se evalúa mediante la expansión en
+VSWF salientes centrada en
+$\mathbf{r}^{j}$, con los coeficientes $a_{mn}^{j},\,b_{mn}^{j}$
+obtenidos del sistema de Foldy--Lax. A diferencia del campo lejano,
+donde se toma el límite $kr \to \infty$ y las funciones de Hankel se
+aproximan por ondas esféricas salientes, en el campo cercano las
+funciones de Hankel esféricas $h_n^{(1)}(kr^{j})$ deben evaluarse en su
+forma completa, sin ninguna aproximación asintótica. Esto permite
+analizar la distribución espacial local de la energía electromagnética
+en el entorno inmediato de las esferas, incluyendo fenómenos como la
+concentración de campo en las zonas de contacto entre partículas
+adyacentes.
 
 \subsubsection{Implementación en el código}
 
 El cálculo del campo cercano se lleva a cabo mediante el módulo
-\texttt{nearfield}, que evalúa los campos eléctrico y magnético sobre una
-malla espacial cartesiana definida por el usuario. Para cada punto
+\texttt{nearfield}, que evalúa los campos eléctrico y magnético sobre
+una malla espacial cartesiana definida por el usuario. Para cada punto
 $\mathbf{r} = (x,y,z)$ de la malla, el programa calcula la posición
-relativa respecto al centro de cada esfera, $\mathbf{r} - \mathbf{r}_j$,
+relativa respecto al centro de cada esfera, $\mathbf{r}-\mathbf{r}^{j}$,
 evalúa las VSWF en esa posición y suma las contribuciones de todos los
-modos multipolares y todas las esferas, añadiendo la contribución del campo
-incidente para obtener el campo total. El proceso se realiza de forma
-independiente para cada una de las dos polarizaciones del campo incidente
-introducidas en~\ref{sec:solver}, de modo que la salida contiene, para cada
-punto de la malla, las tres componentes complejas de los campos eléctrico y
+modos multipolares retenidos y de todas las esferas, añadiendo
+finalmente la contribución del campo incidente para obtener el campo
+total. El proceso se realiza de forma independiente para cada una de
+las dos polarizaciones del campo incidente introducidas
+en~\ref{sec:solver}, de modo que la salida contiene, para cada punto
+de la malla, las tres componentes complejas de los campos eléctrico y
 magnético en ambas polarizaciones.
 
 
 \subsection{Interpretación de resultados}
 \label{sec:interpretacion}
-
+ 
 Para luz no polarizada, los observables se obtienen promediando
-incoherentemente las contribuciones de las dos polarizaciones ortogonales
-calculadas, de modo que la combinación se realiza sobre magnitudes
-cuadráticas. Para el campo cercano, la intensidad media se expresa como
-
+incoherentemente las contribuciones de las dos polarizaciones
+ortogonales calculadas, de modo que la combinación se realiza sobre
+magnitudes cuadráticas. Para el campo cercano, la intensidad media se
+expresa como
+ 
 \begin{equation}
-  \langle |\mathbf{E}|^2 \rangle =
-  \frac{|\mathbf{E}_\parallel|^2 + |\mathbf{E}_\perp|^2}{2}.
+  \langle |\mathbf{E}|^2 \rangle
+  = \frac{|\mathbf{E}_\parallel|^2 + |\mathbf{E}_\perp|^2}{2}.
 \end{equation}
-
-En el campo lejano, el elemento $S_{11}(\theta)$ de la matriz de Mueller
-proporcionado por el código corresponde ya al promedio sobre ambas
-polarizaciones. Los demás elementos $S_{12}$, $S_{33}$ y $S_{34}$ permiten
-caracterizar el estado de polarización del campo dispersado a través de los
-parámetros de Stokes, introducidos en~\ref{sec:stokes}. En particular, para
-luz incidente no polarizada que interactúa con un agregado de esferas
-homogéneas se cumple $U^{(s)} = V^{(s)} = 0$, y el grado de polarización
-lineal del campo dispersado adopta la forma compacta
-
+ 
+En el campo lejano, para luz incidente no polarizada
+$(I_0,\,0,\,0,\,0)^T$, solo actúa la primera columna de la matriz de
+Mueller y los parámetros de Stokes del campo dispersado son
+ 
 \begin{equation}
-  P_L(\theta) = -\frac{S_{12}(\theta)}{S_{11}(\theta)},
+  I^{(s)} = \frac{S_{11}\,I_0}{k^2r^2},\quad
+  Q^{(s)} = \frac{S_{21}\,I_0}{k^2r^2},\quad
+  U^{(s)} = \frac{S_{31}\,I_0}{k^2r^2},\quad
+  V^{(s)} = \frac{S_{41}\,I_0}{k^2r^2}.
 \end{equation}
-
-magnitud directamente medible y útil para caracterizar la composición y el
-tamaño de las partículas con independencia de su concentración.
+ 
+Los grados de polarización se obtienen directamente de estas
+expresiones~\cite{Bohren1983,Mishchenko2002}:
+ 
+\begin{align}
+  P(\theta)   &= \frac{\sqrt{S_{21}^2 + S_{31}^2 + S_{41}^2}}{S_{11}},
+  \label{eq:P_cluster}\\[4pt]
+  P_L(\theta) &= \frac{\sqrt{S_{21}^2 + S_{31}^2}}{S_{11}},
+  \label{eq:PL_cluster}\\[4pt]
+  P_C(\theta) &= \frac{|S_{41}|}{S_{11}}.
+  \label{eq:PC_cluster}
+\end{align}
+ 
+Estas expresiones son válidas para cualquier agregado, independientemente
+de su simetría. Para una esfera individual, la simetría azimutal impone
+$S_{31} = S_{41} = 0$ y se recupera la forma compacta $P_L = \frac{|S_{12}|}{S_{11}}$
+de la sección~\ref{sec:stokes}; para un cluster cuya geometría posee un
+plano de simetría que coincide con el plano de dispersión ocurre lo
+mismo, como confirman los valores $S_{31}/S_{11},\,S_{41}/S_{11}
+\sim 10^{-9}$ obtenidos en las simulaciones de este trabajo.

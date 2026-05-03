@@ -1938,7 +1938,8 @@ class MieTheoryApp:
         if any(q_selected):
             for pol in pol_selected:
                 if len(q_selected) == len(self.q_vars):
-                    sb.Popen(["py", python_plot_file, scat_mat_file, "EFF", save_dir, "--pol", pol])
+                    sb.Popen(["py", python_plot_file, scat_mat_file,
+                             "EFF", save_dir, "--pol", pol])
                 else:
                     for qmode in q_selected:
                         sb.Popen(["py", python_plot_file, scat_mat_file, qmode, save_dir, "--pol", pol])

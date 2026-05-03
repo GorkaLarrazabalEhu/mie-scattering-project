@@ -37,6 +37,8 @@
 % GRAPHICS + MATH
 % -------------------------
 \usepackage{hyperref}
+\hypersetup{hidelinks}
+
 \usepackage{graphicx}
 % \graphicspath{{../../Simulaciones/Definitivo}}
 \usepackage{float}
@@ -64,28 +66,29 @@
 
 \begin{document}
 
-\include{Secciones/portada}
+\input{Secciones/portada}
 
 \renewcommand{\contentsname}{Índice}
 \tableofcontents
 
-\include{Secciones/Intro}
+\newpage
+\input{Secciones/Intro}
 
-\include{Secciones/Teoria}
+\input{Secciones/Teoria}
 
-\include{Secciones/fortran}
+\input{Secciones/fortran}
 
-\include{Secciones/Python}
+\input{Secciones/Python}
 
-\include{Secciones/1Esfera}
+\input{Secciones/1Esfera}
 
-\include{Secciones/4Esferas}
+\input{Secciones/4Esferas}
 
-\include{Secciones/Caso de estudio}
+\input{Secciones/Caso de estudio}
 
-\include{Secciones/ods}
+\input{Secciones/ods}
 
-\include{Secciones/Conclusiones}
+\input{Secciones/Conclusiones}
 
 \printbibliography[title={Bibliografía}]
 
