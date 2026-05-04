@@ -1,37 +1,126 @@
 \section{Simulaciones 1 esfera}
 
-\subsection{Régimen de Rayleigh: x≪1}
+\subsection{Régimen de Rayleigh: $x\ll1$}
+\subsubsection{Barrido de longitudes de onda en el rango visible}
+En esta sección se simula una esfera de oro aislada de radio $a = 20\,\text{nm}$
+en el rango visible del espectro electromagnético, desde $\lambda = 400\,\text{nm}$
+hasta $\lambda = 800\,\text{nm}$ con un paso de $5\,\text{nm}$.
+Para cada longitud de onda, el índice de refracción complejo del oro se obtiene
+mediante interpolación de los datos experimentales de Johnson \& Christy
+\cite{johnson1972optical}.
 
-
-\subsection{$\lambda = r$}
-\hspace{1em}En esta simulación, se ha colocado una esfera de oro con un radio de
-0.6 $\mu$m y se ha utilizado una onda plana monocromática de longitud de onda 
-igual al radio de la esfera. La onda incidente se propaga en el plano xz.
-Para esta longitud de onda y haciendo interpolación de los valores,
-el índice de refracción del oro es
-$n = 0.24873 + 3.074 i$. \cite{johnson1972optical}
-
-Tras la simulación, se observan las siguientes figuras:
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/sim4_1e/plots/S11.png}
-    \caption{Radiación dispersada en función del ángulo de observación en el campo lejano por
-                una esfera de oro de $\lambda = r = 0.6 \mu$m.}
-    \label{fig:s11sim4_1e}
-\end{figure}
-En la figura \ref{fig:s11sim4_1e}, se observa la\dots
-
+La figura~\ref{fig:qext_qabs_qsca_r20sw} muestra las eficiencias de extinción, absorción y
+dispersión en función de la longitud de onda.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/sim4_1e/plots/PV.png}
-    \caption{Vector poynting en el campo cercano por una esfera de oro.}
-    \label{fig:nfPVsim4_1e}
+    \includegraphics[width=0.9\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/r20sw/plots/Efficiencies_-_Unpol.png}
+    \caption{Eficiencias de extinción, absorción y dispersión de una esfera de oro de radio $20 \,n$m frente a la longitud de onda.}
+    \label{fig:qext_qabs_qsca_r20sw}
 \end{figure}
 
-En la figura \ref{fig:nfPVsim4_1e}, se muestra el vector de Poynting en el campo cercano.
-Se observa que el vector de Poynting es nulo en la dirección y, lo que indica que no
-hay flujo de energía en esa dirección. En cambio, en las direcciones x y z, se observa un 
-flujo de energía.
+Las tres cantidades presentan un máximo en torno a 
+$\lambda \approx 500 - 520 \,\text{nm}$,
+a partir del cual decrecen al aumentar la longitud de onda.
+En todo el rango estudiado, la eficiencia de absorción $Q_\text{abs}$ domina
+claramente sobre la de dispersión $Q_\text{sca}$, con valores de $Q_\text{sca}$
+aproximadamente treinta veces menores que $Q_\text{abs}$.
+Esto indica que la mayor parte de la energía extraída del haz incidente es
+absorbida por la partícula y convertida en calor, mientras que la contribución
+de la dispersión es comparativamente despreciable. 
 
+La figura~\ref{fig:S11_small} muestra el elemento $S_{11}(\theta)$ de la
+matriz de dispersión en función del ángulo polar $\theta$, para varias
+longitudes de onda del rango visible.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/r20sw/plots/S11.png}
+    \caption{Elemento $S_{11}(\theta)$ de la matriz de dispersión para una esfera de oro de radio $20\,\text{nm}$ frente al ángulo polar $\theta$ en el campo lejano.}
+    \label{fig:S11_small}
+\end{figure}
+
+
+
+El patrón angular es prácticamente simétrico respecto a $\theta = 90°$,
+sin preferencia neta por la dispersión hacia delante ni hacia atrás.
+En consecuencia, el parámetro de asimetría $g = \langle\cos\theta\rangle$
+toma un valor próximo a cero.
+Asimismo, las curvas correspondientes a las distintas longitudes de onda
+se superponen casi exactamente, lo que indica que el patrón angular es
+prácticamente independiente de $\lambda$ en este régimen.
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/r20sw/plots/ALL.png}
+    \caption{Grado de polarización total de la luz dispersada por una esfera de oro de radio $20\,\text{nm}$ frente al ángulo polar $\theta$ en el campo lejano.}
+    \label{fig:ALL_small}
+\end{figure}
+
+
+
+La figura~\ref{fig:ALL_small} muestra el grado de polarización lineal
+$\text{DoLP}(\theta)$ y el grado de polarización circular $\text{DoCP}(\theta)$
+superpuestos en función del ángulo de dispersión, para varias 
+longitudes de onda del rango visible.
+
+
+El $\text{DoCP}$ es nulo en todo el rango angular y para todas las longitudes
+de onda consideradas, lo que indica que la luz dispersada no adquiere
+polarización circular. Como consecuencia, el grado de polarización total
+$\text{DoP} = \sqrt{\text{DoLP}^2 + \text{DoCP}^2}$ coincide exactamente
+con el $\text{DoLP}$, y ambas curvas se superponen en la figura.
+El $\text{DoLP}$ presenta un máximo en $\theta = 90°$, donde la luz
+dispersada está completamente polarizada linealmente, y se anula en las
+direcciones axiales $\theta = 0°$ y $\theta = 180°$.
+Al igual que el patrón angular de $S_{11}$, el $\text{DoLP}$ es
+prácticamente independiente de la longitud de onda en este régimen.
+
+
+
+
+\begin{figure}[htbp]
+    \centering
+
+    \begin{subfigure}[b]{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/r20sw/plots/nf500.png}
+        \caption{$\lambda = 500\,\text{nm}$.}
+        \label{fig:nearfield_small_500}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/r20sw/plots/nf520.png}
+        \caption{$\lambda = 520\,\text{nm}$.}
+        \label{fig:nearfield_small_520}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.31\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/r20sw/plots/nf540.png}
+        \caption{$\lambda = 540\,\text{nm}$.}
+        \label{fig:nearfield_small_540}
+    \end{subfigure}
+
+    \caption{Distribución espacial de la intensidad del campo eléctrico en el campo cercano 
+            para tres longitudes de onda.}
+    \label{fig:nearfield_small}
+\end{figure}
+
+
+La figura~\ref{fig:nearfield_small} muestra la distribución espacial de la
+intensidad del campo eléctrico en las proximidades de la esfera para tres
+longitudes de onda: $\lambda = 500\,\text{nm}$, $\lambda = 520\,\text{nm}$
+y $\lambda = 540\,\text{nm}$, correspondientes al entorno del máximo de
+$Q_\text{sca}$ observado en la figura~\ref{fig:qext_qabs_qsca_r20sw}.
+El campo cercano se evalúa en un plano que contiene el eje de propagación
+de la onda incidente, y se representa normalizado respecto a la amplitud
+del campo incidente.
+
+Al tratarse de una esfera aislada, no existen efectos de acoplamiento entre
+partículas y el campo en la región exterior refleja únicamente la
+perturbación introducida por la presencia de la esfera sobre la onda plana
+incidente.
 

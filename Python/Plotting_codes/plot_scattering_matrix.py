@@ -269,48 +269,97 @@ def plot_S11_old(runs, run_ids, save_dir="."):
     auto_save_or_show(fig, "S11", save_dir)
 
 
-def plot_S11(runs, run_ids, save_dir="."):
+def plot_S11(runs, run_ids, save_dir=".", skip_run=True, plot_number=5):
     mode = {1, 2}
+    mode = {1}
+    # mode = 2
+    # Filtrar primero los runs que tienen datos
+    valid_run_ids = [
+        ri for ri in run_ids
+        if runs[ri]["S"] is not None
+    ]
+
+    # Seleccionar solo algunos runs homogéneamente
+    if skip_run and len(valid_run_ids) > plot_number:
+        indices = np.linspace(
+            0,
+            len(valid_run_ids) - 1,
+            plot_number,
+            dtype=int
+        )
+        valid_run_ids = [valid_run_ids[i] for i in indices]
+
     fig, axes = plt.subplots(
-        1, len(mode), subplot_kw={'projection': 'polar'}, figsize=(12, 6)
+        1, len(mode),
+        subplot_kw={'projection': 'polar'},
+        figsize=(12, 6)
     )
+
     if not isinstance(axes, (list, np.ndarray)):
         axes = [axes]
+
     ax_map = {}
     i = 0
+
     if 1 in mode:
         ax_map[1] = axes[i]
         i += 1
+
     if 2 in mode:
         ax_map[2] = axes[i]
 
     has_data = False
-    for ri in run_ids:
+
+    for ri in valid_run_ids:
         r = runs[ri]
-        if r["S"] is None:
-            continue
         has_data = True
+
         l_scale = r.get("l_scale", 1.0)
         wl = f"{2*np.pi/l_scale:.2f} $\mu$m"
+
         if 1 in mode:
-            ax_map[1].plot(r["radianTheta"], r["S"][:, 0], label=wl)
+            ax_map[1].plot(
+                r["radianTheta"],
+                r["S"][:, 0],
+                label=wl
+            )
+
         if 2 in mode:
-            ax_map[2].plot(r["radianTheta"], r["S"][:, 0], label=wl)
+            ax_map[2].plot(
+                r["radianTheta"],
+                r["S"][:, 0],
+                label=wl
+            )
 
     if not has_data:
         for ax in axes:
-            ax.text(0.5, 0.5, "No data", transform=ax.transAxes,
-                    ha='center', va='center', fontsize=14, color='grey')
+            ax.text(
+                0.5, 0.5, "No data",
+                transform=ax.transAxes,
+                ha='center',
+                va='center',
+                fontsize=14,
+                color='grey'
+            )
 
     if 1 in mode:
         ax_map[1].set_title("S11 (linear scale)", y=1.05, fontsize=16)
+
     if 2 in mode:
         ax_map[2].set_title("S11 (log scale)", y=1.05)
         ax_map[2].set_yscale("log")
 
     handles, labels = axes[0].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="upper center",
-               ncol=2, bbox_to_anchor=(0.5, 0.93))
+
+    fig.legend(
+        handles,
+        labels,
+        loc="upper center",
+        ncol=2,
+        bbox_to_anchor=(0.5, 0.93),
+        fontsize=10
+    )
+
     plt.tight_layout()
     set_fig_title(fig, "S11")
     auto_save_or_show(fig, "S11", save_dir)
@@ -348,45 +397,73 @@ def plot_polarization2(runs, run_ids, mode, save_dir="."):
     auto_save_or_show(fig, mode, save_dir)
 
 
-def plot_polarization(runs, run_ids, mode, save_dir="."):
+def plot_polarization(runs, run_ids, mode, save_dir=".", skip_run=True, plot_number=5):
+    # Filtrar runs que sí tienen datos
+    valid_run_ids = [
+        ri for ri in run_ids
+        if runs[ri]["S"] is not None
+    ]
+
+    # Seleccionar solo algunos runs homogéneamente
+    if skip_run and len(valid_run_ids) > plot_number:
+        indices = np.linspace(
+            0,
+            len(valid_run_ids) - 1,
+            plot_number,
+            dtype=int
+        )
+        valid_run_ids = [valid_run_ids[i] for i in indices]
+
     fig, ax = plt.subplots()
     has_data = False
-    for ri in run_ids:
+
+    for ri in valid_run_ids:
         r = runs[ri]
-        if r["S"] is None:
-            continue
         has_data = True
+
         S = r["S"]
         S11, S21, S31, S41 = S[:, 0], S[:, 4], S[:, 8], S[:, 12]
+
         DoP = np.sqrt(S21**2 + S31**2 + S41**2)
         DoLP = np.sqrt(S21**2 + S31**2)
         DoCP = np.abs(S41)
+
         l_scale = r.get("l_scale", 1.0)
         wl = f"{2*np.pi/l_scale:.2f} um"
+
         if mode == "DOP":
             ax.plot(r["degreeTheta"], DoP, label=f"DoP {wl}")
             ax.set_ylabel("Degree of Polarization")
+
         elif mode == "DOLP":
             ax.plot(r["degreeTheta"], DoLP, label=f"DoLP {wl}")
             ax.set_ylabel("Degree of Linear Polarization")
+
         elif mode == "DOCP":
             ax.plot(r["degreeTheta"], DoCP, label=f"DoCP {wl}")
             ax.set_ylabel("Degree of Circular Polarization")
+
         elif mode == "ALL":
             ax.plot(r["degreeTheta"], DoP,  label=f"DoP {wl}")
             ax.plot(r["degreeTheta"], DoLP, "--", label=f"DoLP {wl}")
             ax.plot(r["degreeTheta"], DoCP, ":", label=f"DoCP {wl}")
             ax.set_ylabel("Polarization degree")
+
     if not has_data:
-        ax.text(0.5, 0.5, "No data", transform=ax.transAxes,
-                ha='center', va='center', fontsize=14, color='grey')
-    ax.set_xlabel("Scattering angle (deg)")
+        ax.text(
+            0.5, 0.5, "No data",
+            transform=ax.transAxes,
+            ha='center', va='center',
+            fontsize=14, color='grey'
+        )
+
+    ax.set_xlabel(r"$\theta$º")
     ax.set_title("Polarization properties (unpolarized incidence)")
-    ax.legend()
+    ax.legend(fontsize=14)
     ax.grid(True)
+
     set_fig_title(fig, mode)
     auto_save_or_show(fig, mode, save_dir)
-
 
 def plot_efficiencies(runs, run_ids, save_dir=".", pol="unpol", mode="EFF"):
     x = np.arange(1, len(run_ids) + 1)

@@ -45,3 +45,10 @@ refractiveindex.info/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# ======================
+# Images
+# ======================
+*.png
+*.jpg
+*.jpeg

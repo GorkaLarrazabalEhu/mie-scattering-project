@@ -1,32 +1,32 @@
 {
-    "output_file": "pruebas3.dat",
+    "output_file": "r20sw.dat",
     "num_spheres": "1",
     "positions": [
-        "0.d0, 0.d0, 0.d0, 0.02d0, (0.6351200000d0, 2.0720720000d0)"
+        "0.d0, 0.d0, 0.d0, 0.02d0, (0.9711200000d0, 1.8736720000d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
-    "length_scale": "12.0830486677d0",
+    "length_scale": "12.5663706144d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
-    "near_field": false,
-    "near_field_file": "f",
+    "near_field": true,
+    "near_field_file": "r20sw_nf_800.dat",
     "nearfieldplot": "",
-    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\pruebas",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\rayleigh\\r20sw",
     "plot_type": "absE",
     "plot_options": [
         "|E_avg|^2"
     ],
-    "wavelength": "0.520",
+    "wavelength": "0.5",
     "sphere_radius": "0.02",
     "material": "Au",
-    "separation": "0.2",
+    "separation": "0.004",
     "geometry": "(none)",
     "wavelength_sweep": {
-        "enabled": true,
+        "enabled": false,
         "min": "0.4",
         "max": "0.8",
-        "n": "600"
+        "n": "800"
     },
     "radius_sweep": {
         "enabled": false,
@@ -36,6 +36,6 @@
     },
     "custom_n": "",
     "custom_k": "",
-    "near_field_stepsize": "0.125664d0",
-    "near_field_stepsize_auto": true
+    "near_field_stepsize": "0.002d0",
+    "near_field_stepsize_auto": false
 }
