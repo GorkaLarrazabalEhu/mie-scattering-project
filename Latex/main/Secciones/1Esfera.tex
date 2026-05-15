@@ -124,3 +124,82 @@ partículas y el campo en la región exterior refleja únicamente la
 perturbación introducida por la presencia de la esfera sobre la onda plana
 incidente.
 
+
+% =========================================================================
+\subsection{Región de transición: del régimen de Rayleigh al de Mie}
+\label{sec:transicion}
+% =========================================================================
+
+Cuando el parámetro de tamaño $x = 2\pi a/\lambda$ deja de ser
+despreciable frente a la unidad, la aproximación dipolar del régimen de
+Rayleigh deja de ser válida y es necesario retener órdenes multipolares
+superiores en la expansión de Mie. Este \textit{régimen de transición} 
+ocupa aproximadamente
+$0.1 \lesssim x \lesssim 1$: el sistema ha dejado de comportarse como
+un dipolo (Rayleigh, $x \ll 1$) pero todavía no ha alcanzado el
+régimen de Mie pleno ($x \sim 1$), en el que los primeros órdenes
+multipolares superiores contribuyen de forma comparable al dipolo
+eléctrico $a_1$.
+
+Para caracterizar esta evolución se realizó un barrido incrementando
+el radio desde $a = 1\,\text{nm}$ hasta $a = 90\,\text{nm}$,
+manteniendo $\lambda = 520\,\text{nm}$, lo que corresponde a recorrer
+$x \in [0.01,\, 1.1]$.
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/transicion/radsweep/plots/S11_(linear_scale).png}
+    \caption{Elemento $S_{11}(\theta)$ de la matriz de dispersión para una esfera 
+            de oro frente al ángulo polar $\theta$ en el campo lejano, para radios
+            crecientes desde $1\,\text{nm}$ hasta $90\,\text{nm}$.}
+    \label{fig:S11_transicion}
+\end{figure}
+
+La figura~\ref{fig:S11_transicion} muestra el elemento $S_{11}(\theta)$ de la
+matriz de dispersión para una esfera de oro frente al ángulo polar $\theta$.
+Para los radios más pequeños ($a \leq 10\,\text{nm}$), el patrón angular es
+similar al observado en el régimen de Rayleigh, 
+$S_{11}(\theta) \propto 1 + \cos^2\theta$, con una distribución simétrica
+hacia delante y hacia atrás. A medida que el radio aumenta, la simetría se rompe
+progresivamente y 
+el patrón angular comienza a desplazarse hacia la dirección de propagación
+de la onda incidente ($\theta = 0°$), indicando un aumento de la
+dispersión hacia delante.
+
+
+Si analizamos el parámetro de asimetría $g = \langle\cos\theta\rangle$ (\ref{eq:g_mie})
+a lo largo de este barrido, en la figura~\ref{fig:transicion_g_factor} 
+se observa que para los radios más pequeños $g$ es cercano a
+cero, y a medida que el radio aumenta, $g$ crece gradualmente, alcanzando
+valores cercanos a $0.1$ para los radios más grandes del barrido.
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/transicion/radsweep/plots/radsweep_asymmetry.png}
+    \caption{Parámetro de asimetría $g$ a lo largo del barrido de radios.}
+    \label{fig:transicion_g_factor}
+\end{figure}
+
+
+
+La figura~\ref{fig:qext_qabs_qsca_transicion} muestra las eficiencias
+de extinción, absorción y dispersión a lo largo del barrido. Para los
+radios más pequeños, $Q_{\text{sca}}$ es prácticamente nula; en torno
+a $a \approx 25\,\text{nm}$ comienza a crecer de forma apreciable y
+deja de ser despreciable frente a $Q_{\text{abs}}$. Esta última aumenta
+monotónamente hasta $a \approx 55\,\text{nm}$, punto a partir del cual
+comienza a decrecer. La eficiencia de extinción $Q_{\text{ext}}$
+alcanza su máximo en la región donde $Q_{\text{abs}}$ y $Q_{\text{sca}}$
+se igualan, cerca de $a \approx 65\,\text{nm}$.
+
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/transicion/radsweep/plots/Efficiencies_combined.png}
+    \caption{Eficiencias de extinción, absorción y dispersión de una esfera de oro en función del radio, para $\lambda = 520\,\text{nm}$.}
+    \label{fig:qext_qabs_qsca_transicion}
+\end{figure}

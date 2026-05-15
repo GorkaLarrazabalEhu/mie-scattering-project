@@ -271,7 +271,7 @@ def plot_S11_old(runs, run_ids, save_dir="."):
 
 def plot_S11(runs, run_ids, save_dir=".", skip_run=True, plot_number=5):
     mode = {1, 2}
-    mode = {1}
+    # mode = {1}
     # mode = 2
     # Filtrar primero los runs que tienen datos
     valid_run_ids = [

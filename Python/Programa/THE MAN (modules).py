@@ -31,6 +31,7 @@ class Config:
             "incident_beta": "0.d0",
             "incident_alpha": "0.d0",
             "length_scale": "1.d0",
+            "scattering_angle": "1.d0",
             "gaussian_beam_constant": "0.1d0",
             "is_gaussian_beam": False,
             "near_field": False,
@@ -119,6 +120,9 @@ class MieTheoryApp:
         self.output_file_entry = tk.Entry(frame_files, width=60)
         self.output_file_entry.grid(row=1, column=1, sticky="ew")
 
+        tk.Button(frame_files, text="Open Simulation Folder",
+                command=self.open_simulation_folder).grid(row=1, column=2, padx=5)
+
         tk.Label(frame_files, text="Number of Spheres").grid(row=2, column=0, sticky="w")
         self.num_spheres_entry = tk.Entry(frame_files, width=10)
         self.num_spheres_entry.grid(row=2, column=1, sticky="w")
@@ -149,6 +153,10 @@ class MieTheoryApp:
         tk.Label(frame_incident, text="Incident Alpha (deg)").grid(row=0, column=2, sticky="w")
         self.incident_alpha_entry = tk.Entry(frame_incident, width=10)
         self.incident_alpha_entry.grid(row=0, column=3, padx=5)
+
+        tk.Label(frame_incident, text="Scattering angle (deg)").grid(row=0, column=4, sticky="w")
+        self.scattering_angle_entry = tk.Entry(frame_incident, width=10)
+        self.scattering_angle_entry.grid(row=0, column=5, padx=5)
 
         tk.Label(frame_incident, text="Length Scale Factor").grid(row=1, column=0, sticky="w")
         self.length_scale_entry = tk.Entry(frame_incident, width=30)
@@ -373,6 +381,22 @@ class MieTheoryApp:
         self.step_radius_entry = tk.Entry(sweep_radius_frame, width=10)
         self.step_radius_entry.grid(row=1, column=5, sticky="w", padx=(0, 8), pady=2)
 
+        # Row 2 — Plot button + status label
+        self.plot_sweep_btn = tk.Button(
+            sweep_radius_frame,
+            text="\U0001F4CA Plot Radius Sweep",
+            command=self.plot_radius_sweep,
+            # bg="#4A90D9", fg="white",
+            activebackground="#000000", activeforeground="white",
+            relief="raised", padx=6,
+        )
+        self.plot_sweep_btn.grid(row=2, column=0, columnspan=3, sticky="w",
+                                 padx=(6, 10), pady=(4, 6))
+
+        self.plot_sweep_status = tk.Label(sweep_radius_frame, text="", fg="gray")
+        self.plot_sweep_status.grid(row=2, column=3, columnspan=3, sticky="w",
+                                    padx=(0, 8), pady=(4, 6))
+
 
         # ---- Results Panel ----
         frame_results = tk.LabelFrame(self.root, text="Computed Parameters", padx=5, pady=5)
@@ -414,9 +438,9 @@ class MieTheoryApp:
         tk.Button(frame_buttons, text="Run MSTM Simulation", command=self.run_simulation).grid(row=1, column=0, padx=5)
         self.status_label = tk.Label(frame_buttons, text="  Ready   ")
         self.status_label.grid(row=1, column=1, padx=10)
-        tk.Button(frame_buttons, text="Plot Scattering Matrix", command=self.plot_scattering_matrix).grid(row=1, column=2, padx=5)
-        tk.Button(frame_buttons, text="Plot Near Field", command=self.plot_near_field).grid(row=1, column=3, padx=5)
-
+        tk.Button(frame_buttons, text="\U0001F4CA Plot Scattering Matrix", command=self.plot_scattering_matrix).grid(row=1, column=2, padx=5)
+        tk.Button(frame_buttons, text="\U0001F4CA Plot Near Field", command=self.plot_near_field).grid(row=1, column=3, padx=5)
+        tk.Button(frame_buttons, text="\U0001F4CA Plot Asymmetry g", command=self.plot_asymmetry).grid(row=1, column=4, padx=5)
 
     def compute_mstm_params(self):
         try:
@@ -1288,6 +1312,30 @@ class MieTheoryApp:
         messagebox.showinfo("Loaded", f"Simulation loaded from:\n{folder_selected}")
 
 
+    def open_simulation_folder(self):
+        """Open windows explorer with the current folder"""
+            # Open the current folder in the system file explorer
+        folder_input = self.folder_location_entry.get().strip()
+        if not folder_input:
+            messagebox.showwarning(
+                "Missing path", "Please enter a folder path in 'Folder Location' before opening.")
+            return
+
+        path_to_open = os.path.abspath(folder_input)
+        if not os.path.exists(path_to_open):
+            messagebox.showerror("Error", f"Path does not exist: {path_to_open}")
+            return
+
+        try:
+            if os.name == 'nt':  # Windows
+                os.startfile(path_to_open)
+            elif os.name == 'posix':
+                import subprocess
+                subprocess.run(['xdg-open', path_to_open])
+            else:
+                messagebox.showerror("Unsupported OS", "Cannot open folder on this operating system.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to open folder: {e}")
 
     def load_previous_data(self, from_external_config=False):
         """
@@ -1319,6 +1367,9 @@ class MieTheoryApp:
 
         self.incident_alpha_entry.delete(0, "end")
         self.incident_alpha_entry.insert(0, data["incident_alpha"])
+
+        self.scattering_angle_entry.delete(0, "end")
+        self.scattering_angle_entry.insert(0, data["scattering_angle"])
 
         self.length_scale_entry.delete(0, "end")
         self.length_scale_entry.insert(0, data["length_scale"])
@@ -1490,6 +1541,7 @@ class MieTheoryApp:
         ]
         self.config.data["incident_beta"] = self.incident_beta_entry.get()
         self.config.data["incident_alpha"] = self.incident_alpha_entry.get()
+        self.config.data["scattering_angle"] = self.scattering_angle_entry.get()
         self.config.data["length_scale"] = self.length_scale_entry.get()
         self.config.data["gaussian_beam_constant"] = (
             self.gaussian_constant_entry.get() if self.beam_type_var.get() == "Gaussian" else False
@@ -1587,18 +1639,62 @@ class MieTheoryApp:
                     f.write(f"{ls:.10f}d0\n")
 
                 elif self.sweep_radius_var.get():
-                    # ---- Parse sweep parameters ----
-                    params, geom = self.get_computed_params_and_geometry()
+                    # ---- Radius sweep a λ fija ----
+                    wl_rs       = float(self.wavelength_entry.get().strip())
+                    material_rs = (self.material_var.get() or "Custom").strip()
+                    radii_um    = self._iter_radii()
+                    sep_txt_rs  = self.separation_entry.get().strip()
+                    sep_um_rs   = float(sep_txt_rs) if sep_txt_rs else 0.0
 
-                    length_scale = params.get("Length scale factor", "")
-                    refr_index = params.get("Refractive index", "")
-                    r_min = float(self.min_radius_entry.get())
-                    r_max = float(self.max_radius_entry.get())
-                    n_steps = int(self.step_radius_entry.get())
-                    radii_um = np.linspace(r_min, r_max, n_steps)
+                    if not radii_um:
+                        raise ValueError(
+                            "Radius sweep: define al menos 2 pasos con min < max.")
 
-                    # check if the radius overlaps with spheres
+                    # λ fija → length_scale_factor y n son constantes para todos los runs.
+                    # Se calcula una sola vez con el primer radio (r no afecta a ls ni a n).
+                    if material_rs != "Custom":
+                        res_rs = mstm.compute_parameters(
+                            radii_um[0], wl_rs, material=material_rs)
+                    else:
+                        n_real_rs = float(self.custom_n_entry.get().strip())
+                        n_imag_rs = float(self.custom_k_entry.get().strip())
+                        res_rs = mstm.compute_parameters(
+                            radii_um[0], wl_rs,
+                            n_real=n_real_rs, n_imag=n_imag_rs)
 
+                    ls_rs    = res_rs["length_scale_factor"]   # constante para todos los pasos
+                    n_cx_rs  = res_rs["refractive_index"]      # constante para todos los pasos
+                    n_re_rs  = n_cx_rs.real
+                    n_im_rs  = n_cx_rs.imag
+
+                    # Helper reutilizable: escribe sphere_data … end_of_sphere_data
+                    # + length_scale_factor para un radio dado.
+                    def _write_radius_block(fh, r_um):
+                        centers = self._centers_for_geometry(r_um, sep_um_rs)
+                        fh.write("sphere_data\n")
+                        if centers:
+                            # Geometría parametrizada: d = 2·r + sep se recalcula en cada paso
+                            for (cx, cy, cz) in centers:
+                                fh.write(
+                                    f"{cx:.10f}d0,{cy:.10f}d0,{cz:.10f}d0,"
+                                    f"{r_um:.10f}d0,"
+                                    f"({n_re_rs:.10f}d0,{n_im_rs:.10f}d0)\n"
+                                )
+                        else:
+                            # Sin geometría: reutilizar x,y,z del cuadro de posiciones,
+                            # solo se sustituye el radio.
+                            for (px, py, pz, _pr) in self._parse_positions_as_xyzr():
+                                fh.write(
+                                    f"{px},{py},{pz},"
+                                    f"{r_um:.10f}d0,"
+                                    f"({n_re_rs:.10f}d0,{n_im_rs:.10f}d0)\n"
+                                )
+                        fh.write("end_of_sphere_data\n")
+                        fh.write("length_scale_factor\n")
+                        fh.write(f"{ls_rs:.10f}d0\n")
+
+                    # Primer run (bloque principal, sin new_run)
+                    _write_radius_block(f, radii_um[0])
 
 
                 else:
@@ -1643,10 +1739,12 @@ class MieTheoryApp:
                 f.write("calculate_scattering_matrix\n")
                 f.write("t\n") if self.matrix.get() else f.write("f\n")
 
+                f.write("scattering_map_increment\n")
+                f.write(f"{self.config.data['scattering_angle']}\n")
                 # f.write("calculate_near_field\n")
                 # f.write("t\n" if self.config.data["near_field"] else "f\n")
 
-                if self.config.data["near_field"] and not self.sweep_var.get():
+                if self.config.data["near_field"] and not self.sweep_var.get() and not self.sweep_radius_var.get():
                     f.write("calculate_near_field\n")
                     f.write("t\n")
 
@@ -1755,7 +1853,10 @@ class MieTheoryApp:
                         f.write(f"{ls:.10f}d0\n")
 
                 if self.sweep_radius_var.get():
-                    pass  # radius sweep not implemented in input file yet  
+                    # Runs adicionales (r[1], r[2], …) como bloques new_run
+                    for r_um in radii_um[1:]:
+                        f.write("new_run\n")
+                        _write_radius_block(f, r_um)
 
                 f.write("end_of_options\n")
 
@@ -1938,8 +2039,7 @@ class MieTheoryApp:
         if any(q_selected):
             for pol in pol_selected:
                 if len(q_selected) == len(self.q_vars):
-                    sb.Popen(["py", python_plot_file, scat_mat_file,
-                             "EFF", save_dir, "--pol", pol])
+                    sb.Popen(["py", python_plot_file, scat_mat_file, "EFF", save_dir, "--pol", pol])
                 else:
                     for qmode in q_selected:
                         sb.Popen(["py", python_plot_file, scat_mat_file, qmode, save_dir, "--pol", pol])
@@ -1977,6 +2077,120 @@ class MieTheoryApp:
                 + [length_scale, save_dir]
         sb.Popen(args)
         
+
+
+    def plot_radius_sweep(self):
+        """
+        Llama al script plot_radius_sweep.py pasando el archivo de salida de
+        MSTM y el config.json de la simulación actual, para que el script
+        pueda recuperar los radios exactos del sweep.
+        """
+        # Ruta al script de plotting
+        python_plot_file = os.path.join(
+            self.config.plot_location, "plot_radius_sweep.py"
+        )
+
+        # Comprobar que el script existe
+        if not os.path.isfile(python_plot_file):
+            messagebox.showerror(
+                "Script no encontrado",
+                f"No se encuentra:\n{python_plot_file}\n\n"
+                "Comprueba que 'plot_radius_sweep.py' está en la carpeta "
+                "Plotting_codes y que la ruta en DEFAULT_PYTHON_PLOT_LOCATION "
+                "es correcta."
+            )
+            return
+
+        # Archivo de salida de MSTM
+        folder = self.config.data.get("folder_location", "")
+        out_file = self.config.data.get("output_file", "")
+        if not folder or not out_file:
+            messagebox.showwarning(
+                "Carpeta o archivo no definidos",
+                "Define la carpeta de simulación y el nombre del archivo de "
+                "salida antes de hacer el plot."
+            )
+            return
+
+        dat_file = os.path.join(folder, out_file)
+        if not os.path.isfile(dat_file):
+            messagebox.showwarning(
+                "Archivo de salida no encontrado",
+                f"No se encuentra:\n{dat_file}\n\n"
+                "Ejecuta primero la simulación MSTM."
+            )
+            return
+
+        # Guardar config.json en la carpeta de simulación para que el script
+        # pueda leer los radios exactos del sweep
+        config_json = os.path.join(folder, "config.json")
+        try:
+            self.config.save_to_json(config_json)
+        except Exception as exc:
+            messagebox.showwarning(
+                "No se pudo guardar config.json",
+                f"Los radios en el gráfico serán aproximados.\n({exc})"
+            )
+            config_json = None  # el script funcionará con índice de run
+
+        # Lanzar el script en un proceso independiente
+        cmd = ["py", python_plot_file, dat_file]
+        if config_json:
+            cmd.append(config_json)
+
+        try:
+            sb.Popen(cmd)
+            self.plot_sweep_status.config(
+                text="Abriendo plot...", fg="#357ABD"
+            )
+            # Limpiar el mensaje de estado tras 3 s
+            self.root.after(
+                3000,
+                lambda: self.plot_sweep_status.config(text="", fg="gray")
+            )
+        except Exception as exc:
+            self.plot_sweep_status.config(text="Error", fg="red")
+            messagebox.showerror("Error al lanzar el script", str(exc))
+
+
+
+    def plot_asymmetry(self):
+        """Calcula y representa el parámetro de asimetría g."""
+        python_plot_file = os.path.join(self.config.plot_location, "plot_asymmetry.py")
+
+        if not os.path.isfile(python_plot_file):
+            messagebox.showerror("Script no encontrado",
+                                f"No se encuentra:\n{python_plot_file}")
+            return
+
+        folder  = self.config.data.get("folder_location", "")
+        out_file = self.config.data.get("output_file", "")
+        dat_file = os.path.join(folder, out_file)
+
+        if not os.path.isfile(dat_file):
+            messagebox.showwarning("Archivo no encontrado",
+                                f"Ejecuta primero la simulación:\n{dat_file}")
+            return
+
+        config_json = os.path.join(folder, "config.json")
+        try:
+            self.config.save_to_json(config_json)
+        except Exception:
+            config_json = None
+
+        lambda_um = self.wavelength_entry.get().strip()
+        save_dir  = folder
+
+        cmd = ["py", python_plot_file, dat_file,
+            "--lambda_um", lambda_um,
+            "--save_dir",  save_dir]
+        if config_json:
+            cmd += ["--config_json", config_json]
+
+        sb.Popen(cmd)
+
+
+
 
     def show_notification(self, titled="Notification", message="Notification"):
         """Centered, scrollable notification up to 95% of screen height, text fits horizontally."""
