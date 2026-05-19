@@ -63,7 +63,8 @@ else:
 # Detect if last argument is a folder
 # ----------------------------
 if save_dir and os.path.isdir(save_dir):
-    mpl.rcParams['savefig.directory'] = os.path.abspath(save_dir)
+    save_dir2 = os.path.join(save_dir, "plots")
+    mpl.rcParams['savefig.directory'] = os.path.abspath(save_dir2)
     print(f"Default save folder set to: {mpl.rcParams['savefig.directory']}")
 else:
     if len(sys.argv) > 1:
