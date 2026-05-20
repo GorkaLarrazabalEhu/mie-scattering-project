@@ -282,11 +282,27 @@ class MieTheoryApp:
         tk.Button(frame_params, text="Compute Parameters",
                 command=self.compute_mstm_params).grid(row=0, column=2, padx=5)
 
-        # Row 1
-        tk.Label(frame_params, text="Sphere Radius (μm)").grid(
-            row=1, column=0, sticky="w")
-        self.radius_entry = tk.Entry(frame_params, width=10)
-        self.radius_entry.grid(row=1, column=1, padx=5)
+        # Row 1 — Sphere Radius + "All equal" checkbox + dynamic input area
+        radius_hdr = tk.Frame(frame_params)
+        radius_hdr.grid(row=1, column=0, sticky="w")
+        tk.Label(radius_hdr, text="Sphere Radius (μm)").pack(side="left")
+        self.radii_equal_var = tk.BooleanVar(value=True)
+        tk.Checkbutton(
+            radius_hdr, text="All equal",
+            variable=self.radii_equal_var,
+            command=self.toggle_radius_mode,
+        ).pack(side="left", padx=(6, 0))
+
+        # Container that will hold either one Entry (equal mode)
+        # or N labelled entries (individual mode)
+        self.radius_input_frame = tk.Frame(frame_params)
+        self.radius_input_frame.grid(row=1, column=1, sticky="w", padx=5)
+
+        self.individual_radius_entries = []
+        # Build initial single-entry view
+        self.radius_entry = tk.Entry(self.radius_input_frame, width=10)
+        self.radius_entry.grid(row=0, column=0)
+
         tk.Button(frame_params, text="Apply to Positions",
                 command=self.apply_general_to_positions).grid(row=1, column=2, padx=5)
 
@@ -491,7 +507,10 @@ class MieTheoryApp:
             self.results_text.insert("end", preview)
             self.results_text.config(state="disabled")
 
-
+            # If individual-radius mode is active, refresh the entry count
+            # so it matches the current geometry / number of spheres.
+            if not self.radii_equal_var.get():
+                self._rebuild_radius_ui()
 
         except Exception as e:
             self.results_text.config(state="normal")
@@ -656,6 +675,100 @@ class MieTheoryApp:
             self.sweep_var.set(False)
 
 
+    # ------------------------------------------------------------------ #
+    #  Radius mode helpers                                                  #
+    # ------------------------------------------------------------------ #
+
+    def toggle_radius_mode(self):
+        """Switch between single-radius and per-sphere-radius UI."""
+        self._rebuild_radius_ui()
+
+    def _get_num_spheres_for_radii(self):
+        """Return how many individual radius entries to create."""
+        try:
+            n = int(self.num_spheres_entry.get().strip())
+            if n > 0:
+                return n
+        except (ValueError, AttributeError):
+            pass
+        # Fall back to geometry count
+        geo = (self.geometry_var.get() or "").strip()
+        geo_counts = {
+            "2 in line (NS)": 2, "2 in line (EW)": 2,
+            "4 in line (North–South)": 4, "4 in line (East–West)": 4,
+            "4 in a square": 4, "4 in a square (45°)": 4,
+        }
+        return geo_counts.get(geo, 1)
+
+    def _rebuild_radius_ui(self, preserve_values=True):
+        """
+        Destroy and recreate the widgets inside radius_input_frame.
+        If preserve_values=True, carry over whatever is already in the entries.
+        """
+        # Collect current values before destroying
+        old_single = ""
+        old_individual = []
+        if preserve_values:
+            try:
+                old_single = self.radius_entry.get().strip()
+            except Exception:
+                pass
+            for e in self.individual_radius_entries:
+                try:
+                    old_individual.append(e.get().strip())
+                except Exception:
+                    old_individual.append("")
+
+        # Destroy all children
+        for w in self.radius_input_frame.winfo_children():
+            w.destroy()
+        self.individual_radius_entries = []
+
+        if self.radii_equal_var.get():
+            # ---- Single entry mode ----
+            self.radius_entry = tk.Entry(self.radius_input_frame, width=10)
+            self.radius_entry.grid(row=0, column=0)
+            # Restore value: prefer old single; fall back to first individual
+            val = old_single or (old_individual[0] if old_individual else "")
+            if val:
+                self.radius_entry.insert(0, val)
+        else:
+            # ---- Individual entries mode ----
+            n = self._get_num_spheres_for_radii()
+            for i in range(n):
+                tk.Label(self.radius_input_frame, text=f"Sphere {i+1}:").grid(
+                    row=i, column=0, sticky="e", padx=(0, 2))
+                e = tk.Entry(self.radius_input_frame, width=10)
+                e.grid(row=i, column=1, pady=1)
+                # Restore value: use matching old individual, or broadcast old_single
+                if i < len(old_individual) and old_individual[i]:
+                    e.insert(0, old_individual[i])
+                elif old_single:
+                    e.insert(0, old_single)
+                self.individual_radius_entries.append(e)
+            # Make radius_entry point to the first entry for backward-compat code paths
+            if self.individual_radius_entries:
+                self.radius_entry = self.individual_radius_entries[0]
+
+    def get_sphere_radii(self, n_spheres=None):
+        """
+        Return a list of radius strings for all spheres.
+        In equal mode:      returns [r] * n_spheres.
+        In individual mode: returns the list from the individual entries
+                            (padded with first value if shorter than n_spheres).
+        """
+        if self.radii_equal_var.get():
+            r = self.radius_entry.get().strip()
+            count = n_spheres if n_spheres is not None else self._get_num_spheres_for_radii()
+            return [r] * count
+        else:
+            vals = [e.get().strip() for e in self.individual_radius_entries]
+            if n_spheres is not None and len(vals) < n_spheres:
+                pad = vals[0] if vals else ""
+                vals += [pad] * (n_spheres - len(vals))
+            return vals[:n_spheres] if n_spheres is not None else vals
+
+
     def toggle_select_all(self):
         """Toggle all currently visible checkbuttons."""
         if any(not v.get() for v in self.plot_option_vars):
@@ -697,88 +810,105 @@ class MieTheoryApp:
         - Z = North–South
         - X = East–West
         - Y = 0 always
+
+        Center-to-center spacing is computed per-pair as r_i + r_j + s,
+        so the surface gap between adjacent spheres is always exactly s.
+        For square geometries with unequal radii a symmetric mean is used.
         """
         geo = (self.geometry_var.get() or "").strip()
-        r_txt = (self.radius_entry.get() or "").strip()
         s_txt = (self.separation_entry.get() or "").strip()
 
-        # Validate inputs
-        if not r_txt:
-            messagebox.showwarning(
-                "Missing radius", "Please enter a Sphere Radius first.")
-            return
-        if not s_txt and geo != "(none)":
-            messagebox.showwarning("Missing separation",
-                                "Please enter Separation (μm).")
-            return
-
-        try:
-            r = float(r_txt)
-        except ValueError:
-            messagebox.showerror(
-                "Invalid radius", f"Radius is not a number: {r_txt}")
-            return
-
-        # Separation only needed when a geometry is selected
-        s = 0.0
-        if geo != "(none)":
-            try:
-                s = float(s_txt)
-            except ValueError:
-                messagebox.showerror("Invalid separation",
-                                    f"Separation is not a number: {s_txt}")
-                return
-
-        # Center-to-center distance for touching + separation
-        d = 2.0 * r + s
-
-        # ----- Centers in XZ plane (y = 0 always) -----
-        centers = []
         if geo == "(none)":
             return
 
-        elif geo in ("2 in line (NS)", "2 in line (EW)"):
+        # How many radii does this geometry need?
+        geo_n = {
+            "2 in line (NS)": 2, "2 in line (EW)": 2,
+            "4 in line (North–South)": 4, "4 in line (East–West)": 4,
+            "4 in a square": 4, "4 in a square (45°)": 4,
+        }
+        n_needed = geo_n.get(geo, 0)
+        if n_needed == 0:
+            messagebox.showwarning("Unknown geometry",
+                                   f"Geometry not handled: {geo}")
+            return
+
+        # ---- Validate radii ----
+        radii_str = self.get_sphere_radii(n_needed)
+        if not radii_str or not radii_str[0]:
+            messagebox.showwarning("Missing radius",
+                                   "Please enter a Sphere Radius first.")
+            return
+        try:
+            R = [float(t) for t in radii_str]
+        except ValueError as exc:
+            messagebox.showerror("Invalid radius", str(exc))
+            return
+
+        # ---- Validate separation ----
+        if not s_txt:
+            messagebox.showwarning("Missing separation",
+                                   "Please enter Separation (μm).")
+            return
+        try:
+            s = float(s_txt)
+        except ValueError:
+            messagebox.showerror("Invalid separation",
+                                 f"Not a number: {s_txt}")
+            return
+
+        # ---- Compute centers using per-sphere radii ----
+        centers = []
+
+        if geo in ("2 in line (NS)", "2 in line (EW)"):
+            r1, r2 = R[0], R[1]
+            d = r1 + r2 + s          # exact center-to-center distance
             if geo.endswith("(NS)"):
-                # Along Z (North–South)
-                centers = [(0.0, 0.0, -d/2), (0.0, 0.0, d/2)]
+                centers = [(0.0, 0.0, -d / 2), (0.0, 0.0, d / 2)]
             else:
-                # Along X (East–West)
-                centers = [(-d/2, 0.0, 0.0), (d/2, 0.0, 0.0)]
+                centers = [(-d / 2, 0.0, 0.0), (d / 2, 0.0, 0.0)]
 
         elif geo in ("4 in line (North–South)", "4 in line (East–West)"):
-            offsets = [-1.5*d, -0.5*d, 0.5*d, 1.5*d]
+            r1, r2, r3, r4 = R
+            d12 = r1 + r2 + s
+            d23 = r2 + r3 + s
+            d34 = r3 + r4 + s
+            total = d12 + d23 + d34
+            # Centered: sphere 1 at -total/2, each next displaced by its gap
+            p1 = -total / 2
+            p2 = p1 + d12
+            p3 = p2 + d23
+            p4 = p3 + d34
             if "North–South" in geo:
-                # Along Z
-                centers = [(0.0, 0.0, z) for z in offsets]
+                centers = [(0.0, 0.0, p) for p in (p1, p2, p3, p4)]
             else:
-                # Along X
-                centers = [(x, 0.0, 0.0) for x in offsets]
+                centers = [(p, 0.0, 0.0) for p in (p1, p2, p3, p4)]
 
         elif geo == "4 in a square":
-            # Square of side d centered at origin in XZ plane: (±d/2, 0, ±d/2)
+            r = R[0]   # squares always used with equal spheres
+            d = 2.0 * r + s
             a = d / 2.0
             centers = [(-a, 0.0, -a), (a, 0.0, -a), (-a, 0.0, a), (a, 0.0, a)]
 
         elif geo == "4 in a square (45°)":
-            # Diamond (square rotated 45° in XZ plane): points on axes at ±d/√2
-            a = d / (2**0.5)
+            r = R[0]   # squares always used with equal spheres
+            d = 2.0 * r + s
+            a = d / (2 ** 0.5)
             centers = [(-a, 0.0, 0.0), (a, 0.0, 0.0),
-                    (0.0, 0.0, -a), (0.0, 0.0, a)]
+                       (0.0, 0.0, -a), (0.0, 0.0, a)]
+            centers = [(-a, 0.0, 0.0), (a, 0.0, 0.0),
+                       (0.0, 0.0, -a), (0.0, 0.0, a)]
 
-        else:
-            messagebox.showwarning(
-                "Unknown geometry", f"Geometry not handled: {geo}")
-            return
-
-        # Build raw rows [x,y,z,r] (preserve user's radius literal)
-        rows = [[f"{x}", "0", f"{z}", r_txt] for (x, _y, z) in centers]
+        # ---- Build rows [x, y, z, r_i] ----
+        rows = []
+        for i, (x, _y, z) in enumerate(centers):
+            r_i = radii_str[i] if i < len(radii_str) else radii_str[-1]
+            rows.append([f"{x}", "0", f"{z}", r_i])
 
         # ---- Alignment (sign-slot method) ----
         def mag_only(t: str) -> str:
             t = t.strip()
-            if t.startswith(("+", "-")):
-                return t[1:]
-            return t
+            return t[1:] if t.startswith(("+", "-")) else t
 
         col_mag_w = [0, 0, 0, 0]
         for fields in rows:
@@ -794,13 +924,10 @@ class MieTheoryApp:
                 mag = mag_only(v)
                 pad = " " * (col_mag_w[i] - len(mag))
                 pieces.append(sign_char + mag + pad)
-
             numeric = pieces[0]
             for f in pieces[1:]:
                 numeric += "," + f
-
-            line = numeric + ", ( , )"   # comma before tuple
-            rendered_lines.append(line)
+            rendered_lines.append(numeric + ", ( , )")
 
         self.position_entry.delete("1.0", "end")
         self.position_entry.insert("1.0", "\n".join(rendered_lines))
@@ -812,57 +939,69 @@ class MieTheoryApp:
         current Geometry selector + Separation + Radius.
         If geometry is '(none)' or inputs invalid → returns [].
         Coordinates lie in the XZ plane (y=0).
+        Line geometries use per-sphere radii (r_i + r_j + s per pair).
+        Square geometries use the single/first radius (equal spheres assumed).
         """
         geo = (self.geometry_var.get() or "").strip()
         if geo == "(none)":
             return []
 
-        r_txt = (self.radius_entry.get() or "").strip()
         s_txt = (self.separation_entry.get() or "").strip()
-
-        # Validate inputs
-        try:
-            r = float(r_txt)
-        except ValueError:
-            return []
-
         try:
             s = float(s_txt) if s_txt else 0.0
         except ValueError:
             return []
 
-        # Center-to-center distance for touching + separation
-        d = 2.0 * r + s
-
-        # Build centers (x,0,z) in the XZ plane
         centers = []
+
         if geo in ("2 in line (NS)", "2 in line (EW)"):
+            radii = self.get_sphere_radii(2)
+            try:
+                r1, r2 = float(radii[0]), float(radii[1])
+            except (ValueError, IndexError):
+                return []
+            d = r1 + r2 + s
             if geo.endswith("(NS)"):
-                centers = [(0.0, 0.0, -d/2), (0.0, 0.0, d/2)]
+                centers = [(0.0, 0.0, -d / 2), (0.0, 0.0, d / 2)]
             else:
-                centers = [(-d/2, 0.0, 0.0), (d/2, 0.0, 0.0)]
+                centers = [(-d / 2, 0.0, 0.0), (d / 2, 0.0, 0.0)]
 
         elif geo in ("4 in line (North–South)", "4 in line (East–West)"):
-            offsets = [-1.5*d, -0.5*d, 0.5*d, 1.5*d]
+            radii = self.get_sphere_radii(4)
+            try:
+                r1, r2, r3, r4 = [float(x) for x in radii[:4]]
+            except (ValueError, IndexError):
+                return []
+            d12 = r1 + r2 + s
+            d23 = r2 + r3 + s
+            d34 = r3 + r4 + s
+            total = d12 + d23 + d34
+            p1 = -total / 2
+            p2 = p1 + d12
+            p3 = p2 + d23
+            p4 = p3 + d34
             if "North–South" in geo:
-                centers = [(0.0, 0.0, z) for z in offsets]
+                centers = [(0.0, 0.0, p) for p in (p1, p2, p3, p4)]
             else:
-                centers = [(x, 0.0, 0.0) for x in offsets]
+                centers = [(p, 0.0, 0.0) for p in (p1, p2, p3, p4)]
 
-        elif geo == "4 in a square":
-            a = d / 2.0
-            centers = [(-a, 0.0, -a), (a, 0.0, -a), (-a, 0.0, a), (a, 0.0, a)]
-
-        elif geo == "4 in a square (45°)":
-            a = d / (2**0.5)
-            centers = [(-a, 0.0, 0.0), (a, 0.0, 0.0),
-                    (0.0, 0.0, -a), (0.0, 0.0, a)]
         else:
-            return []
+            # Square geometries — single radius (equal spheres)
+            r_txt = (self.radius_entry.get() or "").strip()
+            try:
+                r = float(r_txt)
+            except ValueError:
+                return []
+            d = 2.0 * r + s
+            if geo == "4 in a square":
+                a = d / 2.0
+                centers = [(-a, 0.0, -a), (a, 0.0, -a), (-a, 0.0, a), (a, 0.0, a)]
+            elif geo == "4 in a square (45°)":
+                a = d / (2 ** 0.5)
+                centers = [(-a, 0.0, 0.0), (a, 0.0, 0.0),
+                           (0.0, 0.0, -a), (0.0, 0.0, a)]
 
-        # Return as strings (so we preserve user’s numeric style later)
         return [(f"{x}", "0", f"{z}") for (x, _y, z) in centers]
-
 
     def format_fortran_number(self, s):
         s = s.strip()
@@ -901,12 +1040,13 @@ class MieTheoryApp:
 
         # === Geometry present ===
         if geom:
+            n_spheres = len(geom)
+            sphere_radii = self.get_sphere_radii(n_spheres)
             lines = []
-            for (x, y, z) in geom:
-                xs, ys, zs, rs = fmt(x), fmt(y), fmt(z), fmt(r_str)
+            for i, (x, y, z) in enumerate(geom):
+                r_i = sphere_radii[i] if i < len(sphere_radii) else sphere_radii[-1]
+                xs, ys, zs, rs = fmt(x), fmt(y), fmt(z), fmt(r_i)
                 line = f"{xs}, {ys}, {zs}, {rs}, {refr_index}"
-
-                # add space after commas except before negative signs
                 line = ", ".join(part.strip() for part in line.split(","))
                 line = line.replace(", -", ",-")
                 lines.append(line)
@@ -916,7 +1056,7 @@ class MieTheoryApp:
 
             try:
                 self.num_spheres_entry.delete(0, "end")
-                self.num_spheres_entry.insert(0, str(len(geom)))
+                self.num_spheres_entry.insert(0, str(n_spheres))
             except Exception:
                 pass
             return
@@ -924,7 +1064,9 @@ class MieTheoryApp:
         # === Fallback: rewrite existing positions ===
         raw = self.position_entry.get("1.0", "end-1c").strip()
         if not raw:
-            line = f"0.d0, 0.d0, 0.d0, {fmt(r_str)}, {refr_index}"
+            # Single sphere at origin — use first radius
+            r_first = self.get_sphere_radii(1)[0] or r_str
+            line = f"0.d0, 0.d0, 0.d0, {fmt(r_first)}, {refr_index}"
             line = ", ".join(part.strip() for part in line.split(","))
             line = line.replace(", -", ",-")
             self.position_entry.delete("1.0", "end")
@@ -943,7 +1085,13 @@ class MieTheoryApp:
                 new_lines.append(line)
                 continue
             x, y, z = parts[:3]
-            xs, ys, zs, rs = fmt(x), fmt(y), fmt(z), fmt(r_str)
+            # Per-sphere radius: use individual entry at index `count`, else last
+            sphere_radii = self.get_sphere_radii()
+            if sphere_radii:
+                r_i = sphere_radii[count] if count < len(sphere_radii) else sphere_radii[-1]
+            else:
+                r_i = r_str
+            xs, ys, zs, rs = fmt(x), fmt(y), fmt(z), fmt(r_i)
             formatted = f"{xs}, {ys}, {zs}, {rs}, {refr_index}"
             formatted = ", ".join(part.strip() for part in formatted.split(","))
             formatted = formatted.replace(", -", ",-")
@@ -1402,6 +1550,21 @@ class MieTheoryApp:
         self.radius_entry.delete(0, "end")
         self.radius_entry.insert(0, data.get("sphere_radius", ""))
 
+        # Restore radius mode (equal / individual)
+        radii_equal = data.get("radii_equal", True)
+        self.radii_equal_var.set(radii_equal)
+        # Rebuild UI first so the right widgets exist
+        self._rebuild_radius_ui(preserve_values=False)
+        if radii_equal:
+            self.radius_entry.delete(0, "end")
+            self.radius_entry.insert(0, data.get("sphere_radius", ""))
+        else:
+            saved_radii = data.get("sphere_radii_individual", [])
+            for i, e in enumerate(self.individual_radius_entries):
+                val = saved_radii[i] if i < len(saved_radii) else ""
+                e.delete(0, "end")
+                e.insert(0, val)
+
         self.material_var.set(data.get("material", "Custom"))
 
         self.custom_n_entry.delete(0, "end")
@@ -1561,6 +1724,10 @@ class MieTheoryApp:
         ]
         self.config.data["wavelength"] = self.wavelength_entry.get()
         self.config.data["sphere_radius"] = self.radius_entry.get()
+        self.config.data["radii_equal"] = self.radii_equal_var.get()
+        self.config.data["sphere_radii_individual"] = [
+            e.get().strip() for e in self.individual_radius_entries
+        ]
         self.config.data["material"] = self.material_var.get()
         self.config.data["custom_n"] = self.custom_n_entry.get().strip()
         self.config.data["custom_k"] = self.custom_k_entry.get().strip()

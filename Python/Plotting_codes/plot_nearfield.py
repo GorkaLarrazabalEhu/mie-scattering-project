@@ -1,3 +1,5 @@
+from matplotlib.colors import SymLogNorm
+from matplotlib.colors import LogNorm
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -239,20 +241,34 @@ def make_grid(x, z):
     return X, Z
 
 
-def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
+def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers, log_scale=True):
     X, Z = make_grid(x, z)
     F = reshape_to_grid(field_data, x)
+
+    linthresh = 0.01  # ajusta según tus valores pequeños
+
+    if log_scale:
+        norm = SymLogNorm(linthresh=linthresh, linscale=0.5,
+                          vmin=F.min(), vmax=F.max())
+        # Niveles en espacio log para que los colores transicionen suavemente
+        levels_lin = np.linspace(F.min(), linthresh, 20)
+        levels_log = np.logspace(np.log10(linthresh), np.log10(F.max()), 80)
+        levels = np.unique(np.concatenate([levels_lin, levels_log]))
+    else:
+        norm = None
+        levels = 100
 
     contour = ax.contour(
         X, Z, F,
         colors="black",
-        levels=50,
+        levels=levels,
         linewidths=0.1
     )
     contourf = ax.contourf(
         X, Z, F,
         cmap="viridis",
-        levels=100,
+        levels=levels,
+        norm=norm,
         extend="both"
     )
 
@@ -273,7 +289,31 @@ def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
 
     for height in layers:
         ax.axhline(y=height, color='black')
+    idx_max = np.unravel_index(np.argmax(F), F.shape)
 
+
+    val_max = F.max()
+    tol = 1e-6  # ajusta según la precisión de tus datos
+
+    idx_maxs = np.argwhere(np.abs(F - val_max) <= tol)
+
+    for idx in idx_maxs:
+        x_max = X[tuple(idx)]
+        z_max = Z[tuple(idx)]
+
+        ax.plot(x_max, z_max, 'r+', markersize=8, markeredgewidth=1.5)
+
+    # Anotar el valor solo una vez, en el primer punto
+    annotation = ax.annotate(
+        f'{val_max:.2f}',
+        xy=(X[tuple(idx_maxs[0])], Z[tuple(idx_maxs[0])]),
+        xytext=(10, 10),
+        textcoords='offset points',
+        color='red',
+        fontsize=TICK_SIZE,
+        bbox=dict(boxstyle='round,pad=0.2', fc='white', alpha=0.6)
+    )
+    annotation.draggable(True)  
     return contourf
 
 

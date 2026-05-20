@@ -39,5 +39,7 @@
     "custom_k": "",
     "near_field_stepsize": "0.004d0",
     "near_field_stepsize_auto": false,
-    "scattering_angle": "1.d0"
+    "scattering_angle": "1.d0",
+    "radii_equal": true,
+    "sphere_radii_individual": []
 }

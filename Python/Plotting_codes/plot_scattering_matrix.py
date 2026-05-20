@@ -281,7 +281,7 @@ def plot_S11_old(runs, run_ids, save_dir="."):
 
 def plot_S11(runs, run_ids, save_dir=".", skip_run=True, plot_number=5):
     mode = {1, 2}
-    mode = {1}
+    # mode = {1}
     valid_run_ids = [
         ri for ri in run_ids
         if runs[ri]["S"] is not None
