@@ -245,8 +245,8 @@ def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers, log_scale
     X, Z = make_grid(x, z)
     F = reshape_to_grid(field_data, x)
 
-    linthresh = 0.01  # ajusta según tus valores pequeños
-
+    linthresh = 0.001  # ajusta según tus valores pequeños
+    log_scale = False
     if log_scale:
         norm = SymLogNorm(linthresh=linthresh, linscale=0.5,
                           vmin=F.min(), vmax=F.max())

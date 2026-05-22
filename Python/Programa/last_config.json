@@ -1,33 +1,33 @@
 {
-    "output_file": "wl720.dat",
+    "output_file": "sw.dat",
     "num_spheres": "2",
     "positions": [
-        "-0.08700000000000001d0, 0d0, 0.0d0, 0.085d0, (0.1330097087d0, 4.2351262136d0)",
-        "0.08700000000000001d0, 0d0, 0.0d0, 0.085d0, (0.1330097087d0, 4.2351262136d0)"
+        "-0.08700000000000001d0, 0d0, 0.0d0, 0.085d0, (0.2487319885d0, 3.0739827089d0)",
+        "0.08700000000000001d0, 0d0, 0.0d0, 0.085d0, (0.2487319885d0, 3.0739827089d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
-    "length_scale": "8.7266462600d0",
+    "length_scale": "10.4719755120d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
     "near_field": true,
-    "near_field_file": "wl720_nf.dat",
+    "near_field_file": "sw_nf.dat",
     "nearfieldplot": "",
-    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\2e\\ew\\sep4\\wl720",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\2e\\ew\\sep4\\sw",
     "plot_type": "absE",
     "plot_options": [
         "|E_avg|^2"
     ],
-    "wavelength": "0.720",
+    "wavelength": "0.600",
     "sphere_radius": "0.085",
     "material": "Au",
     "separation": "0.004",
     "geometry": "2 in line (EW)",
     "wavelength_sweep": {
-        "enabled": false,
+        "enabled": true,
         "min": "0.4",
-        "max": "0.8",
-        "n": "400"
+        "max": "1.4",
+        "n": "100"
     },
     "radius_sweep": {
         "enabled": false,
