@@ -281,7 +281,7 @@ def plot_S11_old(runs, run_ids, save_dir="."):
 
 def plot_S11(runs, run_ids, save_dir=".", skip_run=True, plot_number=5):
     mode = {1, 2}
-    # mode = {1}
+    mode = {2}
     valid_run_ids = [
         ri for ri in run_ids
         if runs[ri]["S"] is not None
@@ -350,10 +350,10 @@ def plot_S11(runs, run_ids, save_dir=".", skip_run=True, plot_number=5):
             )
 
     if 1 in mode:
-        ax_map[1].set_title("S11 (escala lineal)", y=1.05, fontsize=16)
+        ax_map[1].set_title(r"$S_{11}$", y=1.05, fontsize=16)
 
     if 2 in mode:
-        ax_map[2].set_title("S11 (escala logarítmica)", y=1.05)
+        ax_map[2].set_title(r"$S_{11}$ (log)", y=1.05)
         ax_map[2].set_yscale("log")
 
     handles, labels = axes[0].get_legend_handles_labels()

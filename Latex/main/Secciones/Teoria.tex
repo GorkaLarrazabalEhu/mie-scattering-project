@@ -17,15 +17,17 @@ corrientes libres:
 \end{aligned}
 \end{equation}
 
-donde $\mathbf{E}$ y $\mathbf{H}$ son los campos eléctrico y magnético,
-respectivamente, y $\epsilon$ y $\mu$ son la permitividad y permeabilidad del
-medio.
+donde $\mathbf{E}$ y $\mathbf{H}$ son el campo eléctrico y la intensidad 
+de campo magnético, respectivamente, y $\epsilon$ y $\mu$ son la 
+permitividad y permeabilidad del medio.
+
 
 Suponiendo una dependencia temporal armónica de la forma $\exp(-i\omega t)$,
 las ecuaciones de Maxwell se reducen a la ecuación de onda vectorial para el
 campo eléctrico y magnético:
 
 \begin{equation}
+  \label{eq:wave_equation}
   \nabla^2 \mathbf{E} + k^2 \mathbf{E} = 0,
   \qquad
   \nabla^2 \mathbf{H} + k^2 \mathbf{H} = 0,
@@ -39,11 +41,10 @@ donde
 
 es el número de onda en el medio, $\lambda$ la longitud de onda en el vacío y
 $N$ el índice de refracción del medio circundante. En materiales absorbentes, el
-índice de refracción es complejo,
-% [CAMBIO: antes «m = n + ik»; se renombra a \tilde{m} y la parte imaginaria
-%  de «k» a «\kappa» para evitar el conflicto con el número de onda k.]
-$\tilde{m} = N + i\kappa$,
-y la parte imaginaria $\kappa$ da cuenta de la absorción interna \cite[cap.~1]{Bohren1983}.
+índice de refracción es complejo, $\tilde{m} = N + i\kappa$.
+
+% , y la parte imaginaria $\kappa$ da cuenta de la 
+% absorción interna \cite[cap.~1]{Bohren1983}.
 
 El problema de la dispersión de la luz por una partícula esférica consiste en
 resolver la ecuación de onda en dos dominios: el interior de la esfera,
@@ -133,12 +134,7 @@ secciones eficaces y grado de polarización del campo dispersado.
 
 La resolución del problema de dispersión por una partícula esférica requiere
 expresar los campos electromagnéticos en una base que respete la simetría del
-sistema. La ecuación de onda vectorial
-\[
-  \nabla^2 \mathbf{E} + k^2 \mathbf{E} = 0,
-  \qquad
-  \nabla^2 \mathbf{H} + k^2 \mathbf{H} = 0,
-\]
+sistema. La ecuación de onda vectorial \eqref{eq:wave_equation},
 junto con la condición de transversidad $\nabla \cdot \mathbf{E} = 0$,
 $\nabla \cdot \mathbf{H} = 0$, describe modos electromagnéticos físicamente
 realizables. Cuando el dominio posee simetría esférica, como ocurre en la
@@ -243,57 +239,88 @@ algebraicas independientes, lo que posibilita obtener los coeficientes de Mie
 y, a partir de ellos, las propiedades ópticas de la partícula.
 
 
-\subsubsection{Expansión de una onda plana en armónicos esféricos vectoriales}
+% \subsubsection{Expansión de una onda plana en armónicos esféricos vectoriales}
+% \label{subsec:expansion_vectorial}
+% Una vez definidos los armónicos esféricos vectoriales, se muestra cómo
+% expresar una onda plana en esta base, es decir, se determinan los coeficientes
+% $A_{emn}$, $A_{omn}$, $B_{emn}$ y $B_{omn}$.
+
+% Consideremos una onda plana monocromática, linealmente polarizada en $x$, que
+% se propaga en la dirección $z$:
+
+% \begin{equation}
+%   \mathbf{E}_{i} = E_0\,e^{ikz}\,\hat{\mathbf{e}}_x,
+%   \qquad
+%   \hat{\mathbf{e}}_x
+%   = \sin\theta\cos\phi\,\hat{\mathbf{e}}_r
+%   + \cos\theta\cos\phi\,\hat{\mathbf{e}}_\theta
+%   - \sin\phi\,\hat{\mathbf{e}}_\phi.
+% \end{equation}
+
+% Usando la ortogonalidad de los armónicos esféricos vectoriales \cite[p.~90]{Bohren1983},
+% los coeficientes son de la forma
+
+% \begin{equation}
+%   B_{emn} =
+%   \frac{
+%     \displaystyle\int_{0}^{2\pi}\!\int_{0}^{\pi}
+%     \mathbf{E}_{i} \cdot \mathbf{M}_{emn}\,\sin\theta\,d\theta\,d\phi
+%   }{
+%     \displaystyle\int_{0}^{2\pi}\!\int_{0}^{\pi}
+%     |\mathbf{M}_{emn}|^2\,\sin\theta\,d\theta\,d\phi
+%   }.
+% \end{equation}
+
+% Para todo $m$ y $n$, la ortogonalidad del seno y el coseno implica
+% $B_{emn} = A_{omn} = 0$, y solo los términos con $m = 1$ contribuyen a
+% $B_{omn}$ y $A_{emn}$. Además, la regularidad del campo en el origen exige que
+% la dependencia radial de los armónicos generadores esté dada por las funciones
+% de Bessel esféricas de primera clase $j_n(kr)$. La expansión se simplifica así
+% a
+
+% \begin{equation}
+%   \mathbf{E}_{i} =
+%   \sum_{n=1}^{\infty}
+%   \Bigl(
+%     B_{o1n}\,\mathbf{M}_{o1n}^{(1)}
+%   + A_{e1n}\,\mathbf{N}_{e1n}^{(1)}
+%   \Bigr),
+% \end{equation}
+
+% donde el superíndice $(1)$ indica dependencia radial en $j_n(kr)$. Evaluando
+% las integrales \cite[p.~91-92]{Bohren1983} se obtiene la expansión del campo
+% incidente:
+
+% \begin{equation}
+%   \mathbf{E}_{i} =
+%   E_0 \sum_{n=1}^{\infty}
+%   i^n\,\frac{2n+1}{n(n+1)}
+%   \Bigl(
+%     \mathbf{M}_{o1n}^{(1)}
+%     - i\,\mathbf{N}_{e1n}^{(1)}
+%   \Bigr),
+% \end{equation}
+
+% \begin{equation}
+%   \mathbf{H}_{i} =
+%   -\frac{k}{\omega\mu}\,
+%   E_0 \sum_{n=1}^{\infty}
+%   i^n\,\frac{2n+1}{n(n+1)}
+%   \Bigl(
+%     \mathbf{M}_{e1n}^{(1)}
+%     + i\,\mathbf{N}_{o1n}^{(1)}
+%   \Bigr).
+% \end{equation}
+
+% Esta expresión constituye el punto de partida para la aplicación de las
+% condiciones de contorno en la superficie de la esfera.
+
+
 \label{subsec:expansion_vectorial}
-Una vez definidos los armónicos esféricos vectoriales, se muestra cómo
-expresar una onda plana en esta base, es decir, se determinan los coeficientes
-$A_{emn}$, $A_{omn}$, $B_{emn}$ y $B_{omn}$.
-
-Consideremos una onda plana monocromática, linealmente polarizada en $x$, que
-se propaga en la dirección $z$:
-
-\begin{equation}
-  \mathbf{E}_{i} = E_0\,e^{ikz}\,\hat{\mathbf{e}}_x,
-  \qquad
-  \hat{\mathbf{e}}_x
-  = \sin\theta\cos\phi\,\hat{\mathbf{e}}_r
-  + \cos\theta\cos\phi\,\hat{\mathbf{e}}_\theta
-  - \sin\phi\,\hat{\mathbf{e}}_\phi.
-\end{equation}
-
-Usando la ortogonalidad de los armónicos esféricos vectoriales \cite[p.~90]{Bohren1983},
-los coeficientes son de la forma
-
-\begin{equation}
-  B_{emn} =
-  \frac{
-    \displaystyle\int_{0}^{2\pi}\!\int_{0}^{\pi}
-    \mathbf{E}_{i} \cdot \mathbf{M}_{emn}\,\sin\theta\,d\theta\,d\phi
-  }{
-    \displaystyle\int_{0}^{2\pi}\!\int_{0}^{\pi}
-    |\mathbf{M}_{emn}|^2\,\sin\theta\,d\theta\,d\phi
-  }.
-\end{equation}
-
-Para todo $m$ y $n$, la ortogonalidad del seno y el coseno implica
-$B_{emn} = A_{omn} = 0$, y solo los términos con $m = 1$ contribuyen a
-$B_{omn}$ y $A_{emn}$. Además, la regularidad del campo en el origen exige que
-la dependencia radial de los armónicos generadores esté dada por las funciones
-de Bessel esféricas de primera clase $j_n(kr)$. La expansión se simplifica así
-a
-
-\begin{equation}
-  \mathbf{E}_{i} =
-  \sum_{n=1}^{\infty}
-  \Bigl(
-    B_{o1n}\,\mathbf{M}_{o1n}^{(1)}
-  + A_{e1n}\,\mathbf{N}_{e1n}^{(1)}
-  \Bigr),
-\end{equation}
-
-donde el superíndice $(1)$ indica dependencia radial en $j_n(kr)$. Evaluando
-las integrales \cite[p.~91-92]{Bohren1983} se obtiene la expansión del campo
-incidente:
+Para expresar una onda plana de amplitud $E_0$ en esta base, se determinan los 
+coeficientes $A_{emn}$, $A_{omn}$, $B_{emn}$ y $B_{omn}$. La derivación detallada,
+disponible en \cite[pp.~91--92]{Bohren1983}, conduce a las expansiones del
+campo incidente:
 
 \begin{equation}
   \mathbf{E}_{i} =
@@ -313,17 +340,15 @@ incidente:
   \Bigl(
     \mathbf{M}_{e1n}^{(1)}
     + i\,\mathbf{N}_{o1n}^{(1)}
-  \Bigr).
+  \Bigr),
 \end{equation}
 
-Esta expresión constituye el punto de partida para la aplicación de las
-condiciones de contorno en la superficie de la esfera.
+donde el superíndice $(1)$ indica dependencia radial en las funciones de Bessel
+esféricas de primera clase $j_n(kr)$. Esta expresión constituye el punto de
+partida para la aplicación de las condiciones de contorno en la superficie de
+la esfera.
 
-
-\subsubsection{Campos internos y dispersados}
-
-En el apartado anterior se obtuvo la expansión del campo incidente en armónicos
-esféricos vectoriales. El siguiente paso consiste en expresar los campos interno y
+El siguiente paso consiste en expresar los campos interno y
 dispersado. A partir de la expansión del campo incidente, y teniendo en cuenta las
 condiciones de contorno
 
@@ -391,10 +416,10 @@ tangenciales de los campos en $r = a$ \cite{Bohren1983}:
 
 \[
 \begin{aligned}
-  E_{i\theta} + E_{s\theta} &= E_{1\theta}, \\
-  E_{i\phi}   + E_{s\phi}   &= E_{1\phi},   \\
-  H_{i\theta} + H_{s\theta} &= H_{1\theta}, \\
-  H_{i\phi}   + H_{s\phi}   &= H_{1\phi}.
+  E_\theta^{(i)} + E_\theta^{(s)} &= E_\theta^{(\mathrm{int})}, \\
+  E_\phi^{(i)}   + E_\phi^{(s)}   &= E_\phi^{(\mathrm{int})},   \\
+  H_\theta^{(i)} + H_\theta^{(s)} &= H_\theta^{(\mathrm{int})}, \\
+  H_\phi^{(i)}   + H_\phi^{(s)}   &= H_\phi^{(\mathrm{int})}.
 \end{aligned}
 \]
 
@@ -476,22 +501,20 @@ se expresa mediante
 \end{equation}
 
 donde $C_{\text{ext}}$ es la sección eficaz de extinción, $C_{\text{sca}}$ la
-de dispersión y $C_{\text{abs}}$ la de absorción. Estas magnitudes cuantifican
-el área efectiva que presenta la partícula frente al haz incidente.
+de dispersión y $C_{\text{abs}}$ la de absorción.
 
 % =========================================================================
 \subsection{Secciones eficaces}
 % =========================================================================
 
 Las secciones eficaces se obtienen aplicando el teorema óptico y el teorema de
-Poynting al campo total \cite{Bohren1983}. El punto de partida es el vector de Poynting promediado
-en el tiempo
-
-\begin{equation}
-  \langle\mathbf{S}\rangle = \frac{1}{2}\,\mathrm{Re}(\mathbf{E}\times\mathbf{H}^*),
-\end{equation}
-
-que representa el flujo de energía electromagnética por unidad de área.
+Poynting al campo total \cite{Bohren1983}. 
+% El punto de partida es el vector de Poynting promediado
+% en el tiempo
+% \begin{equation}
+%   \langle\mathbf{S}\rangle = \frac{1}{2}\,\mathrm{Re}(\mathbf{E}\times\mathbf{H}^*),
+% \end{equation}
+% que representa el flujo de energía electromagnética por unidad de área.
 Escribiendo el campo total como $\mathbf{E} = \mathbf{E}_i + \mathbf{E}_{sca}$,
 $\mathbf{H} = \mathbf{H}_i + \mathbf{H}_{sca}$, el vector de Poynting se
 descompone en tres contribuciones:
@@ -520,12 +543,8 @@ medio no absorbente, es cero: la onda plana incidente satisface
 $\nabla\cdot\langle\mathbf{S}_i\rangle = 0$ en todo el espacio y,
 por el teorema de la divergencia, su flujo neto a través de
 cualquier superficie cerrada se anula. 
-El balance energético se reduce por tanto a
-\begin{equation}
-  W_{ext} = W_{sca} + W_{abs},
-\end{equation}
-que es la forma integral de la relación
-$C_{ext} = C_{sca} + C_{abs}$.
+El balance energético se reduce por tanto a $W_{ext} = W_{sca} + W_{abs}$,
+que es la forma integral de la relación $C_{ext} = C_{sca} + C_{abs}$.
 
 El signo negativo en $W_{ext}$ refleja que el término de interferencia entre
 el campo incidente y el dispersado representa energía \emph{extraída} del haz.
@@ -593,9 +612,9 @@ $\pi a^2$:
   Q_{\text{abs}} = \frac{C_{\text{abs}}}{\pi a^2}.
 \end{equation}
 
-En el límite de partícula grande ($x \gg 1$) se cumple $Q_{\text{ext}} \to 2$,
-resultado conocido como la \textit{paradoja de extinción} \cite[p.~107]{vandeHulst1981},
-\cite{Bohren1983}, que se discute con más detalle en la sección~\ref{sec:geom_optics}.
+% En el límite de partícula grande ($x \gg 1$) se cumple $Q_{\text{ext}} \to 2$,
+% resultado conocido como la \textit{paradoja de extinción} \cite[p.~107]{vandeHulst1981},
+% \cite{Bohren1983}, que se discute con más detalle en la sección~\ref{sec:geom_optics}.
 
 % =========================================================================
 \subsection{Elementos de la matriz de amplitud de dispersión}
@@ -653,6 +672,10 @@ isotropía de la esfera, se recupera el teorema óptico en su forma explícita:
 \subsection{Matriz de Mueller}
 % =========================================================================
 
+% MANTENGO ESTA SECCION PORQUE LA MATRIZ APARECE MAS ADELANTE
+% Y AUNQUE NO TENGA POLARIZACIONES EN EL TRABAJO
+% NECESITO DEFINIRLA PARA QUE LUEGO TENGA SENTIDO EN 
+% MULTIPLES PARTICULAS
 Para relacionar las intensidades y el estado de polarización del campo
 dispersado con los del campo incidente se introduce la \textit{matriz de
 Mueller} $\mathbf{M}(\theta)$ \cite{Bohren1983,Mishchenko2002}, que actúa sobre el vector de Stokes
@@ -693,15 +716,8 @@ bloques diagonales $2\times 2$ de $U$ y $V$ están desacoplados de $I$ y $Q$.
 El elemento $S_{11}(\theta)$ representa la distribución angular 
 de la energía dispersada y es directamente medible. 
 Para una esfera homogénea e isotrópica, los elementos de la matriz de Mueller
-satisfacen
-\begin{equation}
-  S_{11}^2 = S_{12}^2 + S_{33}^2 + S_{34}^2,
-\end{equation}
-
+satisfacen $S_{11}^2 = S_{12}^2 + S_{33}^2 + S_{34}^2$,
 lo que implica que solo tres de los cuatro elementos son independientes.
-En el caso general de una partícula arbitraria esta relación se convierte
-en una desigualdad ($\geq$), cuya igualdad indica que la matriz describe
-luz completamente polarizada.
 
 % =========================================================================
 \subsection{Función de fase y normalización}
@@ -725,8 +741,8 @@ Esta satisface la condición de normalización
 de modo que $p(\theta)\,d\Omega/4\pi$ representa la fracción de la potencia
 total dispersada que se redistribuye en el elemento de ángulo sólido $d\Omega$
 en torno a la dirección $\theta$. Esta normalización facilita la comparación
-entre partículas de distinto tamaño y constituye la forma estándar de
-caracterizar la anisotropía angular de la dispersión.
+entre partículas de distinto tamaño ya que muestra la anisotropía angular 
+de la dispersión.
 
 % =========================================================================
 \subsection{Parámetro de asimetría}
@@ -761,10 +777,10 @@ dispersión isótropa. En términos de los coeficientes de Mie:
   \right].
 \end{equation}
 
-Para partículas pequeñas en el régimen de Rayleigh ($x \ll 1$), la dispersión
-tiende a ser casi isótropa ($g \approx 0$). A medida que el parámetro de
-tamaño aumenta, la dispersión se vuelve progresivamente más anisótropa hacia
-adelante y $g \to 1$.
+% Para partículas pequeñas en el régimen de Rayleigh ($x \ll 1$), la dispersión
+% tiende a ser casi isótropa ($g \approx 0$). A medida que el parámetro de
+% tamaño aumenta, la dispersión se vuelve progresivamente más anisótropa hacia
+% adelante y $g \to 1$.
 
 % =========================================================================
 \subsection{Albedo de dispersión simple}
@@ -804,12 +820,10 @@ El comportamiento óptico de una partícula esférica depende fundamentalmente d
 circunferencia de la partícula con la longitud de onda incidente. En función
 del valor de $x$ se distinguen tres regímenes cualitativamente distintos.
 
-\subsubsection{Régimen de Rayleigh ($x \ll 1$)}
-
-Cuando la partícula es mucho más pequeña que la longitud de onda, el campo
-incidente varía poco sobre su volumen y la respuesta queda dominada por el
-término dipolar ($n = 1$) \cite[cap.~5]{Bohren1983}. En este límite, los coeficientes de Mie se
-aproximan por
+Cuando la partícula es mucho más pequeña que la longitud de onda ($x \ll 1$),
+estamos en el \textit{régimen de Rayleigh}: el campo incidente varía poco sobre
+su volumen y la respuesta queda dominada por el término dipolar ($n = 1$)
+\cite[cap.~5]{Bohren1983}. En este límite, los coeficientes de Mie se aproximan por
 
 \begin{equation}
   a_1 \approx -\frac{2i\,x^3}{3}\,\frac{m^2-1}{m^2+2},
@@ -829,95 +843,111 @@ lo que explica el color azul del cielo: la dispersión preferente de las
 longitudes de onda cortas por las moléculas de aire (partículas en régimen de
 Rayleigh) da lugar a la dependencia $\propto \lambda^{-4}$. La dispersión es
 casi isótropa ($g \approx 0$) con lóbulos hacia adelante y hacia atrás
-simétricos.
+simétricos, como se observa en la figura~\ref{fig:S11_rayleigh}.
 
-\subsubsection{Régimen de Mie ($x \sim 1$)}
+Cuando el tamaño de la partícula es comparable a la longitud de onda ($x \sim
+1$), estamos en el \textit{régimen de Mie}. Las secciones eficaces presentan
+oscilaciones resonantes en función de $x$, conocidas como \textit{resonancias
+de Mie}, asociadas a los modos electromagnéticos del interior de la esfera. La
+dispersión se vuelve marcadamente anisótropa hacia adelante ($g \to 1$), como
+se aprecia en la figura~\ref{fig:S11_mie}, y la función de fase desarrolla
+lóbulos bien definidos que resultan especialmente visibles en escala
+logarítmica (figura~\ref{fig:S11_mie_log}). Este es el régimen de mayor
+riqueza fenomenológica y el que requiere el tratamiento completo de la teoría
+de Mie.
 
-Cuando el tamaño de la partícula es comparable a la longitud de onda, múltiples
-órdenes multipolares contribuyen de forma significativa. Las secciones eficaces
-presentan oscilaciones resonantes en función de $x$, conocidas como
-\textit{resonancias de Mie}, asociadas a los modos electromagnéticos del
-interior de la esfera. La dispersión se vuelve marcadamente anisótropa hacia
-adelante ($g \to 1$) y la función de fase desarrolla lóbulos bien definidos.
-Este es el régimen de mayor riqueza fenomenológica y el que requiere el
-tratamiento completo de la teoría de Mie.
+\textit{Régimen de óptica geométrica} ($x \gg 1$): cuando la partícula es
+mucho mayor que la longitud de onda, 
+la interacción puede describirse mediante rayos geométricos. 
 
-\subsubsection{Régimen de óptica geométrica ($x \gg 1$)}
-\label{sec:geom_optics}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/1e/a20/plots/S11.png}
+        \caption{Régimen de Rayleigh.}
+        \label{fig:S11_rayleigh}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/regimenmie/1e/a600/plots/S11.png}
+        \caption{Régimen de Mie.}
+        \label{fig:S11_mie}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/regimenmie/1e/a600/plots/S11_log.png}
+        \caption{Régimen de Mie.}
+        \label{fig:S11_mie_log}
+    \end{subfigure}
+    \caption{Patrón angular $S_{11}(\theta)$ de una esfera de oro en dos
+             regímenes de dispersión.}
+    \label{fig:S11_regimenes}
+\end{figure}
 
-Cuando la partícula es mucho mayor que la longitud de onda, los efectos de
-difracción se concentran en un ángulo muy estrecho alrededor de la dirección de
-propagación y la interacción puede describirse mediante rayos geométricos. En
-este límite, la eficiencia de extinción converge a
 
-\begin{equation}
-  Q_{\text{ext}} \xrightarrow{x \to \infty} 2,
-\end{equation}
 
-resultado conocido como la \textit{paradoja de extinción}: la partícula
-extingue el doble de la energía que intercepta geométricamente. El factor
-adicional proviene de la difracción de Fraunhofer en el borde de la partícula,
-que desvía hacia adelante una cantidad de energía igual a la interceptada
-\cite{vandeHulst1981,Bohren1983}.
 
-% =========================================================================
-\subsection{Parámetros de Stokes y grado de polarización}
-% =========================================================================
-\label{sec:stokes}
+% % =========================================================================
+% \subsection{Parámetros de Stokes y grado de polarización}
+% % =========================================================================
+% \label{sec:stokes}
 
-El estado de polarización de una onda electromagnética queda completamente
-caracterizado por los \textit{parámetros de Stokes} \cite{Bohren1983,BornWolf1999,Mishchenko2002},
-definidos en términos de
-las componentes del campo eléctrico como
+% El estado de polarización de una onda electromagnética queda completamente
+% caracterizado por los \textit{parámetros de Stokes} \cite{Bohren1983,BornWolf1999,Mishchenko2002},
+% definidos en términos de
+% las componentes del campo eléctrico como
 
-\begin{equation}
-\begin{aligned}
-  I &= \langle E_\parallel E_\parallel^*\rangle
-     + \langle E_\perp    E_\perp^*   \rangle, \\
-  Q &= \langle E_\parallel E_\parallel^*\rangle
-     - \langle E_\perp    E_\perp^*   \rangle, \\
-  U &= \langle E_\parallel E_\perp^*  \rangle
-     + \langle E_\perp    E_\parallel^*\rangle, \\
-  V &= i\bigl(
-         \langle E_\perp    E_\parallel^*\rangle
-       - \langle E_\parallel E_\perp^*  \rangle
-       \bigr),
-\end{aligned}
-\end{equation}
+% \begin{equation}
+% \begin{aligned}
+%   I &= \langle E_\parallel E_\parallel^*\rangle
+%      + \langle E_\perp    E_\perp^*   \rangle, \\
+%   Q &= \langle E_\parallel E_\parallel^*\rangle
+%      - \langle E_\perp    E_\perp^*   \rangle, \\
+%   U &= \langle E_\parallel E_\perp^*  \rangle
+%      + \langle E_\perp    E_\parallel^*\rangle, \\
+%   V &= i\bigl(
+%          \langle E_\perp    E_\parallel^*\rangle
+%        - \langle E_\parallel E_\perp^*  \rangle
+%        \bigr),
+% \end{aligned}
+% \end{equation}
 
-donde los corchetes indican promedio temporal. A diferencia de los campos, los
-parámetros de Stokes son magnitudes reales y directamente medibles mediante
-combinaciones de polarizadores y retardadores. Satisfacen la relación
+% donde los corchetes indican promedio temporal. A diferencia de los campos, los
+% parámetros de Stokes son magnitudes reales y directamente medibles mediante
+% combinaciones de polarizadores y retardadores. Satisfacen la relación
 
-\begin{equation}
-  I^2 \geq Q^2 + U^2 + V^2,
-\end{equation}
+% \begin{equation}
+%   I^2 \geq Q^2 + U^2 + V^2,
+% \end{equation}
 
-donde la igualdad se cumple para luz completamente polarizada. El
-\textit{grado de polarización total} se define como
+% donde la igualdad se cumple para luz completamente polarizada. El
+% \textit{grado de polarización total} se define como
 
-\begin{equation}
-  P = \frac{\sqrt{Q^2 + U^2 + V^2}}{I} \in [0,1].
-\end{equation}
+% \begin{equation}
+%   P = \frac{\sqrt{Q^2 + U^2 + V^2}}{I} \in [0,1].
+% \end{equation}
 
-Para cuantificar únicamente la componente lineal de la polarización se
-introduce el \textit{grado de polarización lineal}
+% Para cuantificar únicamente la componente lineal de la polarización se
+% introduce el \textit{grado de polarización lineal}
 
-\begin{equation}
-  P_L = \frac{\sqrt{Q^2 + U^2}}{I}.
-\end{equation}
+% \begin{equation}
+%   P_L = \frac{\sqrt{Q^2 + U^2}}{I}.
+% \end{equation}
 
-En el caso particular de luz incidente no polarizada que interactúa con una
-esfera homogénea, $U = V = 0$ en el campo dispersado y el grado de polarización
-lineal adopta la forma compacta
+% En el caso particular de luz incidente no polarizada que interactúa con una
+% esfera homogénea, $U = V = 0$ en el campo dispersado y el grado de polarización
+% lineal adopta la forma compacta
 
-\begin{equation}
-  P_L(\theta) = \frac{|S_{12}(\theta)|}{S_{11}(\theta)},
-\end{equation}
+% \begin{equation}
+%   P_L(\theta) = \frac{|S_{12}(\theta)|}{S_{11}(\theta)},
+% \end{equation}
 
-que es directamente medible experimentalmente y proporciona información sobre
-la composición y el tamaño de las partículas independientemente de su
-concentración.
+% que es directamente medible experimentalmente y proporciona información sobre
+% la composición y el tamaño de las partículas independientemente de su
+% concentración.
 
 
 % =========================================================================
