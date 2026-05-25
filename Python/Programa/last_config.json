@@ -1,42 +1,42 @@
 {
-    "output_file": "sw.dat",
+    "output_file": "Ag_sw.dat",
     "num_spheres": "1",
     "positions": [
-        "0.d0, 0.d0, 0.d0, 10d0, (0.9200000000d0, 13.7800000000d0)"
+        "0.d0, 0.d0, 0.d0, 0.01d0, (0.0551585014d0, 4.0096599424d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
-    "length_scale": "0.0104719755d0",
+    "length_scale": "10.4719755120d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
-    "near_field": false,
-    "near_field_file": "f",
+    "near_field": true,
+    "near_field_file": "Ag_sw_nf.dat",
     "nearfieldplot": "",
-    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\particulaenorme\\sw",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\pruebas\\buscandoresonanciaoro\\sim1\\Ag_sw",
     "plot_type": "absE",
     "plot_options": [
         "|E_avg|^2"
     ],
-    "wavelength": "600",
-    "sphere_radius": "10",
-    "material": "Au",
-    "separation": "0.004",
+    "wavelength": "0.600",
+    "sphere_radius": "0.01",
+    "material": "Ag",
+    "separation": "0.007",
     "geometry": "(none)",
     "wavelength_sweep": {
-        "enabled": false,
-        "min": "0.4",
-        "max": "1.4",
-        "n": "100"
+        "enabled": true,
+        "min": "0.2",
+        "max": "0.8",
+        "n": "50"
     },
     "radius_sweep": {
-        "enabled": true,
-        "min": "100",
-        "max": "4000",
-        "n": "20"
+        "enabled": false,
+        "min": "0.001",
+        "max": "0.5",
+        "n": "100"
     },
     "custom_n": "",
     "custom_k": "",
-    "near_field_stepsize": "0.05d0",
+    "near_field_stepsize": "0.01d0",
     "near_field_stepsize_auto": false,
     "scattering_angle": "1.d0",
     "radii_equal": true,

@@ -2204,12 +2204,22 @@ class MieTheoryApp:
 
         # --- Efficiency plots ---
         if any(q_selected):
+            material = self.material_var.get().strip()
+            try:
+                radius_str = str(float(self.radius_entry.get().strip()))
+            except ValueError:
+                radius_str = None
+
+            nk_extra = []
+            if material and material.lower() != "custom" and radius_str:
+                nk_extra = ["--material", material, "--radius", radius_str]
+
             for pol in pol_selected:
                 if len(q_selected) == len(self.q_vars):
-                    sb.Popen(["py", python_plot_file, scat_mat_file, "EFF", save_dir, "--pol", pol])
+                    sb.Popen(["py", python_plot_file, scat_mat_file, "EFF", save_dir, "--pol", pol] + nk_extra)
                 else:
                     for qmode in q_selected:
-                        sb.Popen(["py", python_plot_file, scat_mat_file, qmode, save_dir, "--pol", pol])
+                        sb.Popen(["py", python_plot_file, scat_mat_file, qmode, save_dir, "--pol", pol] + nk_extra)
 
 
     def plot_near_field(self):

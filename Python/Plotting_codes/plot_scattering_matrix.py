@@ -15,6 +15,21 @@ import matplotlib as mpl
 # False → las tres curvas comparten el mismo eje Y izquierdo
 DUAL_Y_AXIS = False
 
+# True  → al plotear eficiencias se abre también una figura separada con n y k
+#          interpolados en el mismo rango de longitudes de onda
+# False → solo se plotean las eficiencias
+PLOT_REFRACTIVE_INDEX = True
+
+# =========================
+# Importar mstm_utils para n/k
+# =========================
+try:
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "Programa", "calculations")))
+    import mstm_utils as _mstm_utils  # type: ignore
+    _HAS_MSTM_UTILS = True
+except Exception:
+    _HAS_MSTM_UTILS = False
+
 # =========================
 # Estilo global de figuras
 # =========================
@@ -281,7 +296,7 @@ def plot_S11_old(runs, run_ids, save_dir="."):
 
 def plot_S11(runs, run_ids, save_dir=".", skip_run=True, plot_number=5):
     mode = {1, 2}
-    mode = {2}
+    mode = {1}
     valid_run_ids = [
         ri for ri in run_ids
         if runs[ri]["S"] is not None
@@ -472,27 +487,27 @@ def plot_polarization(runs, run_ids, mode, save_dir=".", skip_run=True, plot_num
     auto_save_or_show(fig, mode, save_dir)
 
 
-def _plot_eff_axes(ax, axr, x, y_qext, y_qabs, y_qsca, xlabels,
-                   C_EXT, C_ABS, C_SCA, dual):
+def _plot_eff_axes(ax, axr, x, y_qext, y_qabs, y_qsca, dual):
     """
     Dibuja Q_ext, Q_abs y Q_sca sobre los ejes proporcionados.
+    x debe ser el array de longitudes de onda reales (µm).
 
     dual=True  → Q_ext y Q_abs en 'ax' (izquierda), Q_sca en 'axr' (derecha).
     dual=False → las tres curvas en 'ax'; 'axr' no se usa.
     """
-    ax.plot(x, y_qext, color=C_EXT, label=r"$Q_\mathrm{ext}$")
-    ax.plot(x, y_qabs, color=C_ABS, linestyle="--",
+    ax.plot(x, y_qext, color="#1f77b4", label=r"$Q_\mathrm{ext}$")
+    ax.plot(x, y_qabs, color="#d62728", linestyle="--",
             label=r"$Q_\mathrm{abs}$")
 
     if dual:
-        axr.plot(x, y_qsca, color=C_SCA, linestyle=":",
+        axr.plot(x, y_qsca, color="#2ca02c", linestyle=":",
                  label=r"$Q_\mathrm{sca}$")
         ax.set_ylabel(r"$Q_\mathrm{ext}$,  $Q_\mathrm{abs}$")
         axr.set_ylabel(r"$Q_\mathrm{sca}$")
-        axr.tick_params(axis="y", labelcolor=C_SCA)
+        axr.tick_params(axis="y", labelcolor="#2ca02c")
         lines = ax.get_lines() + axr.get_lines()
     else:
-        ax.plot(x, y_qsca, color=C_SCA, linestyle=":",
+        ax.plot(x, y_qsca, color="#2ca02c", linestyle=":",
                 label=r"$Q_\mathrm{sca}$")
         ax.set_ylabel(r"$Q_\mathrm{ext}$,  $Q_\mathrm{abs}$,  $Q_\mathrm{sca}$")
         axr.set_visible(False)
@@ -501,19 +516,81 @@ def _plot_eff_axes(ax, axr, x, y_qext, y_qabs, y_qsca, xlabels,
     labels = [l.get_label() for l in lines]
     ax.legend(lines, labels, loc="upper right", fontsize=13)
 
-    max_labels = 10
-    step = max(1, len(xlabels) // max_labels)
-    ax.set_xticks(x[::step])
-    ax.set_xticklabels([xlabels[i] for i in range(0, len(xlabels), step)],
-                       rotation=0)
+
+def _get_nk_arrays(wavelengths_um, material, radius):
+    """
+    Llama a mstm_utils.compute_parameters para cada longitud de onda y devuelve
+    (n_arr, k_arr). Devuelve (None, None) si el material es Custom o si
+    mstm_utils no está disponible.
+    """
+    if not _HAS_MSTM_UTILS:
+        return None, None
+    if not material or material.strip().lower() == "custom":
+        return None, None
+    if radius is None:
+        return None, None
+    try:
+        n_vals, k_vals = [], []
+        for wl in wavelengths_um:
+            res = _mstm_utils.compute_parameters(radius, wl, material=material)
+            ri = res["refractive_index"]
+            n_vals.append(ri.real)
+            k_vals.append(ri.imag)
+        return np.array(n_vals), np.array(k_vals)
+    except Exception as exc:
+        print(f"[n/k] No se pudo calcular el índice de refracción: {exc}")
+        return None, None
 
 
-def plot_efficiencies(runs, run_ids, save_dir=".", pol="unpol", mode="EFF"):
-    x = np.arange(1, len(run_ids) + 1)
-    xlabels = []
-    for ri in run_ids:
-        l_scale = runs[ri]["l_scale"]
-        xlabels.append(f"{2*np.pi/l_scale:.2f}")
+def _build_nk_figure(x, n_arr, k_arr, material):
+    """
+    Construye dos figuras sin mostrarlas:
+      · n y k  (índice de refracción complejo)
+      · ε₁ y ε₂ (función dieléctrica), con la línea de resonancia ε₁ = −2
+
+    plt.show() del caller las mostrará todas juntas.
+    x debe ser el array de longitudes de onda reales (µm).
+    """
+    # ── Figura 1: n y k ──────────────────────────────────────────────
+    fig_nk, ax_nk = plt.subplots(figsize=(9, 4))
+    ax_nk.plot(x, n_arr, color="#1f77b4", label="n (real)")
+    ax_nk.plot(x, k_arr, color="#d62728", linestyle="--", label="k (imag)")
+    ax_nk.set_xlabel(r"Longitud de onda ($\mu$m)")
+    ax_nk.set_ylabel("Índice de refracción")
+    ax_nk.set_title(f"Índice de refracción interpolado — {material}")
+    ax_nk.legend(fontsize=13).set_draggable(True)
+    ax_nk.grid(True)
+    fig_nk.tight_layout()
+    set_fig_title(fig_nk, f"n/k — {material}")
+
+    # ── Figura 2: ε₁ y ε₂ ───────────────────────────────────────────
+    eps1 = n_arr ** 2 - k_arr ** 2   # parte real de ε
+    eps2 = 2.0 * n_arr * k_arr       # parte imaginaria de ε
+
+    fig_eps, ax_eps = plt.subplots(figsize=(9, 4))
+    ax_eps.plot(x, eps1, color="#1f77b4",
+                label=r"$\varepsilon_1 = n^2 - k^2$")
+    ax_eps.plot(x, eps2, color="#d62728", linestyle="--",
+                label=r"$\varepsilon_2 = 2nk$")
+    ax_eps.axhline(-2, color="#2ca02c", linestyle=":", linewidth=1.5,
+                   label=r"$\varepsilon_1 = -2$  (resonancia dipolar, vacío)")
+    ax_eps.axhline(0, color="gray", linestyle="-", linewidth=0.6)
+    ax_eps.set_xlabel(r"Longitud de onda ($\mu$m)")
+    ax_eps.set_ylabel(r"$\varepsilon_1$,  $\varepsilon_2$")
+    ax_eps.set_title(f"Función dieléctrica — {material}")
+    ax_eps.legend(fontsize=13).set_draggable(True)
+    ax_eps.grid(True)
+    fig_eps.tight_layout()
+    set_fig_title(fig_eps, f"ε — {material}")
+
+    return fig_nk, fig_eps
+
+
+def plot_efficiencies(runs, run_ids, save_dir=".", pol="unpol", mode="EFF",
+                      material=None, radius=None):
+
+    # Eje X: longitudes de onda reales (µm) — el ratón mostrará valores correctos
+    x = np.array([2 * np.pi / runs[ri]["l_scale"] for ri in run_ids])
 
     y_qext, y_qabs, y_qsca = [], [], []
     for ri in run_ids:
@@ -524,42 +601,45 @@ def plot_efficiencies(runs, run_ids, save_dir=".", pol="unpol", mode="EFF"):
 
     invert_x = False
     if invert_x:
-        wavelengths = np.array([float(v) for v in xlabels])
-        inv_x = 1 / wavelengths
+        inv_x = 1 / x
         order = np.argsort(inv_x)
-        inv_x = inv_x[order]
+        x      = inv_x[order]
         y_qext = np.array(y_qext)[order]
         y_qabs = np.array(y_qabs)[order]
         y_qsca = np.array(y_qsca)[order]
-        x = inv_x
-        xlabels = [f"{val:.3f}" for val in inv_x]
 
     mode = mode.upper()
     valid_modes = ["EFF", "QEXT", "QABS", "QSCA"]
     if mode not in valid_modes:
         raise ValueError(f"Modo no válido '{mode}'. Elige entre {valid_modes}.")
 
-    C_EXT = "#1f77b4"   # azul   — Q_ext
-    C_ABS = "#d62728"   # rojo   — Q_abs
-    C_SCA = "#2ca02c"   # verde  — Q_sca
+    # Calcular n/k y construir figura antes del show (se mostrará a la vez)
+    n_arr, k_arr = _get_nk_arrays(x.tolist(), material, radius) if PLOT_REFRACTIVE_INDEX else (None, None)
+
+    C_EXT = "#1f77b4"
+    C_ABS = "#d62728"
+    C_SCA = "#2ca02c"
 
     if mode == "EFF":
         fig, ax = plt.subplots(figsize=(9, 5))
         axr = ax.twinx()
 
-        _plot_eff_axes(ax, axr, x, y_qext, y_qabs, y_qsca, xlabels,
-                       C_EXT, C_ABS, C_SCA, dual=DUAL_Y_AXIS)
+        _plot_eff_axes(ax, axr, x, y_qext, y_qabs, y_qsca, dual=DUAL_Y_AXIS)
 
         ax.set_xlabel(r"Longitud de onda ($\mu$m)")
         ax.grid(True)
         fig.suptitle(f"Eficiencias ({pol.capitalize()})")
-        
+
         leg = ax.get_legend()
         if leg:
             leg.set_draggable(True)
-        
+
         fig.tight_layout()
         set_fig_title(fig, f"Eficiencias - {pol.capitalize()}")
+
+        if n_arr is not None:
+            _build_nk_figure(x, n_arr, k_arr, material)
+
         auto_save_or_show(fig, f"EFF_{pol.upper()}", save_dir)
 
     else:
@@ -574,16 +654,14 @@ def plot_efficiencies(runs, run_ids, save_dir=".", pol="unpol", mode="EFF"):
         ax.set_xlabel(r"Longitud de onda ($\mu$m)")
         ax.set_ylabel(f"{title_map[mode]} ({pol})")
         max_index = np.argmax(y_map[mode])
-        print(
-            f"Máximo de {mode} en longitud de onda {xlabels[max_index]} um: {y_map[mode][max_index]}")
-        max_labels = 10
-        step = max(1, len(xlabels) // max_labels)
-        ax.set_xticks(x[::step])
-        ax.set_xticklabels([xlabels[i]
-                            for i in range(0, len(xlabels), step)], rotation=0)
+        print(f"Máximo de {mode} en longitud de onda {x[max_index]:.4f} um: {y_map[mode][max_index]}")
         ax.grid(True)
         ax.set_title(f"{title_map[mode]} ({pol.capitalize()})")
         set_fig_title(fig, f"{mode} - {pol.capitalize()}")
+
+        if n_arr is not None:
+            _build_nk_figure(x, n_arr, k_arr, material)
+
         auto_save_or_show(fig, f"{mode}_{pol.upper()}", save_dir)
 
 
@@ -754,9 +832,7 @@ def plot_small_sphere(runs, run_ids, save_dir=".", pol="unpol"):
     ax0 = axes[0, 0]
     ax0r = ax0.twinx()
 
-    xlabels_ray = [f"{v:.3f}" for v in wl_um]
-    _plot_eff_axes(ax0, ax0r, wl_um, Qext_v, Qabs_v, Qsca_v, xlabels_ray,
-                   C_EXT, C_ABS, C_SCA, dual=DUAL_Y_AXIS)
+    _plot_eff_axes(ax0, ax0r, wl_um, Qext_v, Qabs_v, Qsca_v, dual=DUAL_Y_AXIS)
 
     ax0.set_xlabel(r"Longitud de onda ($\mu$m)")
     ax0.set_title("Eficiencias")
@@ -835,11 +911,14 @@ def parse_args(argv):
     """
     Uso:
       python plot_scattering_matrix.py <fichero> [modo] [carpeta_guardado] [--run N|ALL] [--pol POL]
+                                       [--material MAT] [--radius R]
 
     Modos:
       S11, DOP, DOLP, DOCP, ALL, EFF, QEXT, QABS, QSCA, DASHBOARD, RAYLEIGH
     Polarizaciones:
       unpol (por defecto), par, perp
+    Materiales (para figura n/k):
+      Au, Ag, Al, Cu, Fe, H2O  (se ignora si es Custom)
     """
     from argparse import ArgumentParser
     parser = ArgumentParser(description="Representar datos de la matriz de dispersión o de eficiencias.")
@@ -848,12 +927,16 @@ def parse_args(argv):
                         help="S11 | DOP | DOLP | DOCP | ALL | EFF | QEXT | QABS | QSCA | DASHBOARD | RAYLEIGH")
     parser.add_argument("save_folder", nargs="?", default=".",
                         help="Carpeta donde guardar las figuras")
-    parser.add_argument("--run",  default="ALL", help="Índice de ejecución o ALL")
-    parser.add_argument("--pol",  choices=["unpol", "par", "perp"], default="unpol",
+    parser.add_argument("--run",      default="ALL", help="Índice de ejecución o ALL")
+    parser.add_argument("--pol",      choices=["unpol", "par", "perp"], default="unpol",
                         help="Polarización para las gráficas de eficiencias")
+    parser.add_argument("--material", default=None,
+                        help="Material para figura n/k (Au, Ag, Al, Cu, Fe, H2O)")
+    parser.add_argument("--radius",   type=float, default=None,
+                        help="Radio de la esfera en µm (necesario para la figura n/k)")
 
     args = parser.parse_args(argv[1:])
-    return args.file, args.mode.upper(), args.save_folder, args.run.upper(), args.pol
+    return args.file, args.mode.upper(), args.save_folder, args.run.upper(), args.pol, args.material, args.radius
 
 
 def select_runs(runs, selector):
@@ -870,7 +953,7 @@ def select_runs(runs, selector):
 # Punto de entrada
 # =========================
 def main():
-    file, mode, save_dir, run_selector, pol = parse_args(sys.argv)
+    file, mode, save_dir, run_selector, pol, material, radius = parse_args(sys.argv)
 
     if save_dir:
         plot_dir = os.path.join(os.path.abspath(save_dir), "plots")
@@ -880,6 +963,8 @@ def main():
     print(f"Fichero de entrada : {file}")
     print(f"Modo               : {mode}")
     print(f"Polarización       : {pol}")
+    if material:
+        print(f"Material (n/k)     : {material}  |  radio: {radius} µm")
 
     runs = parse_runs_with_efficiencies(file)
     if not runs:
@@ -893,7 +978,8 @@ def main():
     elif mode in ["DOP", "DOLP", "DOCP", "ALL"]:
         plot_polarization(runs, run_ids, mode, save_dir)
     elif mode in ["EFF", "QEXT", "QABS", "QSCA"]:
-        plot_efficiencies(runs, run_ids, save_dir, pol, mode)
+        plot_efficiencies(runs, run_ids, save_dir, pol, mode,
+                          material=material, radius=radius)
     elif mode == "DASHBOARD":
         plot_dashboard(runs, run_ids, save_dir)
     elif mode == "RAYLEIGH":
