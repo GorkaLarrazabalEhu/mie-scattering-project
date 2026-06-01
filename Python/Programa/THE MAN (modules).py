@@ -1936,9 +1936,12 @@ class MieTheoryApp:
                     rs = [r for _, _, _, r in coords] or [0.0]
 
                     margin = 2.0 * (max(rs) if rs else 0.0)
+                    # margin = 1.2 * (min(rs) if rs else 0.0) # Cambiar esto si se requiere mas margen.
+                    margin = 0                              # Si las simulaciones tardan demasiado y necesito reducir el área
 
                     xmin, xmax = min(xs) - max(rs) - margin, max(xs) + max(rs) + margin
                     zmin, zmax = min(zs) - max(rs) - margin, max(zs) + max(rs) + margin
+
 
                     # center square box
                     xmid = 0.5 * (xmin + xmax)
@@ -1951,6 +1954,7 @@ class MieTheoryApp:
                     # scale into k0·length
                     xmin, xmax = length_scale * xmin, length_scale * xmax
                     zmin, zmax = length_scale * zmin, length_scale * zmax
+
 
                     f.write("near_field_minimum_border\n")
                     f.write(f"{xmin:.6f}d0,0.d0,{zmin:.6f}d0\n")

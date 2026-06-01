@@ -14,6 +14,8 @@ TITLE_SIZE = 16
 LABEL_SIZE = 14
 TICK_SIZE = 12
 COLORBAR_LABEL_SIZE = 14
+log_scale = False
+# log_scale = True
 
 FIG_WIDTH_PER_COL = 6
 FIG_HEIGHT_PER_ROW = 5
@@ -241,12 +243,12 @@ def make_grid(x, z):
     return X, Z
 
 
-def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers, log_scale=True):
+def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
     X, Z = make_grid(x, z)
     F = reshape_to_grid(field_data, x)
 
     linthresh = 0.001  # ajusta según tus valores pequeños
-    log_scale = False
+    
     if log_scale:
         norm = SymLogNorm(linthresh=linthresh, linscale=0.5,
                           vmin=F.min(), vmax=F.max())

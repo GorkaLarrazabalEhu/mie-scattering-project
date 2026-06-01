@@ -19,102 +19,402 @@
 
 \refsection{0}
   \datalist[entry]{none/global//global/global/global}
-    \entry{Bohren}{book}{}{}
-      \name{author}{2}{}{%
-        {{hash=c41360d0b1200a324731569f8e00798e}{%
-           family={Bohren},
-           familyi={B\bibinitperiod},
-           given={F.},
-           giveni={F\bibinitperiod}}}%
-        {{hash=090a4c58fa53a4f1e4b6fc1221eda050}{%
-           family={Huffman},
-           familyi={H\bibinitperiod},
-           given={B.},
-           giveni={B\bibinitperiod}}}%
+    \entry{Jackson1975}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=bc51fc62aec5c2fb2968eb631d48cf2a}{%
+           family={Jackson},
+           familyi={J\bibinitperiod},
+           given={John\bibnamedelima David},
+           giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {New York}%
       }
       \list{publisher}{1}{%
         {Wiley}%
       }
-      \strng{namehash}{e81eca8ff9616a74ee73c1fc524c2519}
-      \strng{fullhash}{e81eca8ff9616a74ee73c1fc524c2519}
-      \strng{fullhashraw}{e81eca8ff9616a74ee73c1fc524c2519}
-      \strng{bibnamehash}{e81eca8ff9616a74ee73c1fc524c2519}
-      \strng{authorbibnamehash}{e81eca8ff9616a74ee73c1fc524c2519}
-      \strng{authornamehash}{e81eca8ff9616a74ee73c1fc524c2519}
-      \strng{authorfullhash}{e81eca8ff9616a74ee73c1fc524c2519}
-      \strng{authorfullhashraw}{e81eca8ff9616a74ee73c1fc524c2519}
+      \strng{namehash}{bc51fc62aec5c2fb2968eb631d48cf2a}
+      \strng{fullhash}{bc51fc62aec5c2fb2968eb631d48cf2a}
+      \strng{fullhashraw}{bc51fc62aec5c2fb2968eb631d48cf2a}
+      \strng{bibnamehash}{bc51fc62aec5c2fb2968eb631d48cf2a}
+      \strng{authorbibnamehash}{bc51fc62aec5c2fb2968eb631d48cf2a}
+      \strng{authornamehash}{bc51fc62aec5c2fb2968eb631d48cf2a}
+      \strng{authorfullhash}{bc51fc62aec5c2fb2968eb631d48cf2a}
+      \strng{authorfullhashraw}{bc51fc62aec5c2fb2968eb631d48cf2a}
       \field{sortinit}{1}
       \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Absorption and Scattering of Light by Small Particles}
-      \field{year}{1983}
+      \field{edition}{2}
+      \field{title}{Classical Electrodynamics}
+      \field{year}{1975}
     \endentry
-    \entry{Mishchenko}{article}{}{}
-      \name{author}{3}{}{%
-        {{hash=959594e2d519ec8278a0f211f35a26de}{%
-           family={Mishchenko},
-           familyi={M\bibinitperiod},
-           given={M.\bibnamedelimi I.},
-           giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
-        {{hash=7f99a4497e15a0fe9b653f7035cfcc4d}{%
-           family={Travis},
-           familyi={T\bibinitperiod},
-           given={L.\bibnamedelimi D.},
-           giveni={L\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
-        {{hash=a17d27663bc06ad5bed1b13b82b79244}{%
-           family={Lacis},
-           familyi={L\bibinitperiod},
-           given={A.\bibnamedelimi A.},
-           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+    \entry{Bohren1983}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=33233e3e3b3a1b37257c460202afa1e4}{%
+           family={Bohren},
+           familyi={B\bibinitperiod},
+           given={Craig\bibnamedelima F.},
+           giveni={C\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
+        {{hash=1d5725310698290bae735a820f713316}{%
+           family={Huffman},
+           familyi={H\bibinitperiod},
+           given={Donald\bibnamedelima R.},
+           giveni={D\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
       }
-      \strng{namehash}{8a61f90ffd68bcfd4eddc4dbbb60e97a}
-      \strng{fullhash}{3114d35b80d76b156ca4ad069e0bcc75}
-      \strng{fullhashraw}{3114d35b80d76b156ca4ad069e0bcc75}
-      \strng{bibnamehash}{3114d35b80d76b156ca4ad069e0bcc75}
-      \strng{authorbibnamehash}{3114d35b80d76b156ca4ad069e0bcc75}
-      \strng{authornamehash}{8a61f90ffd68bcfd4eddc4dbbb60e97a}
-      \strng{authorfullhash}{3114d35b80d76b156ca4ad069e0bcc75}
-      \strng{authorfullhashraw}{3114d35b80d76b156ca4ad069e0bcc75}
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {Wiley}%
+      }
+      \strng{namehash}{bc195ae617c294f75772b703d297e316}
+      \strng{fullhash}{bc195ae617c294f75772b703d297e316}
+      \strng{fullhashraw}{bc195ae617c294f75772b703d297e316}
+      \strng{bibnamehash}{bc195ae617c294f75772b703d297e316}
+      \strng{authorbibnamehash}{bc195ae617c294f75772b703d297e316}
+      \strng{authornamehash}{bc195ae617c294f75772b703d297e316}
+      \strng{authorfullhash}{bc195ae617c294f75772b703d297e316}
+      \strng{authorfullhashraw}{bc195ae617c294f75772b703d297e316}
       \field{sortinit}{2}
       \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Cambridge University Press}
-      \field{title}{Scattering, Absorption, and Emission of Light by Small Particles}
-      \field{year}{1999}
+      \field{isbn}{978-0-471-05772-2}
+      \field{title}{Absorption and Scattering of Light by Small Particles}
+      \field{year}{1983}
     \endentry
-    \entry{johnson1972optical}{article}{}{}
-      \name{author}{2}{}{%
-        {{hash=c9dc10413918689b413c600d90a00048}{%
-           family={Johnson},
-           familyi={J\bibinitperiod},
-           given={P.\bibnamedelimi B.},
-           giveni={P\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
-        {{hash=95b89ad912640b9464d311e6df1628a9}{%
-           family={Christy},
-           familyi={C\bibinitperiod},
-           given={R.\bibnamedelimi W.},
-           giveni={R\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+    \entry{Stratton1941}{book}{}{}
+      \name{author}{1}{}{%
+        {{hash=3ebed8e637785fb174ae1535ae2fed7d}{%
+           family={Stratton},
+           familyi={S\bibinitperiod},
+           given={Julius\bibnamedelima A.},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
       }
-      \strng{namehash}{a643dbe3b2117352255dd033e36b8768}
-      \strng{fullhash}{a643dbe3b2117352255dd033e36b8768}
-      \strng{fullhashraw}{a643dbe3b2117352255dd033e36b8768}
-      \strng{bibnamehash}{a643dbe3b2117352255dd033e36b8768}
-      \strng{authorbibnamehash}{a643dbe3b2117352255dd033e36b8768}
-      \strng{authornamehash}{a643dbe3b2117352255dd033e36b8768}
-      \strng{authorfullhash}{a643dbe3b2117352255dd033e36b8768}
-      \strng{authorfullhashraw}{a643dbe3b2117352255dd033e36b8768}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \list{location}{1}{%
+        {New York}%
+      }
+      \list{publisher}{1}{%
+        {McGraw-Hill}%
+      }
+      \strng{namehash}{3ebed8e637785fb174ae1535ae2fed7d}
+      \strng{fullhash}{3ebed8e637785fb174ae1535ae2fed7d}
+      \strng{fullhashraw}{3ebed8e637785fb174ae1535ae2fed7d}
+      \strng{bibnamehash}{3ebed8e637785fb174ae1535ae2fed7d}
+      \strng{authorbibnamehash}{3ebed8e637785fb174ae1535ae2fed7d}
+      \strng{authornamehash}{3ebed8e637785fb174ae1535ae2fed7d}
+      \strng{authorfullhash}{3ebed8e637785fb174ae1535ae2fed7d}
+      \strng{authorfullhashraw}{3ebed8e637785fb174ae1535ae2fed7d}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Physical Review B}
-      \field{title}{Optical Constants of the Noble Metals}
-      \field{volume}{6}
-      \field{year}{1972}
-      \field{pages}{4370\bibrangedash 4379}
+      \field{title}{Electromagnetic Theory}
+      \field{year}{1941}
+    \endentry
+    \entry{Mishchenko2002}{book}{}{}
+      \name{author}{3}{}{%
+        {{hash=4e14d7f3d8ce2d2558d7d71c5c4749e7}{%
+           family={Mishchenko},
+           familyi={M\bibinitperiod},
+           given={Michael\bibnamedelima I.},
+           giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+        {{hash=db2d45f0fa74376cc6a1e916ea3faf7c}{%
+           family={Travis},
+           familyi={T\bibinitperiod},
+           given={Larry\bibnamedelima D.},
+           giveni={L\bibinitperiod\bibinitdelim D\bibinitperiod}}}%
+        {{hash=ac6a8bb7ec9e8c9b81ea88038eeb6e8f}{%
+           family={Lacis},
+           familyi={L\bibinitperiod},
+           given={Andrew\bibnamedelima A.},
+           giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Cambridge}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{fa6f5bde5a14ab77b9bf1b0b8759601e}
+      \strng{fullhash}{1acccf31c1691d3c74b679c170ffa9f9}
+      \strng{fullhashraw}{1acccf31c1691d3c74b679c170ffa9f9}
+      \strng{bibnamehash}{1acccf31c1691d3c74b679c170ffa9f9}
+      \strng{authorbibnamehash}{1acccf31c1691d3c74b679c170ffa9f9}
+      \strng{authornamehash}{fa6f5bde5a14ab77b9bf1b0b8759601e}
+      \strng{authorfullhash}{1acccf31c1691d3c74b679c170ffa9f9}
+      \strng{authorfullhashraw}{1acccf31c1691d3c74b679c170ffa9f9}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0-521-78252-4}
+      \field{title}{Scattering, Absorption, and Emission of Light by Small Particles}
+      \field{year}{2002}
+      \verb{urlraw}
+      \verb https://www.giss.nasa.gov/staff/mmishchenko/books.html
+      \endverb
+      \verb{url}
+      \verb https://www.giss.nasa.gov/staff/mmishchenko/books.html
+      \endverb
+    \endentry
+    \entry{Mackowski1991}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=77f5db7ebdea753bdaae1d95537426c5}{%
+           family={Mackowski},
+           familyi={M\bibinitperiod},
+           given={Daniel\bibnamedelima W.},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{fullhash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{fullhashraw}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{bibnamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorbibnamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authornamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorfullhash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorfullhashraw}{77f5db7ebdea753bdaae1d95537426c5}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Proceedings of the Royal Society of London. Series A}
+      \field{title}{Analysis of radiative scattering for multiple sphere configurations}
+      \field{volume}{433}
+      \field{year}{1991}
+      \field{pages}{599\bibrangedash 614}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1098/rspa.1991.0066
+      \endverb
+    \endentry
+    \entry{Foldy1945}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=83be68187546ece88450a1455be1cef2}{%
+           family={Foldy},
+           familyi={F\bibinitperiod},
+           given={Leslie\bibnamedelima L.},
+           giveni={L\bibinitperiod\bibinitdelim L\bibinitperiod}}}%
+      }
+      \strng{namehash}{83be68187546ece88450a1455be1cef2}
+      \strng{fullhash}{83be68187546ece88450a1455be1cef2}
+      \strng{fullhashraw}{83be68187546ece88450a1455be1cef2}
+      \strng{bibnamehash}{83be68187546ece88450a1455be1cef2}
+      \strng{authorbibnamehash}{83be68187546ece88450a1455be1cef2}
+      \strng{authornamehash}{83be68187546ece88450a1455be1cef2}
+      \strng{authorfullhash}{83be68187546ece88450a1455be1cef2}
+      \strng{authorfullhashraw}{83be68187546ece88450a1455be1cef2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Physical Review}
+      \field{title}{The multiple scattering of waves. {I}. {G}eneral theory of isotropic scattering by randomly distributed scatterers}
+      \field{volume}{67}
+      \field{year}{1945}
+      \field{pages}{107\bibrangedash 119}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1103/PhysRev.67.107
+      \endverb
+    \endentry
+    \entry{Lax1951}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=bc6a8bd75ac85b8fee992e1e3cdd0c4b}{%
+           family={Lax},
+           familyi={L\bibinitperiod},
+           given={Melvin},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \strng{fullhash}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \strng{fullhashraw}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \strng{bibnamehash}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \strng{authorbibnamehash}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \strng{authornamehash}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \strng{authorfullhash}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \strng{authorfullhashraw}{bc6a8bd75ac85b8fee992e1e3cdd0c4b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Reviews of Modern Physics}
+      \field{number}{4}
+      \field{title}{Multiple scattering of waves}
+      \field{volume}{23}
+      \field{year}{1951}
+      \field{pages}{287\bibrangedash 310}
+      \range{pages}{24}
+      \verb{doi}
+      \verb 10.1103/RevModPhys.23.287
+      \endverb
+    \endentry
+    \entry{Mackowski1996}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=77f5db7ebdea753bdaae1d95537426c5}{%
+           family={Mackowski},
+           familyi={M\bibinitperiod},
+           given={Daniel\bibnamedelima W.},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+        {{hash=4e14d7f3d8ce2d2558d7d71c5c4749e7}{%
+           family={Mishchenko},
+           familyi={M\bibinitperiod},
+           given={Michael\bibnamedelima I.},
+           giveni={M\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+      }
+      \strng{namehash}{2a2be4d8a745dd333d591bef61ec674b}
+      \strng{fullhash}{2a2be4d8a745dd333d591bef61ec674b}
+      \strng{fullhashraw}{2a2be4d8a745dd333d591bef61ec674b}
+      \strng{bibnamehash}{2a2be4d8a745dd333d591bef61ec674b}
+      \strng{authorbibnamehash}{2a2be4d8a745dd333d591bef61ec674b}
+      \strng{authornamehash}{2a2be4d8a745dd333d591bef61ec674b}
+      \strng{authorfullhash}{2a2be4d8a745dd333d591bef61ec674b}
+      \strng{authorfullhashraw}{2a2be4d8a745dd333d591bef61ec674b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the Optical Society of America A}
+      \field{number}{11}
+      \field{title}{Calculation of the {T} matrix and the scattering matrix for ensembles of spheres}
+      \field{volume}{13}
+      \field{year}{1996}
+      \field{pages}{2266\bibrangedash 2278}
+      \range{pages}{13}
+      \verb{doi}
+      \verb 10.1364/JOSAA.13.002266
+      \endverb
+    \endentry
+    \entry{Stein1961}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=c41a0e182427de16061de82cd6eef714}{%
+           family={Stein},
+           familyi={S\bibinitperiod},
+           given={Seymour},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{c41a0e182427de16061de82cd6eef714}
+      \strng{fullhash}{c41a0e182427de16061de82cd6eef714}
+      \strng{fullhashraw}{c41a0e182427de16061de82cd6eef714}
+      \strng{bibnamehash}{c41a0e182427de16061de82cd6eef714}
+      \strng{authorbibnamehash}{c41a0e182427de16061de82cd6eef714}
+      \strng{authornamehash}{c41a0e182427de16061de82cd6eef714}
+      \strng{authorfullhash}{c41a0e182427de16061de82cd6eef714}
+      \strng{authorfullhashraw}{c41a0e182427de16061de82cd6eef714}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Quarterly of Applied Mathematics}
+      \field{title}{Addition theorems for spherical wave functions}
+      \field{volume}{19}
+      \field{year}{1961}
+      \field{pages}{15\bibrangedash 24}
       \range{pages}{10}
+      \verb{doi}
+      \verb 10.1090/qam/120407
+      \endverb
+    \endentry
+    \entry{Cruzan1962}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=1faf806f6dcda973a5f66e5aa5138186}{%
+           family={Cruzan},
+           familyi={C\bibinitperiod},
+           given={Orval\bibnamedelima R.},
+           giveni={O\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \strng{namehash}{1faf806f6dcda973a5f66e5aa5138186}
+      \strng{fullhash}{1faf806f6dcda973a5f66e5aa5138186}
+      \strng{fullhashraw}{1faf806f6dcda973a5f66e5aa5138186}
+      \strng{bibnamehash}{1faf806f6dcda973a5f66e5aa5138186}
+      \strng{authorbibnamehash}{1faf806f6dcda973a5f66e5aa5138186}
+      \strng{authornamehash}{1faf806f6dcda973a5f66e5aa5138186}
+      \strng{authorfullhash}{1faf806f6dcda973a5f66e5aa5138186}
+      \strng{authorfullhashraw}{1faf806f6dcda973a5f66e5aa5138186}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Quarterly of Applied Mathematics}
+      \field{title}{Translational addition theorems for spherical vector wave functions}
+      \field{volume}{20}
+      \field{year}{1962}
+      \field{pages}{33\bibrangedash 40}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1090/qam/132851
+      \endverb
+    \endentry
+    \entry{Mackowski1994}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=77f5db7ebdea753bdaae1d95537426c5}{%
+           family={Mackowski},
+           familyi={M\bibinitperiod},
+           given={Daniel\bibnamedelima W.},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \strng{namehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{fullhash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{fullhashraw}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{bibnamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorbibnamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authornamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorfullhash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorfullhashraw}{77f5db7ebdea753bdaae1d95537426c5}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of the Optical Society of America A}
+      \field{number}{11}
+      \field{title}{Calculation of total cross sections of multiple-sphere clusters}
+      \field{volume}{11}
+      \field{year}{1994}
+      \field{pages}{2851\bibrangedash 2861}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1364/JOSAA.11.002851
+      \endverb
+    \endentry
+    \entry{Mackowski_code}{manual}{}{}
+      \name{author}{1}{}{%
+        {{hash=77f5db7ebdea753bdaae1d95537426c5}{%
+           family={Mackowski},
+           familyi={M\bibinitperiod},
+           given={Daniel\bibnamedelima W.},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Auburn, AL}%
+      }
+      \list{organization}{1}{%
+        {Department of Mechanical Engineering, Auburn University}%
+      }
+      \strng{namehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{fullhash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{fullhashraw}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{bibnamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorbibnamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authornamehash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorfullhash}{77f5db7ebdea753bdaae1d95537426c5}
+      \strng{authorfullhashraw}{77f5db7ebdea753bdaae1d95537426c5}
+      \field{extraname}{3}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{1}
+      \field{title}{{MSTM}: A multiple sphere {T}-matrix {FORTRAN} code for use on parallel computer clusters. Version~4.0}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb http://www.eng.auburn.edu/~dmckwski/scatcodes/
+      \endverb
+      \verb{url}
+      \verb http://www.eng.auburn.edu/~dmckwski/scatcodes/
+      \endverb
     \endentry
   \enddatalist
 \endrefsection
