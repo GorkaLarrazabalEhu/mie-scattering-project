@@ -8,21 +8,35 @@ depende de las opciones activadas, y trabaja exclusivamente en unidades
 adimensionales escaladas por el número de onda. Para automatizar el
 ciclo completo de una simulación ---configuración, conversión de
 unidades, ejecución, lectura de salidas y visualización--- se ha
-desarrollado un \emph{wrapper} en Python organizado en cuatro módulos:
+desarrollado un \emph{wrapper} en Python. El código completo
+está disponible en GitHub:
+\url{https://github.com/GorkaLarrazabalEhu/mie-scattering-project}.
+
+El entorno se diseñó para poder explorar distintas configuraciones y
+observables, no solo los que se emplean en este trabajo. Por eso
+incluye más opciones de las que luego aparecen en los resultados; en
+esta sección se describe el conjunto general y, cuando procede, se
+indica qué parte se usa en cada caso.
+
+El wrapper se organiza en una interfaz gráfica, un módulo de utilidades
+físicas y un conjunto de scripts de representación:
 
 \begin{itemize}
     \item \texttt{THE\_MAN.py}: interfaz gráfica (GUI) basada en
           Tkinter que centraliza la entrada de parámetros, gestiona el
-          proyecto y orquesta la ejecución y el postproceso.
+          proyecto y orquesta la ejecución y el postproceso. La
+          ejecución del binario se lanza en un hilo aparte para que la
+          interfaz no se bloquee, e incluye una vista previa del
+          agregado de esferas.
     \item \texttt{mstm\_utils.py}: utilidades físicas; conversión a
           unidades adimensionales e interpolación del índice de
           refracción a la longitud de onda deseada.
-    \item \texttt{plot\_nearfield.py}: visualización del campo cercano
-          (intensidad, componentes del campo eléctrico y magnético, y
-          vector de Poynting).
-    \item \texttt{plot\_scattering\_matrix.py}: visualización del
-          campo lejano (función de fase $S_{11}$, grados de
-          polarización y eficiencias espectrales).
+    \item Scripts de representación (\texttt{plot\_nearfield.py},
+          \texttt{plot\_scattering\_matrix.py},
+          \texttt{plot\_radius\_sweep.py} y
+          \texttt{plot\_asymmetry.py}): generan las figuras de campo
+          cercano, campo lejano, barridos y parámetro de asimetría. La
+          GUI los lanza como procesos independientes.
 \end{itemize}
 
 La comunicación entre Python y Fortran se realiza estrictamente por
@@ -49,8 +63,10 @@ convierte los parámetros geométricos del usuario (longitud de onda y
 radio en $\mu$m) al par (\texttt{length\_scale\_factor},
 \texttt{size\_parameter}) que requiere el fichero de entrada.
 
-Para los materiales empleados en este trabajo (Au, Ag, Al, Cu,
-H$_2$O), el módulo carga las tablas de \texttt{refractiveindex.info}
+A pesar de utilizar únicamente oro en este trabajo, 
+el programa está configurado para
+otros materiales seleccionables (Ag, Al, Cu,
+H$_2$O). El módulo carga las tablas de \texttt{refractiveindex.info}
 almacenadas localmente (Johnson \& Christy para los metales nobles,
 Rakic para el aluminio, Hale \& Querry para el agua) e interpola
 linealmente el índice complejo $\tilde{n} = n + i\,\kappa$ a la longitud de
@@ -61,11 +77,38 @@ Cabe señalar que MSTM adopta el convenio de parte imaginaria positiva
 para medios absorbentes, convención que el módulo respeta al leer las
 tablas.
 
-Cuando el usuario activa un barrido en longitud de onda, la GUI genera
-un único \texttt{mstm.inp} con bloques \texttt{new\_run} sucesivos en
-los que se actualizan el factor de escala y el índice de refracción de
-cada esfera, aprovechando el mecanismo nativo de MSTM y evitando el
-sobrecoste de invocar el binario una vez por longitud de onda.
+% ---------------------------------------------------------------------
+\subsection{Barridos paramétricos}
+\label{subsec:sweeps}
+
+El entorno permite repetir una misma configuración variando un
+parámetro, ya sea la longitud de onda o el radio de las esferas. En
+lugar de invocar el binario una vez por cada valor, la GUI genera un
+único \texttt{mstm.inp} con bloques \texttt{new\_run} sucesivos,
+aprovechando el mecanismo nativo de MSTM. Los dos barridos son
+excluyentes: solo uno puede estar activo a la vez.
+
+En un barrido en longitud de onda, cada \texttt{new\_run} actualiza el
+factor de escala $k_{0} = 2\pi/\lambda$ y el índice de refracción
+$\tilde{n}(\lambda)$ interpolado, manteniendo fija la geometría física
+del agregado. El resultado son las eficiencias y demás observables en
+función de $\lambda$.
+
+En un barrido en radio, la longitud de onda es fija, de modo que
+$k_{0}$ y $\tilde{n}$ son constantes y se calculan una sola vez; lo
+único que cambia entre \emph{runs} es el radio de las esferas. Cuando
+se usa una de las geometrías predefinidas, los centros se recalculan en
+cada paso con una separación centro a centro $d = 2r + s$, de manera
+que la separación entre superficies $s$ se mantiene constante mientras
+crece el radio. Esto permite estudiar cómo cambia la respuesta del
+agregado con el tamaño de las partículas sin alterar el hueco entre
+ellas.
+
+Para facilitar este tipo de estudios, la GUI puede generar de forma
+automática las posiciones de varias geometrías sencillas (dos o cuatro
+esferas en línea, en cuadrado o en cuadrado girado $45^\circ$) y admite
+asignar un radio común a todas las esferas o un radio distinto a cada
+una.
 
 % ---------------------------------------------------------------------
 \subsection{Muestreo del campo cercano}
@@ -99,7 +142,7 @@ cualquier momento sustituir el valor automático por uno manual.
 
 \subsubsection*{Campo cercano}
 
-El módulo \texttt{plot\_nearfield.py} lee el fichero de campo cercano
+El script \texttt{plot\_nearfield.py} lee el fichero de campo cercano
 de MSTM, que contiene para cada punto de la malla las componentes
 complejas de los campos eléctrico y magnético correspondientes a las
 dos polarizaciones de la onda incidente. A partir de ellas se calculan
@@ -114,20 +157,49 @@ de las esferas superpuestas.
 
 \subsubsection*{Campo lejano}
 
-El módulo \texttt{plot\_scattering\_matrix.py} extrae del fichero de
+El script \texttt{plot\_scattering\_matrix.py} extrae del fichero de
 salida la matriz de Mueller y las eficiencias de extinción, absorción y
-dispersión para cada \emph{run}. Las representaciones disponibles son:
-$S_{11}(\theta)$ en coordenadas polares (escala lineal y logarítmica
-simultáneas), los grados de polarización total, lineal y circular
-con las expresiones \eqref{eq:P_cluster}, \eqref{eq:PL_cluster} y \eqref{eq:PC_cluster}
+dispersión de cada \emph{run}. Representa la función de fase
+$S_{11}(\theta)$ en coordenadas polares (en escalas lineal y
+logarítmica de forma simultánea) y las eficiencias $Q_{\text{ext}}$,
+$Q_{\text{abs}}$ y $Q_{\text{sca}}$ frente a la longitud de onda cuando
+hay barrido espectral, o frente al radio cuando el barrido es en tamaño
+(\texttt{plot\_radius\_sweep.py}).
 
-y las eficiencias $Q_{\text{ext}}$, $Q_{\text{abs}}$, $Q_{\text{sca}}$
-frente a longitud de onda cuando la simulación incluye un barrido
-espectral.
+El programa calcula también los grados de polarización del campo
+dispersado a partir de sus parámetros de Stokes
+(ec.~\ref{eq:MuellerMatrix}) y el parámetro de asimetría $g$
+(ec.~\ref{eq:g_mie}, mediante \texttt{plot\_asymmetry.py}). Son
+magnitudes disponibles en el entorno que se han empleado de forma
+puntual según el caso.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Imagenes/Pantallazo_GUI.png}
+    \includegraphics[width=1\textwidth]{Imagenes/Pantallazo_GUI.png}
     \caption{Interfaz gráfica del \emph{wrapper} en Python para MSTM.}
     \label{GUI:screenshot}
 \end{figure}
+
+En la figura~\ref{GUI:screenshot} se muestra una captura de la GUI con
+la configuración de una simulación: cuatro esferas de oro, de radio
+0.1\,$\mu$m, dispuestas en un cuadrado a 45$^\circ$ respecto a la onda
+incidente. Se puede ver una vista previa del agregado, que se actualiza
+en tiempo real a medida que se modifica la posición de las esferas, su
+radio o la separación entre ellas. También se aprecia el tipo de
+simulación que se va a ejecutar: un barrido en longitud de onda entre
+400 y 800\,nm con 30 pasos, una onda plana incidente (el programa
+también admite un haz gaussiano), con el orden multipolar determinado
+automáticamente por el propio MSTM y sin cálculo del campo cercano.
+
+Una vez hecha la configuración, los botones \texttt{Write mstm.inp} y
+\texttt{Run MSTM Simulation} se encargan, respectivamente, de generar el
+fichero de entrada con la sintaxis adecuada y de lanzar la simulación.
+Cuando esta finaliza, los distintos botones \texttt{Plot} permiten
+visualizar los resultados de forma inmediata.
+
+Si el usuario carga una configuración guardada previamente, la GUI
+reconstruye la geometría y los parámetros de la simulación a partir del
+fichero JSON asociado y queda lista para lanzar la simulación o
+visualizar los resultados, si estos ya están en la carpeta de la
+simulación. Todos los resultados de este trabajo se han generado 
+mediante esta interfaz.

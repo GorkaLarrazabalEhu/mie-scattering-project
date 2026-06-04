@@ -16,7 +16,7 @@ realizan únicamente para $d=5\,\text{nm}$.
 \subsection{Tetrámero homogéneo: $a = 25\,\text{nm}$}
 \label{subsec:tetramero_a25}
 % =========================================================================
-Este caso sirve de para analizar cómo cambia el acoplamiento
+Este caso sirve para analizar cómo cambia el acoplamiento
 al añadir más partículas respecto al dímero equivalente.
 
 \begin{figure}[H]
@@ -46,11 +46,13 @@ al añadir más partículas respecto al dímero equivalente.
 \end{figure}
 
 El tetrámero con $a=25\,\text{nm}$ opera en el mismo régimen que el dímero
-equivalente: la resonancia no se desplaza y la absorción sigue siendo el
-canal dominante. El efecto más notable es la concentración del campo en el
-gap central, que alcanza $430.78\,|\mathbf{E}_0|^2$, notablemente superior
-a los $147\,|\mathbf{E}_0|^2$ del dímero, lo que indica que añadir más
-partículas intensifica el campo en los gaps interiores de la cadena.
+equivalente, con la absorción como canal dominante. La resonancia solo se
+desplaza un poco hacia el rojo respecto al dímero (figura~\ref{fig:a25_eff}, de $\sim520$ a
+$\sim550\,\text{nm}$), lo que indica que el acoplamiento entre cuatro
+partículas es algo mayor pero no cambia la forma del espectro. El efecto más
+claro está en el campo cercano: la intensificación en el gap central llega a
+$430.78\,|\mathbf{E}_0|^2$, muy por encima de los $147\,|\mathbf{E}_0|^2$ del
+dímero (figura~\ref{fig:a25_nf}). Añadir esferas refuerza el campo en el gap central de la cadena.
 
 
 % =========================================================================
@@ -83,9 +85,10 @@ partículas intensifica el campo en los gaps interiores de la cadena.
     \label{fig:tet_a85_nf_1000}
   \end{subfigure}
   \caption{Tetrámero homogéneo con $a=85\,\text{nm}$ y $d=5\,\text{nm}$.
-           El espectro muestra tres picos: uno dominado por la absorción
-           en torno a $\lambda\approx500\,\text{nm}$ y dos por la dispersión
-           en torno a $\lambda\approx590\,\text{nm}$ y $\lambda\approx1000\,\text{nm}$.
+           El espectro muestra tres picos: uno en torno a
+           $\lambda\approx500\,\text{nm}$, donde la absorción y la dispersión
+           compiten, y dos dominados por la dispersión en torno a
+           $\lambda\approx590\,\text{nm}$ y $\lambda\approx1000\,\text{nm}$.
            A $\lambda=590\,\text{nm}$ la zona de concentración
            ($131.41\,|\mathbf{E}_0|^2$) se localiza en los gaps exteriores.
            A $\lambda=1000\,\text{nm}$ el máximo ($323.74\,|\mathbf{E}_0|^2$)
@@ -96,7 +99,7 @@ partículas intensifica el campo en los gaps interiores de la cadena.
 
 El acoplamiento entre las cuatro partículas desplaza el pico principal
 hasta el infrarrojo cercano, muy por encima de lo observado en el dímero
-equivalente. El campo cercano revela además que los gaps activos cambian
+equivalente (figura~\ref{fig:a85_eff}). El campo cercano revela además que los gaps activos cambian
 con la longitud de onda: a $590\,\text{nm}$ dominan los gaps exteriores,
 mientras que a $1000\,\text{nm}$ es el gap central el que concentra
 la mayor intensidad.
@@ -134,7 +137,21 @@ la mayor intensidad.
   \label{fig:tet_alt}
 \end{figure}
 
-FALTA ALGO
+En la configuración alternada las dos esferas grandes gobiernan la respuesta
+óptica y fijan el pico dispersor principal en torno a
+$\lambda\approx660\,\text{nm}$. Este valor está desplazado hacia el rojo
+respecto a la esfera de $85\,\text{nm}$ aislada ($\sim570\,\text{nm}$), pero
+queda lejos del infrarrojo cercano del tetrámero homogéneo de $85\,\text{nm}$
+($\sim1000\,\text{nm}$, figura~\ref{fig:tet_a85}): al intercalar esferas pequeñas se rompe la cadena de
+partículas grandes y el desplazamiento es menor. En campo cercano la
+intensificación se concentra alrededor de la esfera pequeña interior, que es
+la única con una esfera grande a cada lado. La esfera pequeña exterior, con una
+sola vecina grande, apenas participa y su gap queda poco activo. El máximo ($305.53\,|\mathbf{E}_0|^2$) es
+menor que el del tetrámero homogéneo de $25\,\text{nm}$
+($430.78\,|\mathbf{E}_0|^2$, figura~\ref{fig:tet_a25_nf}), lo que sugiere que con una sola esfera pequeña
+bien acoplada no se llega al máximo de intensificación. Esto motiva la
+configuración de la sección siguiente (sección~\ref{subsec:tetramero_central}), con las dos esferas pequeñas en el
+interior de la cadena.
 
 % =========================================================================
 \subsection{Tetrámero heterogéneo con esferas pequeñas centrales}
@@ -167,8 +184,9 @@ FALTA ALGO
   \end{subfigure}
   \caption{Tetrámero heterogéneo ($85$--$25$--$25$--$85\,\text{nm}$) con
            $d=5\,\text{nm}$. El espectro muestra un pico de extinción en
-           $\lambda\approx520\,\text{nm}$ dominado por la absorción, y un
-           pico dispersor principal en $\lambda\approx620\,\text{nm}$.
+           $\lambda\approx520\,\text{nm}$, donde la absorción alcanza su
+           máxima contribución, y un pico dispersor principal en
+           $\lambda\approx620\,\text{nm}$.
            En ambos casos la zona de concentración se localiza entre las
            dos esferas pequeñas centrales; a $\lambda=620\,\text{nm}$
            la intensificación alcanza $566.20\,|\mathbf{E}_0|^2$, el valor
@@ -176,9 +194,17 @@ FALTA ALGO
   \label{fig:tet_medio}
 \end{figure}
 
-Situar las dos esferas pequeñas en el interior concentra el gap más estrecho
-en la zona central de la cadena, donde el acoplamiento es máximo. El resultado
-es la mayor intensificación de campo observada en este trabajo: $566.20\,|\mathbf{E}_0|^2$
+El resultado es la mayor intensificación de campo observada en este trabajo:
+$566.20\,|\mathbf{E}_0|^2$
 a $\lambda=620\,\text{nm}$, frente a los $430.78\,|\mathbf{E}_0|^2$ del
-tetrámero homogéneo de $25\,\text{nm}$ y los $305.53\,|\mathbf{E}_0|^2$
-de la configuración alternada.
+tetrámero homogéneo de $25\,\text{nm}$ (figura~\ref{fig:tet_a25_nf}) y los $305.53\,|\mathbf{E}_0|^2$
+de la configuración alternada (figura~\ref{fig:tet_alt_nf}).
+
+Una posible interpretación de este máximo es que cada tamaño de esfera
+cumpla una función distinta. Las esferas grandes de los extremos, con mayor
+sección eficaz, capturarían la mayor parte de la luz incidente, mientras que
+las esferas pequeñas centrales, concentrarían ese
+campo en una región más pequeña. Situarlas en el centro con una esfera grande
+a cada lado podría combinar ambos efectos y explicar por qué esta disposición
+supera al tetrámero homogéneo de $25\,\text{nm}$ y a la configuración
+alternada.

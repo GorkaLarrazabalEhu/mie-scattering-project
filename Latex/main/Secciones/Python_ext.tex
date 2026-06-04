@@ -1,0 +1,264 @@
+\section{Entorno de trabajo en Python sobre MSTM}
+\label{sec:python_wrapper}
+
+El código MSTM~\cite{Mackowski_code} se controla mediante un fichero
+de texto plano (\texttt{mstm.inp}) con sintaxis numérica de Fortran,
+devuelve los resultados en ficheros \texttt{.dat} cuya estructura
+depende de las opciones activadas, y trabaja exclusivamente en unidades
+adimensionales escaladas por el número de onda. Preparar a mano cada
+fichero de entrada, convertir las unidades, lanzar el ejecutable y
+procesar las salidas es tedioso y propenso a errores, sobre todo cuando
+se quieren repetir muchas simulaciones parecidas. Para automatizar todo
+ese ciclo se ha desarrollado un entorno de trabajo en Python con
+interfaz gráfica.\footnote{El código completo está disponible en
+\url{https://github.com/GorkaLarrazabalEhu/mie-scattering-project}.}
+
+El entorno se diseñó para poder explorar distintas configuraciones y
+observables, no solo los que se emplean en este trabajo. Por eso
+incluye más opciones de las que luego aparecen en los resultados; en
+esta sección se describe el conjunto general y, cuando procede, se
+indica qué parte se usa en cada caso. El desarrollo de esta herramienta
+ha constituido una parte sustancial del trabajo.
+
+El entorno se organiza en una interfaz gráfica, un módulo de utilidades
+físicas y un conjunto de scripts de representación:
+
+\begin{itemize}
+    \item \texttt{THE\_MAN.py}: interfaz gráfica (GUI) basada en
+          Tkinter que centraliza la entrada de parámetros, gestiona el
+          proyecto y orquesta la ejecución y el postproceso.
+    \item \texttt{mstm\_utils.py}: utilidades físicas; conversión a
+          unidades adimensionales e interpolación del índice de
+          refracción a la longitud de onda deseada.
+    \item Scripts de representación (\texttt{plot\_nearfield.py},
+          \texttt{plot\_scattering\_matrix.py},
+          \texttt{plot\_radius\_sweep.py} y
+          \texttt{plot\_asymmetry.py}): generan las figuras de campo
+          cercano, campo lejano, barridos y parámetro de asimetría.
+\end{itemize}
+
+% ---------------------------------------------------------------------
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Imagenes/Pantallazo_GUI.png}
+    \caption{Interfaz gráfica del \emph{wrapper} en Python para MSTM,
+    configurada para una simulación de ejemplo: cuatro esferas de oro de
+    radio 0.1\,$\mu$m dispuestas en un cuadrado a 45$^\circ$ respecto a la
+    onda incidente, con un barrido en longitud de onda de 400 a 800\,nm en
+    30 pasos. Se aprecia también la vista previa del agregado, que se
+    actualiza en tiempo real.}
+    \label{GUI:screenshot}
+\end{figure}
+
+% ---------------------------------------------------------------------
+\subsection{Arquitectura y flujo de trabajo}
+\label{subsec:arquitectura}
+
+Toda la configuración de una simulación se almacena en un único objeto
+(clase \texttt{Config}) que agrupa la geometría del agregado, el haz
+incidente, el material, las opciones de campo cercano y los barridos.
+Ese objeto se serializa en un fichero JSON, de modo que cualquier
+simulación queda descrita por completo en un fichero de texto legible.
+
+El ciclo de trabajo habitual, que se sigue íntegramente desde la
+interfaz de la figura~\ref{GUI:screenshot}, consta de cuatro pasos:
+
+\begin{enumerate}
+    \item El usuario introduce los parámetros en la GUI.
+    \item Al pulsar \texttt{Write mstm.inp}, la GUI convierte las
+          unidades físicas a las adimensionales de MSTM, da formato de
+          Fortran a los números y escribe el fichero de entrada con la
+          sintaxis adecuada.
+    \item \texttt{Run MSTM Simulation} lanza el ejecutable
+          \texttt{mstm.exe} mediante el módulo \texttt{subprocess} de
+          Python.
+    \item Los botones \texttt{Plot} leen los ficheros \texttt{.dat}
+          resultantes y generan las figuras.
+\end{enumerate}
+
+La comunicación entre Python y Fortran se realiza estrictamente por
+archivos: Python escribe la entrada y lee las salidas, sin acoplarse al
+código de Fortran. Como el binario puede tardar en converger, su
+ejecución se lanza en un hilo aparte y se muestra una ventana de
+progreso mientras dura; de este modo el programa no se cuelga ni deja de
+responder. Cuando la simulación termina, se informa del resultado. 
+
+Cada simulación se guarda en su propia carpeta, que contiene el fichero
+de entrada, las salidas y la configuración en JSON. Esto mantiene los
+resultados autocontenidos y reproducibles: una simulación guardada puede
+recargarse más tarde y la GUI reconstruye a partir del JSON la geometría
+y todos los parámetros, lista para volver a ejecutarla o para representar
+sus resultados. Todos los resultados de este trabajo se han generado
+mediante esta interfaz.
+
+% ---------------------------------------------------------------------
+\subsection{Parámetros físicos y unidades adimensionales}
+\label{subsec:mstm_utils}
+
+MSTM trabaja con todas las longitudes escaladas por el número de onda en
+el medio externo, $k_{0} = \frac{2\pi}{\lambda}$,
+de modo que cada esfera queda caracterizada por su parámetro de tamaño
+$x = k_{0}\,a$, siendo $a$ el radio, siguiendo la convención de la
+sección~\ref{sec:miecoeffs}. El módulo \texttt{mstm\_utils.py} convierte
+los parámetros geométricos del usuario (longitud de onda y radio en
+$\mu$m) al par (\texttt{length\_scale\_factor}, \texttt{size\_parameter})
+que requiere el fichero de entrada.
+
+El usuario puede introducir directamente un índice de refracción
+complejo o seleccionar un material de una pequeña base de datos. En este
+último caso, el módulo carga tablas de
+\texttt{refractiveindex.info} almacenadas localmente (Au, Ag, Cu y Fe a
+partir de las medidas de Johnson \& Christy; Al según Rakić; agua según
+Hale \& Querry) e interpola linealmente el índice complejo
+$\tilde{n}$ a la longitud de onda solicitada. 
+% El espaciado
+% de estas tablas ($\sim 10$\,nm) es suficientemente fino para que el error
+% de interpolación sea despreciable frente a la incertidumbre experimental
+% de los datos. 
+Cabe señalar que MSTM adopta el convenio de parte
+imaginaria positiva para medios absorbentes, convención que el módulo
+respeta al leer las tablas.
+
+% ---------------------------------------------------------------------
+\subsection{Definición de la geometría}
+\label{subsec:geometria}
+
+La geometría del agregado se especifica en una tabla de texto en la que
+cada fila describe una esfera mediante su posición $(x,y,z)$, su radio y
+su índice de refracción. De este modo se pueden construir tanto agregados
+homogéneos como mezclas de materiales o tamaños, sin más que ajustar los
+valores de cada fila.
+
+Para los casos más habituales, la GUI puede generar automáticamente las
+posiciones de varias geometrías sencillas: dos o cuatro esferas en línea
+(en dirección norte--sur o este--oeste), cuatro esferas en cuadrado y
+cuatro en cuadrado girado $45^\circ$ respecto a la onda incidente. Las
+posiciones se calculan a partir del radio y de la separación entre
+superficies $s$ que indica el usuario: la distancia centro a centro de un
+par de esferas se fija como $d = a_i + a_j + s$, de manera que el hueco
+entre superficies es exactamente $s$ con independencia de los radios. Se
+puede asignar un radio común a todas las esferas o un radio distinto a
+cada una.
+
+La GUI muestra además una vista previa del agregado en el plano $XZ$
+(figura~\ref{GUI:screenshot}) que se actualiza en tiempo real a medida
+que se modifican las posiciones, los radios o la separación, lo que
+facilita comprobar la disposición antes de lanzar la simulación.
+
+% ---------------------------------------------------------------------
+\subsection{Barridos paramétricos}
+\label{subsec:sweeps}
+
+El entorno permite repetir una misma configuración variando un
+parámetro, ya sea la longitud de onda o el radio de las esferas. En lugar
+de invocar el binario una vez por cada valor, la GUI genera un único
+\texttt{mstm.inp} con bloques \texttt{new\_run} sucesivos, aprovechando el
+mecanismo nativo de MSTM. Los dos barridos son excluyentes: solo uno puede
+estar activo a la vez.
+
+En un barrido en longitud de onda, cada \texttt{new\_run} actualiza el
+factor de escala $k_{0} = 2\pi/\lambda$ y el índice de refracción
+$\tilde{n}(\lambda)$ interpolado, manteniendo fija la geometría física del
+agregado. El resultado son las eficiencias y demás observables en función
+de $\lambda$.
+
+En un barrido en radio, la longitud de onda es fija, de modo que $k_{0}$
+y $\tilde{n}$ son constantes y se calculan una sola vez; lo único que
+cambia entre \emph{runs} es el radio de las esferas. Cuando se usa una de
+las geometrías predefinidas, los centros se recalculan en cada paso con la
+misma regla $d = 2r + s$, de manera que la separación entre superficies
+$s$ se mantiene constante mientras crece el radio. Esto permite estudiar
+cómo cambia la respuesta del agregado con el tamaño de las partículas sin
+alterar el hueco entre ellas.
+
+% ---------------------------------------------------------------------
+\subsection{Muestreo del campo cercano}
+\label{subsec:adaptive_step}
+
+El paso espacial $\Delta$ de la malla del campo cercano debe resolver
+simultáneamente la longitud de onda, el radio de la esfera más pequeña y
+el \emph{gap} entre esferas adyacentes. El módulo calcula automáticamente
+un paso candidato como el mínimo de tres criterios:
+
+\begin{equation}
+    \Delta = \min\!\left(
+        \frac{2\pi}{N_{\text{ppw}}},\;
+        \frac{r_{\min}}{N_{\text{rad}}},\;
+        \frac{g_{\min}}{N_{\text{gap}}}
+    \right),
+    \label{eq:dmin}
+\end{equation}
+
+Cada criterio fija un número mínimo de puntos a lo largo de una escala
+característica del problema. $N_{\text{ppw}}$ (\emph{points per
+wavelength}) es el número de puntos por longitud de onda: como en
+unidades escaladas una longitud de onda equivale a $2\pi$, el término
+$2\pi/N_{\text{ppw}}$ garantiza que las oscilaciones del campo queden bien
+muestreadas. $N_{\text{rad}}$ es el número de puntos a lo largo del radio
+de la esfera más pequeña, $r_{\min}$, y $N_{\text{gap}}$ el número de
+puntos a lo largo del hueco más estrecho entre dos esferas.
+% $g_{\min} = \min_{i\neq j}\!\bigl(\|\mathbf{r}^i - \mathbf{r}^j\| - a^i -
+% a^j\bigr)$. 
+Este último criterio es importante porque es justo en esos
+huecos donde el campo varía de forma más brusca, y donde aparecen los
+fenomenos que interesa analizar. Tomar el mínimo de los tres
+asegura que se muestrea adecuadamente la más fina de esas escalas. Los
+valores por defecto son $N_{\text{ppw}}=50$, $N_{\text{rad}}=25$ y
+$N_{\text{gap}}=12$; además, el paso se acota a un rango razonable y, si
+la malla resultante superase $2\times 10^{6}$ puntos, se reescala hasta
+satisfacer esa cota.
+
+El cálculo del campo cercano es costoso y puede tardar bastante, sobre
+todo con mallas finas, por lo que conviene no elegir un paso demasiado
+pequeño a ciegas. Este criterio no pretende dar el paso definitivo, sino
+una estimación del orden de magnitud al que conviene trabajar: en este
+trabajo se ha usado como punto de partida y, tras inspeccionar los
+resultados, se ha empleado ese mismo valor o uno ligeramente menor. El
+usuario puede en cualquier momento sustituir el valor automático por uno
+manual.
+
+% ---------------------------------------------------------------------
+\subsection{Visualización de resultados}
+\label{subsec:visualizacion}
+
+Cada tipo de figura se genera con un script independiente que la GUI lanza
+como un proceso aparte, pasándole el fichero de salida correspondiente.
+Esto mantiene la representación separada del resto del programa y permite
+abrir varias figuras a la vez.
+
+\subsubsection*{Campo cercano}
+
+El script \texttt{plot\_nearfield.py} lee el fichero de campo cercano de
+MSTM, que contiene en cada punto de la malla las componentes complejas de
+los campos eléctrico y magnético para las dos polarizaciones de la onda
+incidente, tal como se describe en la sección~\ref{sec:interpretacion}. En
+cada punto se dispone así de 24 componentes: para cada una de las dos
+polarizaciones (paralela y perpendicular), los campos eléctrico y
+magnético, cada uno con sus tres componentes espaciales ($x,y,z$) y cada
+componente con su parte real e imaginaria ($2\times2\times3\times2=24$); el
+script puede representar cualquiera de ellas. A partir de los campos
+calcula además la intensidad $|\mathbf{E}|^2$ y, para luz no polarizada,
+su promedio incoherente entre polarizaciones
+(ec.~\ref{eq:nearfield_intensity}), así como el vector de Poynting
+promedio. Los resultados se representan como mapas de contorno sobre la
+malla reconstruida, con las secciones transversales de las esferas
+superpuestas.
+
+\subsubsection*{Campo lejano}
+
+El script \texttt{plot\_scattering\_matrix.py} extrae del fichero de
+salida la matriz de Mueller y las eficiencias de extinción, absorción y
+dispersión de cada \emph{run}. Representa la función de fase
+$S_{11}(\theta)$ en coordenadas polares (en escalas lineal y logarítmica
+de forma simultánea) y las eficiencias $Q_{\text{ext}}$, $Q_{\text{abs}}$
+y $Q_{\text{sca}}$ frente a la longitud de onda cuando hay barrido
+espectral, o frente al radio cuando el barrido es en tamaño
+(\texttt{plot\_radius\_sweep.py}).
+
+El programa calcula también los grados de polarización del campo
+dispersado a partir de sus parámetros de Stokes
+(ec.~\ref{eq:MuellerMatrix}, \ref{eq:stokes_farfield}) y el parámetro de 
+asimetría $g$
+(ec.~\ref{eq:g_mie}, mediante \texttt{plot\_asymmetry.py}). Son magnitudes
+disponibles en el entorno que se han empleado de forma puntual según el
+caso.
