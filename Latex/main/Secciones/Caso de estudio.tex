@@ -197,37 +197,58 @@ aunque no se ha acotado en este trabajo.
 \subsection{Aplicaciones}
 \label{subsec:aplicaciones_antena}
 % =========================================================================
-
-El interés práctico de las nanoantenas plasmónicas reside en que los hot
-spots descritos pueden potenciar diversos procesos ópticos sensibles a la
-intensidad local del campo, siempre que exista solapamiento espacial y
-espectral con el hot spot. Tres familias de aplicaciones ilustran el alcance
-de los resultados de este trabajo:
-
+ 
+El interés práctico de las nanoantenas plasmónicas reside en que los
+\emph{hot spots} generan campos locales mucho más intensos que el campo
+incidente. Una molécula situada en el gap entre partículas experimenta,
+por tanto, una interacción reforzada con la luz, lo que puede aumentar de
+forma significativa la señal óptica observada. Tres ejemplos ilustran la
+utilidad de este mecanismo.
+ 
 \begin{itemize}
   \item \textbf{Espectroscopía Raman amplificada por superficie (SERS).}
-        Dado que la señal Raman escala aproximadamente con $|\mathbf{E}|^4$,
-        un factor de intensificación de campo de $\sim\!500$ en el gap del
-        tetrámero sugiere un aumento de la señal del orden de
-        $500^2\sim2.5\times10^5$, es decir, de varios órdenes de magnitud
-        bajo la aproximación electromagnética habitual~\cite{Myroshnychenko2008}.
-  \item \textbf{Realce de fluorescencia.} Aunque este trabajo no modela
-        explícitamente una molécula emisora, los hot spots obtenidos son
-        relevantes para el realce de fluorescencia, donde la antena puede
-        modificar tanto la tasa de excitación como la de emisión.
-        Experimentalmente se ha observado un realce de más de un orden de
-        magnitud al acercar una nanopartícula de oro a una molécula
-        individual, si bien a distancias muy cortas la cesión de energía no
-        radiativa al metal (\emph{quenching}) compite con el
-        realce~\cite{Kuhn2006}.
-  \item \textbf{Sensado y metrología de distancias.} La dependencia de la
-        posición espectral de la resonancia con el gap es el principio físico
-        empleado en las \emph{reglas plasmónicas} para estimar distancias
-        nanométricas, por ejemplo entre biomoléculas~\cite{Harris2009}.
-\end{itemize}
+        Cuando la luz ilumina una molécula, una pequeña fracción se dispersa
+        con una frecuencia distinta de la incidente, determinada por los
+        modos vibracionales de la molécula. Este espectro Raman actúa como
+        una \emph{huella dactilar} que permite identificarla. El problema es
+        que la señal Raman espontánea es muy débil, por lo que normalmente
+        se requiere una cantidad apreciable de moléculas para medirla. Si la
+        molécula se sitúa en un \emph{hot spot}, el campo concentrado puede
+        amplificar notablemente la señal, llegando en condiciones optimizadas
+        a la detección de cantidades extremadamente pequeñas de analito e
+        incluso de moléculas individuales. Este principio se emplea, por
+        ejemplo, en la detección de trazas químicas, contaminantes o residuos
+        de pesticidas en muestras muy reducidas~\cite{Pilot2019}.
 
-En conjunto, los sistemas simulados en este trabajo —desde la esfera aislada
-hasta el tetrámero heterogéneo— reproducen algunos de los mecanismos
-electromagnéticos básicos que sustentan estas aplicaciones: localización de
-campo, desplazamiento resonante y control de la respuesta óptica mediante el
-tamaño, el gap, el número de partículas y la asimetría del agregado.
+  \item \textbf{Realce de fluorescencia.} Muchas moléculas absorben luz y la
+        reemiten con otro color; este fenómeno, la fluorescencia, se usa en
+        biología para «iluminar» estructuras concretas de una célula al
+        microscopio, marcándolas con moléculas fluorescentes. Cuanto más
+        brilla el marcador, más fácil es verlo. Una nanoantena situada al lado
+        hace que la molécula emita más luz 
+        actuando como intermediaria entre el emisor localizado y el campo lejano, 
+        de modo que un marcador demasiado tenue puede
+        volverse visible; esto se ha comprobado acercando una nanopartícula de
+        oro a una sola molécula. Eso sí, si se acerca demasiado al metal la
+        energía se disipa en él en forma de calor y la molécula se apaga en
+        lugar de brillar más, por lo que existe una distancia
+        óptima~\cite{Kuhn2006}.
+
+  \item \textbf{Medida de distancias.} La longitud de onda de la resonancia
+        de un dímero depende de la separación entre sus partículas: al
+        reducir el gap, el acoplamiento de campo cercano aumenta y la
+        resonancia se desplaza hacia el rojo. Esta dependencia
+        puede utilizarse de forma inversa, deduciendo la distancia entre
+        partículas a partir del desplazamiento espectral, lo que da lugar a
+        las denominadas \emph{reglas plasmónicas}. Así, al unir nanopartículas
+        metálicas a distintas partes de una biomolécula, los cambios en el
+        espectro pueden informar sobre variaciones en su forma, como
+        procesos de plegamiento o estiramiento, en escalas por debajo del
+        límite de resolución de un microscopio óptico convencional~\cite{Sonnichsen2005}.
+\end{itemize}
+ 
+En conjunto, los sistemas simulados en este trabajo —de la esfera aislada al
+tetrámero— reproducen los ingredientes físicos en los que se apoyan estas
+aplicaciones: la concentración del campo, el desplazamiento de la resonancia
+y el control de la respuesta mediante el tamaño, el gap y la forma del
+agregado.
