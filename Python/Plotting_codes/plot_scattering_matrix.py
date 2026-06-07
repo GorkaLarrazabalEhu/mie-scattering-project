@@ -655,6 +655,7 @@ def plot_efficiencies(runs, run_ids, save_dir=".", pol="unpol", mode="EFF",
         ax.set_ylabel(f"{title_map[mode]} ({pol})")
         max_index = np.argmax(y_map[mode])
         print(f"Máximo de {mode} en longitud de onda {x[max_index]:.4f} um: {y_map[mode][max_index]}")
+        print(f"Albedo de dispersión (Qsca/Qext) en ese punto: {y_qsca[max_index]/y_qext[max_index]:.4f}")
         ax.grid(True)
         ax.set_title(f"{title_map[mode]} ({pol.capitalize()})")
         set_fig_title(fig, f"{mode} - {pol.capitalize()}")
