@@ -127,14 +127,17 @@ observamos al cerrar el gap en el dímero de $85\,\text{nm}$.
 \label{subsec:reinterpretacion}
 % =========================================================================
 
-La tabla~\ref{tab:antena_merito} resume las configuraciones estudiadas
-ordenadas por su factor de intensificación máximo, que adoptamos aquí como
-figura de mérito de la capacidad de concentración de campo cercano de la
-nanoantena. Conviene recordar que no es la única figura de mérito posible:
-una nanoantena puede evaluarse también por su eficiencia radiativa, su
-directividad o su sección eficaz de dispersión, entre
-otras.
-
+La tabla~\ref{tab:antena_merito} resume las configuraciones representativas
+ordenadas por su intensificación máxima de campo cercano. Esta intensificación
+es solo uno de los muchos criterios con los que puede caracterizarse una
+nanoantena: también pueden considerarse su eficiencia radiativa, su
+directividad o su sección eficaz de dispersión, entre otros. El canal de
+extinción dominante en cada caso —absorción o dispersión— se recoge en las
+tablas~\ref{tab:dimero_albedo} y~\ref{tab:tetramero_albedo}: las
+configuraciones con esferas de $25\,\text{nm}$ permanecen dominadas por la
+absorción, mientras que las que incorporan esferas de $85\,\text{nm}$
+presentan un mayor peso del canal radiativo (dispersión).
+ 
 \begin{table}[H]
   \centering
   \begin{tabular}{lccc}
@@ -147,19 +150,20 @@ otras.
     Dímero homogéneo, $a=25\,\text{nm}$         & 530\,nm & $147$   & Absorción \\
     Dímero heterogéneo, $a=25/85\,\text{nm}$    & 590\,nm & $186$   & Dispersión \\
     Tetrámero homogéneo, $a=25\,\text{nm}$      & 550\,nm & $431$   & Absorción \\
-    Tetrámero heterogéneo                       & 620\,nm & $566$   & Dispersión \\
+    Tetrámero heterogéneo, $a=85/25/25/85$      & 620\,nm & $566$   & Dispersión \\
     \hline
   \end{tabular}
-  \caption{Figura de mérito (intensificación máxima de campo cercano) de las
-           distintas configuraciones estudiadas, interpretadas como
-           nanoantenas. El canal de extinción se refiere a la comparación entre
-           $Q_\text{abs}$ y $Q_\text{sca}$ en la longitud de onda resonante
-           indicada. El paso de la esfera al dímero y de éste al tetrámero
-           incrementa la concentración de campo.}
+  \caption{Intensificación máxima de campo cercano de las configuraciones
+           más representativas, interpretadas como nanoantenas. El canal de
+           extinción indica si en la longitud de onda resonante domina la
+           absorción o la dispersión
+           (tablas~\ref{tab:dimero_albedo} y~\ref{tab:tetramero_albedo}). El
+           paso de la esfera al dímero y de éste al tetrámero incrementa la
+           concentración de campo.}
   \label{tab:antena_merito}
 \end{table}
 
-Dos tendencias destacan al leer los resultados en clave de antena. La primera
+Dos tendencias destacan al interpretar los resultados como una antena. La primera
 es el papel del gap como región de máxima concentración de campo: a igualdad
 de tamaño y número de esferas, estrechar el hueco se asocia con una mayor
 intensificación, al aumentar el acoplamiento de campo cercano entre
@@ -171,25 +175,23 @@ partículas adicionales contribuyen al acoplamiento colectivo de la cadena.
 Este comportamiento es coherente con el observado experimentalmente en
 cadenas de oro de uno a seis elementos, donde el desplazamiento al rojo crece
 con la longitud de la cadena y satura en torno a 10--12
-partículas~\cite{Barrow2011}, y con las predicciones de la T-matrix para
-cadenas largas, que alcanzan un valor asintótico hacia las 10
+partículas~\cite{Barrow2011}, y con los cálculos de T-matrix, según los cuales
+—para separaciones pequeñas (gap $\lesssim 5\,\text{nm}$)— la resonancia
+longitudinal se aproxima a su valor de cadena infinita ya hacia las $\sim\!10$
 partículas~\cite{Harris2009}. El tetrámero estudiado aquí puede entenderse,
-por tanto, como un segmento corto de esa serie, todavía lejos de la
-saturación.
+por tanto, como un segmento corto de esa serie, en la zona donde el
+desplazamiento todavía crece al añadir partículas.
 
-La asimetría geométrica modifica la distribución espacial del hot spot y
-permite desplazar la zona de máxima intensidad dentro del agregado. En las
-configuraciones heterogéneas, la combinación de esferas de distinto tamaño
-concentra el campo en el lado de la esfera menor, dando lugar a la mayor
-intensificación de todo el trabajo ($566\,|\mathbf{E}_0|^2$ en el tetrámero
-heterogéneo). En el extremo opuesto, la esfera de $a=600\,\text{nm}$ presenta
-un rendimiento bajo como concentrador de campo cercano, según la figura de
-mérito empleada en este trabajo. En este régimen multipolar, la respuesta
-deja de estar dominada por una única resonancia dipolar y aparecen patrones
-espaciales complejos asociados a la interferencia entre modos de orden
-superior, de modo que el acoplamiento entre partículas deja de ser el
-mecanismo principal que gobierna la intensificación máxima de campo cercano
-(sección~\ref{sec:dimero}).
+Desde esta misma perspectiva, dos aspectos merecen destacarse. El primero es que la
+asimetría geométrica actúa como un grado de libertad de diseño: combinar
+esferas de distinto tamaño no solo aumenta la intensificación, sino que
+permite fijar la posición del hot spot dentro del agregado, en el lado de la
+esfera menor. El segundo es que esta interpretación deja de ser aplicable al aumentar
+suficientemente el tamaño: la esfera de $a=600\,\text{nm}$, ya en pleno
+régimen multipolar (sección~\ref{sec:dimero}), no presenta una resonancia
+localizada dominante y no concentra el campo de forma eficiente. El tamaño a
+partir del cual se produce esta transición se sitúa por debajo de ese valor,
+aunque no se ha acotado en este trabajo.
 
 % =========================================================================
 \subsection{Aplicaciones}
