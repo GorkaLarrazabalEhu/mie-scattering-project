@@ -1,35 +1,32 @@
 {
-    "output_file": "wl620.dat",
-    "num_spheres": "4",
+    "output_file": "wl600.dat",
+    "num_spheres": "1",
     "positions": [
-        "-0.14250000000000002d0, 0d0, 0.0d0, 0.085d0, (0.2047540984d0, 3.3038501171d0)",
-        "-0.027499999999999997d0, 0d0, 0.0d0, 0.025d0, (0.2047540984d0, 3.3038501171d0)",
-        "0.027500000000000004d0, 0d0, 0.0d0, 0.025d0, (0.2047540984d0, 3.3038501171d0)",
-        "0.14250000000000002d0, 0d0, 0.0d0, 0.085d0, (0.2047540984d0, 3.3038501171d0)"
+        "0.d0, 0.d0, 0.d0, 0.6d0, (0.3823582090d0, 2.5938417910d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
-    "length_scale": "10.1341698503d0",
+    "length_scale": "11.2199737628d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
     "near_field": true,
-    "near_field_file": "wl620_nf.dat",
+    "near_field_file": "wl600_nf.dat",
     "nearfieldplot": "",
-    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\4e\\ew\\a85a25\\medio\\wl620",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\1e\\ew\\a600\\wl600",
     "plot_type": "absE",
     "plot_options": [
         "|E_avg|^2"
     ],
-    "wavelength": "0.620",
-    "sphere_radius": "0.085",
+    "wavelength": "0.600",
+    "sphere_radius": "0.6",
     "material": "Au",
-    "separation": "0.005",
-    "geometry": "4 in line (East\u2013West)",
+    "separation": "0.05",
+    "geometry": "(none)",
     "wavelength_sweep": {
         "enabled": false,
         "min": "0.4",
         "max": "0.8",
-        "n": "200"
+        "n": "400"
     },
     "radius_sweep": {
         "enabled": false,
@@ -39,14 +36,9 @@
     },
     "custom_n": "",
     "custom_k": "",
-    "near_field_stepsize": "0.008d0",
+    "near_field_stepsize": "0.08d0",
     "near_field_stepsize_auto": false,
     "scattering_angle": "1.d0",
-    "radii_equal": false,
-    "sphere_radii_individual": [
-        "0.085",
-        "0.025",
-        "0.025",
-        "0.085"
-    ]
+    "radii_equal": true,
+    "sphere_radii_individual": []
 }

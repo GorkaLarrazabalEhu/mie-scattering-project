@@ -1,5 +1,6 @@
 from matplotlib.colors import SymLogNorm
 from matplotlib.colors import LogNorm
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -11,21 +12,34 @@ from scipy.stats import binned_statistic_2d
 
 # ===== AJUSTES DE TAMAÑO =====
 TITLE_SIZE = 16
+TITLE_SIZE = 24
 LABEL_SIZE = 14
+LABEL_SIZE = 22
 TICK_SIZE = 12
+TICK_SIZE = 20
 COLORBAR_LABEL_SIZE = 14
+COLORBAR_LABEL_SIZE = 20
 log_scale = False
 # log_scale = True
 
 FIG_WIDTH_PER_COL = 6
 FIG_HEIGHT_PER_ROW = 5
 
-plt.rcParams.update({
-    "axes.titlesize": TITLE_SIZE,
+# Viridis sin el morado oscuro inicial (empieza desde ~20% del mapa)
+viridis_trunc = mpl.colors.LinearSegmentedColormap.from_list(
+    'viridis_trunc',
+    plt.cm.viridis(np.linspace(0.95, 0, 256))
+)
+
+plt.rcParams.update({    "axes.titlesize": TITLE_SIZE,
     "axes.labelsize": LABEL_SIZE,
     "xtick.labelsize": TICK_SIZE,
     "ytick.labelsize": TICK_SIZE,
     "lines.linewidth": 1.5,
+    # --- Fuente en negrita por defecto ---
+    "font.weight": "bold",
+    "axes.titleweight": "bold",
+    "axes.labelweight": "bold",
 })
 
 if len(sys.argv) > 1:
@@ -210,9 +224,9 @@ def plot_poynting_quiver_subplot(ax, x, z, sx, sz, title, spheres, layers,
         color="white",
         alpha=0.9
     )
-    ax.set_xlabel('x ($\mu$m)', fontsize=LABEL_SIZE)
-    ax.set_ylabel('z ($\mu$m)', fontsize=LABEL_SIZE)
-    ax.set_title(title, fontsize=TITLE_SIZE)
+    ax.set_xlabel(r'x ($\boldsymbol{\mu}$m)', fontsize=LABEL_SIZE, fontweight='bold')
+    ax.set_ylabel(r'z ($\boldsymbol{\mu}$m)', fontsize=LABEL_SIZE, fontweight='bold')
+    ax.set_title(title, fontsize=TITLE_SIZE, fontweight='bold')
     ax.tick_params(axis='both', labelsize=TICK_SIZE)
 
     for sphere in spheres:
@@ -268,15 +282,15 @@ def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
     )
     contourf = ax.contourf(
         X, Z, F,
-        cmap="viridis",
+        cmap=viridis_trunc,
         levels=levels,
         norm=norm,
         extend="both"
     )
 
-    ax.set_xlabel('x ($\mu$m)', fontsize=LABEL_SIZE)
-    ax.set_ylabel('z ($\mu$m)', fontsize=LABEL_SIZE)
-    ax.set_title(title, fontsize=TITLE_SIZE)
+    ax.set_xlabel(r'x ($\boldsymbol{\mu}$m)', fontsize=LABEL_SIZE, fontweight='bold')
+    ax.set_ylabel(r'z ($\boldsymbol{\mu}$m)', fontsize=LABEL_SIZE, fontweight='bold')
+    ax.set_title(title, fontsize=TITLE_SIZE, fontweight='bold')
     ax.tick_params(axis='both', labelsize=TICK_SIZE)
 
     for sphere in spheres:
@@ -313,6 +327,7 @@ def plot_contour_subplot(ax, x, z, field_data, title, spheres, layers):
         textcoords='offset points',
         color='red',
         fontsize=TICK_SIZE,
+        fontweight='bold',
         bbox=dict(boxstyle='round,pad=0.2', fc='white', alpha=0.6)
     )
     annotation.draggable(True)  
@@ -438,18 +453,18 @@ def split_component(comp):
 
 def format_title(t):
     if t == "|E_avg|^2":
-        return r"$|E_{\mathrm{avg}}|^2$"
+        return r"$\boldsymbol{|E_{\mathrm{avg}}|^2}$"
     if t == "|E‖|^2":
-        return r"$|E_{\parallel}|^2$"
+        return r"$\boldsymbol{|E_{\parallel}|^2}$"
     if t == "|E⟂|^2" or t == "|E⊥|^2":
-        return r"$|E_{\perp}|^2$"
+        return r"$\boldsymbol{|E_{\perp}|^2}$"
 
     if t == "Sx":
-        return r"$S_x$"
+        return r"$\boldsymbol{S_x}$"
     if t == "Sy":
-        return r"$S_y$"
+        return r"$\boldsymbol{S_y}$"
     if t == "Sz":
-        return r"$S_z$"
+        return r"$\boldsymbol{S_z}$"
     if t == "S_quiver":
         return r"$\mathbf{S}$"
 
@@ -466,12 +481,12 @@ def format_title(t):
         }
 
         ri_map = {
-            "Re": r"\mathrm{Re}",
-            "Im": r"\mathrm{Im}"
+            "Re": r"\mathbf{Re}",
+            "Im": r"\mathbf{Im}"
         }
 
         if pol in pol_map:
-            return rf"${ri_map.get(ri, ri)}\!\left({base}_{{{axis},{pol_map[pol]}}}\right)$"
+            return rf"$\boldsymbol{{{ri_map.get(ri, ri)}\!\left({base}_{{{axis},{pol_map[pol]}}}\right)}}$"
 
     return t
 

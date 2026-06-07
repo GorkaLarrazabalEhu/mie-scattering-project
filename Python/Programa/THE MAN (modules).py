@@ -1937,7 +1937,7 @@ class MieTheoryApp:
 
                     margin = 2.0 * (max(rs) if rs else 0.0)
                     # margin = 1.2 * (min(rs) if rs else 0.0) # Cambiar esto si se requiere mas margen.
-                    margin = 0                              # Si las simulaciones tardan demasiado y necesito reducir el área
+                    # margin = 0                              # Si las simulaciones tardan demasiado y necesito reducir el área
 
                     xmin, xmax = min(xs) - max(rs) - margin, max(xs) + max(rs) + margin
                     zmin, zmax = min(zs) - max(rs) - margin, max(zs) + max(rs) + margin
