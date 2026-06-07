@@ -1,1 +1,234 @@
 \section{Caso de estudio: nanoantenas}
+\label{sec:nanoantenas}
+
+A lo largo del trabajo se ha caracterizado la dispersión de luz por esferas
+de oro aisladas y por agregados de dos y cuatro esferas en términos de dos
+magnitudes complementarias: las eficiencias espectrales en campo lejano
+($Q_\text{abs}$, $Q_\text{sca}$, $Q_\text{ext}$) y la intensificación de
+campo cercano $|\mathbf{E}|^2$ en el entorno de las partículas. Estos
+resultados pueden reinterpretarse de forma coherente dentro del marco de las
+\emph{nanoantenas ópticas}, un concepto que hasta aquí no se había
+introducido de forma explícita. Esta sección presenta dicho concepto, lo
+conecta con el formalismo desarrollado en la sección~\ref{sec:miecoeffs} y
+reinterpreta los resultados de las secciones~\ref{sec:dimero}
+y~\ref{sec:tetramero} desde este punto de vista.
+
+% =========================================================================
+\subsection{¿Qué es una nanoantena óptica?}
+\label{subsec:que_es_nanoantena}
+% =========================================================================
+
+En radiofrecuencia y microondas, una antena es un dispositivo que convierte
+la energía electromagnética que viaja confinada en un circuito o guía en
+radiación que se propaga libremente, y viceversa~\cite{Novotny2011}. Su
+función es servir de interfaz entre campos localizados y campos propagantes.
+Una \emph{nanoantena óptica} desempeña un papel análogo a frecuencias
+ópticas —concentrar la luz incidente en volúmenes muy inferiores a la
+longitud de onda, generando una región de campo intenso o \emph{hot spot},
+y, recíprocamente, transformar la energía de una fuente localizada (por ejemplo, una
+molécula) en radiación al campo lejano—, aunque
+condicionado por la respuesta dispersiva y disipativa de los metales a
+frecuencias ópticas~\cite{Bharadwaj2009,Novotny2011}.
+
+La diferencia esencial respecto a las antenas convencionales es que, a
+frecuencias ópticas, los metales no pueden describirse como conductores
+perfectos. Cuando la luz incide sobre una partícula metálica pequeña, su
+campo eléctrico empuja de forma colectiva a los electrones de conducción, que
+oscilan de un lado a otro de la partícula. A ciertas frecuencias esta
+oscilación entra en resonancia: es lo que se conoce como \emph{plasmón de
+superficie localizado} (LSP), y es el responsable de que el campo se
+intensifique en las inmediaciones de la partícula. En el formalismo de Mie
+empleado en este trabajo, esta respuesta queda recogida en los coeficientes
+de dispersión $a_n$ (sección~\ref{sec:miecoeffs}): las resonancias
+plasmónicas aparecen como máximos de dichos coeficientes, siendo el término
+dipolar $a_1$ el dominante para las partículas más pequeñas.
+
+Estos máximos resonantes están ligados a las frecuencias de operación de la
+antena, mientras que el carácter de la resonancia (dipolar, cuadrupolar,
+etc.) condiciona el patrón de radiación, es decir, la distribución angular de
+la luz dispersada (véase la figura~\ref{fig:S11_regimenes}). Cuando el
+parámetro de tamaño es pequeño y domina el modo dipolar, una esfera metálica
+puede interpretarse como una antena dipolar resonante elemental~\cite{Kuhn2006}.
+
+Conviene distinguir dos funciones reconocibles en los
+resultados de este trabajo~\cite{Kolwas2013}:
+
+\begin{itemize}
+  \item \textbf{Antena receptora.} La partícula transforma parte de la
+        radiación incidente en energía localizada en su entorno inmediato,
+        intensificando el campo cercano. En partículas pequeñas, este
+        comportamiento suele estar acompañado por una contribución importante
+        de la absorción, debido al predominio de las pérdidas disipativas.
+  \item \textbf{Antena emisora.} La partícula puede actuar también como canal
+        radiativo, reemitiendo energía hacia el campo lejano. Este carácter
+        radiativo se manifiesta en una mayor contribución de la dispersión,
+        especialmente al aumentar el tamaño de la partícula.
+\end{itemize}
+
+El predominio relativo de estos comportamientos depende del tamaño de la
+partícula, de la longitud de onda, del medio circundante y, en agregados, de
+la separación entre partículas. En particular, al aumentar el tamaño la
+partícula tiende a reemitir la luz incidente en
+lugar de disiparla en forma de calor, lo que permite interpretar el cambio
+relativo entre $Q_\text{abs}$ y $Q_\text{sca}$ observado al pasar de
+$a=25\,\text{nm}$ a $a=85\,\text{nm}$ en la sección~\ref{sec:dimero} como una
+transición desde una respuesta más disipativa hacia otra de mayor carácter
+radiativo.
+
+% =========================================================================
+\subsection{La esfera y el dímero como nanoantena}
+\label{subsec:esfera_dimero_antena}
+% =========================================================================
+
+La esfera individual constituye la nanoantena más simple. Su resonancia
+plasmónica dipolar se asocia con una frecuencia de operación que puede
+sintonizarse variando el radio: al aumentar el tamaño, la resonancia se
+desplaza al rojo y crece la contribución de modos de orden superior
+(cuadrupolar y siguientes), tal y como se observó en los espectros de
+referencia de la sección~\ref{sec:dimero}. Sin embargo, en las
+configuraciones estudiadas la esfera aislada produce una intensificación
+moderada, del orden de diez veces la intensidad incidente, porque no presenta
+un gap donde se concentre el campo por acoplamiento entre
+partículas.
+
+El dímero introduce precisamente esa región. El gap desempeña un papel
+análogo al punto de alimentación de una antena, al ser la región donde se
+localiza con mayor intensidad el campo cercano por el acoplamiento de las dos
+partículas~\cite{Yousif2013}. La magnitud para cuantificar este
+efecto es el factor de intensificación de campo en el gap,
+$|\mathbf{E}|^2/|\mathbf{E}_0|^2$, equivalente al \emph{local field intensity
+enhancement factor} (LFIEF) empleado en la literatura~\cite{Yousif2013}.
+La iluminación empleada en este trabajo es una onda monocromática no
+polarizada. Aun así, como el dímero está orientado con su eje a lo largo de
+la dirección $x$ ---contenida en el plano de polarización---, de las dos
+componentes ortogonales del campo es la paralela al eje la que excita el modo
+de acoplamiento entre las esferas y concentra el campo en el gap. Al estrechar
+el gap aumenta este acoplamiento de campo cercano, lo que se traduce en una
+mayor intensificación en el hueco: en la sección~\ref{sec:dimero}, el dímero
+heterogéneo pasó de $21$ a $186\,|\mathbf{E}_0|^2$ al reducir $d$ de $50$ a
+$5\,\text{nm}$. El efecto sobre la posición espectral de la resonancia, en
+cambio, depende del tamaño: es prácticamente nulo en el dímero de
+$25\,\text{nm}$, mientras que en el de $85\,\text{nm}$ la resonancia de
+$Q_\text{sca}$ se desplaza al rojo en más de $170\,\text{nm}$ al cerrar el
+gap. Esta dependencia con el tamaño es coherente con las simulaciones de
+dímeros de oro mediante el método de la T-matrix~\cite{Yousif2013}.
+ 
+Conviene señalar que los resultados de referencia más próximos a este trabajo
+emplean la misma herramienta numérica: las cadenas de esferas de oro de
+Harris \textit{et al.} se calcularon con el código de la T-matrix de
+Mackowski y Mishchenko~\cite{Harris2009}, el mismo formalismo descrito en la
+sección~\ref{sec:miecoeffs} e implementado en MSTM. Allí, empleando
+polarización paralela al eje de la cadena, se observa que en el régimen de
+campo cercano fuertemente acoplado la resonancia longitudinal se desplaza al
+rojo de forma aproximadamente proporcional a $1/d$ al reducir la
+separación~\cite{Harris2009}, en línea con el corrimiento al rojo que
+observamos al cerrar el gap en el dímero de $85\,\text{nm}$.
+
+% =========================================================================
+\subsection{Reinterpretación de los resultados como nanoantenas}
+\label{subsec:reinterpretacion}
+% =========================================================================
+
+La tabla~\ref{tab:antena_merito} resume las configuraciones estudiadas
+ordenadas por su factor de intensificación máximo, que adoptamos aquí como
+figura de mérito de la capacidad de concentración de campo cercano de la
+nanoantena. Conviene recordar que no es la única figura de mérito posible:
+una nanoantena puede evaluarse también por su eficiencia radiativa, su
+directividad, su sección eficaz de dispersión o el factor de Purcell, entre
+otras.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lccc}
+    \hline
+    Configuración de Au ($d=5\,\text{nm}$ en agregados) & $\lambda_\text{res}$ &
+    $|\mathbf{E}|^2_\text{máx}/|\mathbf{E}_0|^2$ & Canal dominante \\
+    \hline
+    Esfera individual, $a=25\,\text{nm}$        & 520\,nm & $11.9$  & Absorción \\
+    Esfera individual, $a=85\,\text{nm}$        & 570\,nm & $12.8$  & Dispersión \\
+    Dímero homogéneo, $a=25\,\text{nm}$         & 530\,nm & $147$   & Absorción \\
+    Dímero heterogéneo, $a=25/85\,\text{nm}$    & 590\,nm & $186$   & Dispersión \\
+    Tetrámero homogéneo, $a=25\,\text{nm}$      & 550\,nm & $431$   & Absorción \\
+    Tetrámero heterogéneo                       & 620\,nm & $566$   & Dispersión \\
+    \hline
+  \end{tabular}
+  \caption{Figura de mérito (intensificación máxima de campo cercano) de las
+           distintas configuraciones estudiadas, interpretadas como
+           nanoantenas. El canal dominante se refiere a la comparación entre
+           $Q_\text{abs}$ y $Q_\text{sca}$ en la longitud de onda resonante
+           indicada. El paso de la esfera al dímero y de éste al tetrámero
+           incrementa la concentración de campo en más de un orden de
+           magnitud.}
+  \label{tab:antena_merito}
+\end{table}
+
+Dos tendencias destacan al leer los resultados en clave de antena. La primera
+es el papel del gap como región de máxima concentración de campo: a igualdad
+de tamaño y número de esferas, estrechar el hueco se asocia con una mayor
+intensificación, al aumentar el acoplamiento de campo cercano entre
+partículas. La segunda es el efecto de añadir elementos a la cadena. Al pasar
+del dímero al tetrámero homogéneo de $25\,\text{nm}$, la intensificación en el
+gap central crece de $147$ a $431\,|\mathbf{E}_0|^2$ y la resonancia se
+desplaza al rojo, lo que indica que, para el modo longitudinal estudiado, las
+partículas adicionales contribuyen al acoplamiento colectivo de la cadena.
+Este comportamiento es coherente con el observado experimentalmente en
+cadenas de oro de uno a seis elementos, donde el desplazamiento al rojo crece
+con la longitud de la cadena y satura en torno a 10--12
+partículas~\cite{Barrow2011}, y con las predicciones de la T-matrix para
+cadenas largas, que alcanzan un valor asintótico hacia las 10
+partículas~\cite{Harris2009}. El tetrámero estudiado aquí puede entenderse,
+por tanto, como un segmento corto de esa serie, todavía lejos de la
+saturación.
+
+La asimetría geométrica modifica la distribución espacial del hot spot y
+permite desplazar la zona de máxima intensidad dentro del agregado. En las
+configuraciones heterogéneas, la combinación de esferas de distinto tamaño
+concentra el campo en el lado de la esfera menor, dando lugar a la mayor
+intensificación de todo el trabajo ($566\,|\mathbf{E}_0|^2$ en el tetrámero
+heterogéneo). En el extremo opuesto, la esfera de $a=600\,\text{nm}$ presenta
+un rendimiento bajo como concentrador de campo cercano, según la figura de
+mérito empleada en este trabajo. En este régimen multipolar, la respuesta
+deja de estar dominada por una única resonancia dipolar y aparecen patrones
+espaciales complejos asociados a la interferencia entre modos de orden
+superior, de modo que el acoplamiento entre partículas deja de ser el
+mecanismo principal que gobierna la intensificación máxima de campo cercano
+(sección~\ref{sec:dimero}).
+
+% =========================================================================
+\subsection{Aplicaciones}
+\label{subsec:aplicaciones_antena}
+% =========================================================================
+
+El interés práctico de las nanoantenas plasmónicas reside en que los hot
+spots descritos pueden potenciar diversos procesos ópticos sensibles a la
+intensidad local del campo, siempre que exista solapamiento espacial y
+espectral con el hot spot. Tres familias de aplicaciones ilustran el alcance
+de los resultados de este trabajo:
+
+\begin{itemize}
+  \item \textbf{Espectroscopía Raman amplificada por superficie (SERS).}
+        Dado que la señal Raman escala aproximadamente con $|\mathbf{E}|^4$,
+        un factor de intensificación de campo de $\sim\!500$ en el gap del
+        tetrámero sugiere un aumento de la señal del orden de
+        $500^2\sim2.5\times10^5$, es decir, de varios órdenes de magnitud
+        bajo la aproximación electromagnética habitual~\cite{Myroshnychenko2008}.
+  \item \textbf{Realce de fluorescencia.} Aunque este trabajo no modela
+        explícitamente una molécula emisora, los hot spots obtenidos son
+        relevantes para el realce de fluorescencia, donde la antena puede
+        modificar tanto la tasa de excitación como la de emisión.
+        Experimentalmente se ha observado un realce de más de un orden de
+        magnitud al acercar una nanopartícula de oro a una molécula
+        individual, si bien a distancias muy cortas la cesión de energía no
+        radiativa al metal (\emph{quenching}) compite con el
+        realce~\cite{Kuhn2006}.
+  \item \textbf{Sensado y metrología de distancias.} La dependencia de la
+        posición espectral de la resonancia con el gap es el principio físico
+        empleado en las \emph{reglas plasmónicas} para estimar distancias
+        nanométricas, por ejemplo entre biomoléculas~\cite{Harris2009}.
+\end{itemize}
+
+En conjunto, los sistemas simulados en este trabajo —desde la esfera aislada
+hasta el tetrámero heterogéneo— reproducen algunos de los mecanismos
+electromagnéticos básicos que sustentan estas aplicaciones: localización de
+campo, desplazamiento resonante y control de la respuesta óptica mediante el
+tamaño, el gap, el número de partículas y la asimetría del agregado.

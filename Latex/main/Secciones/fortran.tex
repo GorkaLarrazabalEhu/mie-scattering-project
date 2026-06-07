@@ -285,18 +285,18 @@ escalado efectivo del método es $\mathcal{O}(N_S^{\,2})$. Para clusters
 grandes esta ganancia de un orden en $N_S$ frente a LU resulta
 determinante.
 
-\paragraph{Aprovechamiento de la linealidad.}
-Como ya se argumentó al introducir las ecuaciones de Maxwell, la
-linealidad del problema permite expresar cualquier polarización del
-campo incidente como combinación lineal de dos polarizaciones
-independientes. El código explota esta propiedad y resuelve el sistema
-simultáneamente para dos polarizaciones ortogonales (parámetro
-\texttt{nrhs}~$=2$ en las rutinas del solver), de modo que en una sola
-ejecución se obtienen los coeficientes $\{\mathbf{a}^{j}\}$
-correspondientes a ambas. Esto permite construir directamente todos
-los elementos de la matriz de Mueller a partir de los productos
-cruzados de las amplitudes de dispersión, sin necesidad de una segunda
-resolución del sistema.
+% \paragraph{Aprovechamiento de la linealidad.}
+% Como ya se argumentó al introducir las ecuaciones de Maxwell, la
+% linealidad del problema permite expresar cualquier polarización del
+% campo incidente como combinación lineal de dos polarizaciones
+% independientes. El código explota esta propiedad y resuelve el sistema
+% simultáneamente para dos polarizaciones ortogonales (parámetro
+% \texttt{nrhs}~$=2$ en las rutinas del solver), de modo que en una sola
+% ejecución se obtienen los coeficientes $\{\mathbf{a}^{j}\}$
+% correspondientes a ambas. Esto permite construir directamente todos
+% los elementos de la matriz de Mueller a partir de los productos
+% cruzados de las amplitudes de dispersión, sin necesidad de una segunda
+% resolución del sistema.
 
 
 \subsection{Cálculo del campo cercano}
