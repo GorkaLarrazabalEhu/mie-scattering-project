@@ -12,13 +12,13 @@ from scipy.stats import binned_statistic_2d
 
 # ===== AJUSTES DE TAMAÑO =====
 TITLE_SIZE = 16
-TITLE_SIZE = 24
+TITLE_SIZE = 32
 LABEL_SIZE = 14
-LABEL_SIZE = 22
+LABEL_SIZE = 26
 TICK_SIZE = 12
-TICK_SIZE = 20
+TICK_SIZE = 22
 COLORBAR_LABEL_SIZE = 14
-COLORBAR_LABEL_SIZE = 20
+COLORBAR_LABEL_SIZE = 26
 log_scale = False
 # log_scale = True
 
@@ -196,7 +196,7 @@ def plot_poynting_quiver_subplot(ax, x, z, sx, sz, title, spheres, layers,
 
     contourf = ax.contourf(
         X, Z, mag,
-        cmap="viridis",
+        cmap=viridis_trunc,
         levels=100,
         extend="both"
     )
@@ -512,6 +512,7 @@ fig, axs = plt.subplots(
     sharex=True, sharey=True,
     constrained_layout=True
 )
+fig.canvas.get_default_filename = lambda: 'nf.png'
 
 # axs = np.atleast_1d(axs).ravel()
 axs = np.atleast_1d(axs)
