@@ -23,7 +23,7 @@ al añadir más partículas respecto al dímero equivalente.
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a25/sep5/sw/plots/Eficiencias_-_Unpol.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a25/sep5/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{Eficiencias espectrales. Pico en $\lambda\approx550\,\text{nm}$
              con $Q_\text{abs}$ dominante.}
     \label{fig:tet_a25_eff}
@@ -31,7 +31,7 @@ al añadir más partículas respecto al dímero equivalente.
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a25/sep5/wl550/plots/Figure_1.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a25/sep5/wl550/plots/nf.png}
     \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$, $\lambda=550\,\text{nm}$.
              Máximo: $430.78\,|\mathbf{E}_0|^2$.}
     \label{fig:tet_a25_nf}
@@ -62,24 +62,24 @@ dímero (figura~\ref{fig:a25_nf}). Añadir esferas refuerza el campo en el gap c
 
 \begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.32\textwidth}
+  \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85/sep5/sw/plots/Eficiencias_-_Unpol.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85/sep5/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{Eficiencias espectrales.}
     \label{fig:tet_a85_eff}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.32\textwidth}
+  \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85/sep5/wl590/plots/Figure_1.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85/sep5/wl590/plots/nf.png}
     \caption{Campo cercano, $\lambda=590\,\text{nm}$.
              Máximo: $131.41\,|\mathbf{E}_0|^2$.}
     \label{fig:tet_a85_nf_590}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.32\textwidth}
+  \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85/sep5/wl1000/plots/Figure_1.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85/sep5/wl1000/plots/nf.png}
     \caption{Campo cercano, $\lambda=1000\,\text{nm}$.
              Máximo: $323.74\,|\mathbf{E}_0|^2$.}
     \label{fig:tet_a85_nf_1000}
@@ -108,19 +108,34 @@ la mayor intensidad.
 \subsection{Tetrámero heterogéneo alternado}
 \label{subsec:tetramero_alterno}
 % =========================================================================
-
+Como se observa en la figura~\ref{fig:tet_alt}, en la configuración alternada 
+las dos esferas grandes gobiernan la respuesta
+óptica y fijan el pico dispersor principal en torno a
+$\lambda\approx660\,\text{nm}$. Este valor está desplazado hacia el rojo
+respecto a la esfera de $85\,\text{nm}$ aislada ($\sim570\,\text{nm}$), pero
+queda lejos del infrarrojo cercano del tetrámero homogéneo de $85\,\text{nm}$
+($\sim1000\,\text{nm}$, figura~\ref{fig:tet_a85}): al intercalar esferas pequeñas se rompe la cadena de
+partículas grandes y el desplazamiento es menor. En campo cercano la
+intensificación se concentra alrededor de la esfera pequeña interior, que es
+la única con una esfera grande a cada lado. La esfera pequeña exterior, con una
+sola vecina grande, apenas participa y su gap queda poco activo. El máximo ($305.53\,|\mathbf{E}_0|^2$) es
+menor que el del tetrámero homogéneo de $25\,\text{nm}$
+($430.78\,|\mathbf{E}_0|^2$, figura~\ref{fig:tet_a25_nf}), lo que sugiere que con una sola esfera pequeña
+bien acoplada no se llega al máximo de intensificación. Esto motiva la
+configuración de la sección siguiente (sección~\ref{subsec:tetramero_central}), con las dos esferas pequeñas en el
+interior de la cadena.
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/alterno/sw/plots/Eficiencias_-_Unpol.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/alterno/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{Eficiencias espectrales.}
     \label{fig:tet_alt_eff}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/alterno/wl660/plots/Figure_1.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/alterno/wl660/plots/nf.png}
     \caption{Campo cercano, $\lambda=660\,\text{nm}$.
              Máximo: $305.53\,|\mathbf{E}_0|^2$.}
     \label{fig:tet_alt_nf}
@@ -137,49 +152,71 @@ la mayor intensidad.
   \label{fig:tet_alt}
 \end{figure}
 
-En la configuración alternada las dos esferas grandes gobiernan la respuesta
-óptica y fijan el pico dispersor principal en torno a
-$\lambda\approx660\,\text{nm}$. Este valor está desplazado hacia el rojo
-respecto a la esfera de $85\,\text{nm}$ aislada ($\sim570\,\text{nm}$), pero
-queda lejos del infrarrojo cercano del tetrámero homogéneo de $85\,\text{nm}$
-($\sim1000\,\text{nm}$, figura~\ref{fig:tet_a85}): al intercalar esferas pequeñas se rompe la cadena de
-partículas grandes y el desplazamiento es menor. En campo cercano la
-intensificación se concentra alrededor de la esfera pequeña interior, que es
-la única con una esfera grande a cada lado. La esfera pequeña exterior, con una
-sola vecina grande, apenas participa y su gap queda poco activo. El máximo ($305.53\,|\mathbf{E}_0|^2$) es
-menor que el del tetrámero homogéneo de $25\,\text{nm}$
-($430.78\,|\mathbf{E}_0|^2$, figura~\ref{fig:tet_a25_nf}), lo que sugiere que con una sola esfera pequeña
-bien acoplada no se llega al máximo de intensificación. Esto motiva la
-configuración de la sección siguiente (sección~\ref{subsec:tetramero_central}), con las dos esferas pequeñas en el
-interior de la cadena.
 
 % =========================================================================
 \subsection{Tetrámero heterogéneo con esferas pequeñas centrales}
 \label{subsec:tetramero_central}
 % =========================================================================
 
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.6\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/sw/plots/Eficiencias_-_Unpol.png}
+%     \caption{Eficiencias espectrales.}
+%     \label{fig:tet_medio_eff}
+%   \end{subfigure}
+
+%   \vspace{1em}
+
+%   \begin{subfigure}[b]{0.48\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/wl520/plots/Figure_1.png}
+%     \caption{Campo cercano, $\lambda=520\,\text{nm}$.
+%              Máximo: $109.63\,|\mathbf{E}_0|^2$.}
+%     \label{fig:tet_medio_nf_520}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.48\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/wl620/plots/Figure_1.png}
+%     \caption{Campo cercano, $\lambda=620\,\text{nm}$.
+%              Máximo: $566.20\,|\mathbf{E}_0|^2$.}
+%     \label{fig:tet_medio_nf_620}
+%   \end{subfigure}
+%   \caption{Tetrámero heterogéneo ($85$--$25$--$25$--$85\,\text{nm}$) con
+%            $d=5\,\text{nm}$. El espectro muestra un pico de extinción en
+%            $\lambda\approx520\,\text{nm}$, donde la absorción alcanza su
+%            máxima contribución, y un pico dispersor principal en
+%            $\lambda\approx620\,\text{nm}$.
+%            En ambos casos la zona de concentración se localiza entre las
+%            dos esferas pequeñas centrales; a $\lambda=620\,\text{nm}$
+%            la intensificación alcanza $566.20\,|\mathbf{E}_0|^2$, el valor
+%            más alto de todas las configuraciones estudiadas.}
+%   \label{fig:tet_medio}
+% \end{figure}
+
+
 \begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.6\textwidth}
+  \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/sw/plots/Eficiencias_-_Unpol.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{Eficiencias espectrales.}
     \label{fig:tet_medio_eff}
   \end{subfigure}
-
-  \vspace{1em}
-
-  \begin{subfigure}[b]{0.48\textwidth}
+  \hfill
+  \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/wl520/plots/Figure_1.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/wl520/plots/nf.png}
     \caption{Campo cercano, $\lambda=520\,\text{nm}$.
              Máximo: $109.63\,|\mathbf{E}_0|^2$.}
     \label{fig:tet_medio_nf_520}
   \end{subfigure}
   \hfill
-  \begin{subfigure}[b]{0.48\textwidth}
+  \begin{subfigure}[t]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/wl620/plots/Figure_1.png}
+    \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/4e/ew/a85a25/medio/wl620/plots/nf.png}
     \caption{Campo cercano, $\lambda=620\,\text{nm}$.
              Máximo: $566.20\,|\mathbf{E}_0|^2$.}
     \label{fig:tet_medio_nf_620}
@@ -205,7 +242,7 @@ de la configuración alternada (figura~\ref{fig:tet_alt_nf}).
 Una posible interpretación de este máximo es que cada tamaño de esfera
 cumpla una función distinta. Las esferas grandes de los extremos, con mayor
 sección eficaz, capturarían la mayor parte de la luz incidente, mientras que
-las esferas pequeñas centrales, concentrarían ese
+las esferas pequeñas centrales concentrarían ese
 campo en una región más pequeña. Situarlas en el centro con una esfera grande
 a cada lado podría combinar ambos efectos y explicar por qué esta disposición
 supera al tetrámero homogéneo de $25\,\text{nm}$ y a la configuración

@@ -34,15 +34,19 @@ except Exception:
 # Estilo global de figuras
 # =========================
 plt.rcParams.update({
-    "xtick.labelsize": 16,
-    "ytick.labelsize": 16,
-    "axes.titlesize": 16,
-    "axes.labelsize": 20,
-    "legend.fontsize": 14,
+    "xtick.labelsize": 19,
+    "ytick.labelsize": 19,
+    "axes.titlesize": 20,
+    "axes.labelsize": 24,
+    "legend.fontsize": 20,    
+    
+    "font.weight": "bold",
+    "axes.titleweight": "bold",
+    "axes.labelweight": "bold",
 })
-plt.rcParams["figure.titlesize"] = 18
+plt.rcParams["figure.titlesize"] = 24
 plt.rcParams["lines.linewidth"] = 2
-
+plt.rcParams["figure.titleweight"] = "bold"
 # =========================
 # Utilidades
 # =========================
@@ -297,6 +301,7 @@ def plot_S11_old(runs, run_ids, save_dir="."):
 def plot_S11(runs, run_ids, save_dir=".", skip_run=True, plot_number=5):
     mode = {1, 2}
     mode = {1}
+    # mode = {2}
     valid_run_ids = [
         ri for ri in run_ids
         if runs[ri]["S"] is not None
@@ -514,7 +519,7 @@ def _plot_eff_axes(ax, axr, x, y_qext, y_qabs, y_qsca, dual):
         lines = ax.get_lines()
 
     labels = [l.get_label() for l in lines]
-    ax.legend(lines, labels, loc="upper right", fontsize=13)
+    ax.legend(lines, labels, loc="upper right")
 
 
 def _get_nk_arrays(wavelengths_um, material, radius):
@@ -628,7 +633,8 @@ def plot_efficiencies(runs, run_ids, save_dir=".", pol="unpol", mode="EFF",
 
         ax.set_xlabel(r"Longitud de onda ($\mu$m)")
         ax.grid(True)
-        fig.suptitle(f"Eficiencias ({pol.capitalize()})")
+        # fig.suptitle(f"Eficiencias ({pol.capitalize()})")
+        fig.suptitle("Eficiencias espectrales")
 
         leg = ax.get_legend()
         if leg:

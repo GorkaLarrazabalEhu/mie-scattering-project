@@ -1,1 +1,63 @@
+% =========================================================================
 \section{Conclusiones}
+\label{sec:conclusiones}
+% =========================================================================
+
+Puede considerarse que los objetivos planteados en la introducción se han 
+cumplido: se ha presentado el formalismo de Mie y de la matriz $T$ para la
+dispersión por una y varias esferas (sección~\ref{sec:miecoeffs}), y se ha
+analizado cómo el código MSTM de Mackowski implementa este formalismo y qué
+magnitudes físicas calcula (sección~\ref{sec:mstm}). También se ha
+desarrollado un entorno propio en Python que automatiza por completo el ciclo
+de trabajo con MSTM, y cuyo 
+desarrollo ha constituido una parte sustancial del
+esfuerzo dedicado al trabajo (sección~\ref{sec:python_wrapper}). Con esta
+herramienta se ha estudiado la dispersión por la esfera individual, el dímero
+y el tetrámero, analizando tanto el campo lejano como el campo cercano, y,
+finalmente, los resultados se han reinterpretado desde el punto de vista de
+las nanoantenas ópticas (sección~\ref{sec:nanoantenas}).
+
+Entre los resultados obtenidos destacan varias tendencias. La esfera aislada
+produce una intensificación de campo cercano moderada, del orden de diez
+veces la intensidad incidente, al carecer de un gap donde concentrar el
+campo. La aparición de esa región al pasar al dímero altera significativamente 
+la respuesta óptica del sistema: estrechar el hueco aumenta el acoplamiento 
+de campo cercano y, con él, la intensificación, 
+que en el dímero de $85\,\text{nm}$ alcanza
+$\sim\!169\,|\mathbf{E}_0|^2$ para $d=5\,\text{nm}$, acompañada de un
+desplazamiento al rojo de la resonancia de más de $170\,\text{nm}$. Este
+corrimiento espectral, en cambio, depende del tamaño y resulta prácticamente
+nulo en el régimen dipolar ($a=25\,\text{nm}$) y en el régimen Mie avanzado
+($a=600\,\text{nm}$). Añadir partículas a la cadena refuerza la concentración
+del campo: el tetrámero homogéneo de $25\,\text{nm}$ pasa de los
+$147\,|\mathbf{E}_0|^2$ del dímero a $431\,|\mathbf{E}_0|^2$ en su gap
+central. La mayor intensificación observada en este trabajo,
+$566\,|\mathbf{E}_0|^2$, se obtuvo en el tetrámero heterogéneo
+$85$--$25$--$25$--$85$. En conjunto, el tamaño, la separación
+entre partículas y la geometría del agregado constituyen los 
+grados de libertad que determinan la respuesta óptica de estos sistemas.
+
+El entorno gráfico en Python sobre MSTM constituye una de las principales 
+aportaciones de este trabajo. La herramienta resultó eficaz para el propósito que
+motivó su desarrollo: automatizar un flujo de trabajo (conversión de
+unidades, generación del fichero de entrada, ejecución del binario y
+representación de resultados) que, realizado manualmente, 
+supone una tarea laboriosa y susceptible de errores.
+El entorno actúa como una capa externa que no modifica MSTM 
+y el registro de cada simulación en JSON garantiza su reproducibilidad.
+Como contrapartida, el programa hereda las limitaciones del propio MSTM y, en su
+estado actual, deja sin explotar parte de las opciones que ya contempla
+(otros materiales, haz gaussiano o barridos en radio), empleadas solo
+parcialmente en este trabajo.
+
+Por último, el trabajo deja abiertas varias líneas de continuación. La más
+inmediata es acotar el tamaño a partir del cual la partícula deja de
+comportarse como una nanoantena eficiente, es decir, la transición entre el
+régimen de resonancia localizada y el régimen multipolar que aquí solo se ha
+identificado de forma cualitativa. También sería natural prolongar el estudio
+a cadenas más largas, para observar la saturación del desplazamiento al rojo
+descrita en la literatura~\cite{Harris2009,Barrow2011}, así como explorar
+otras geometrías, otros materiales ya disponibles en el entorno (Ag, Al, Cu)
+y la dependencia con la polarización y con el índice de refracción del medio.
+Todas ellas pueden abordarse con la herramienta desarrollada, que queda como punto
+de partida para quien desee continuar el trabajo.
