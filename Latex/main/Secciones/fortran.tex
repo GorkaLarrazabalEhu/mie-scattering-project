@@ -3,27 +3,32 @@
 
 \subsection{El código MSTM}
 
-El código empleado en este trabajo es MSTM (\textit{Multiple Sphere
+El código empleado en este trabajo para el cálculo de la dispersión múltiple
+es MSTM (\textit{Multiple Sphere
 T-Matrix}), una implementación en Fortran desarrollada por
 Mackowski~\cite{Mackowski_code} del formalismo de la T-matrix descrito en
-la sección anterior. El programa calcula los coeficientes de Mie de cada
+la sección anterior. Para las simulaciones realizadas en este trabajo,
+el programa se ha compilado en Windows~11 con \texttt{gfortran}
+versión~10.3.0. El programa calcula los coeficientes de Mie de cada
 esfera (que conforman la T-matrix diagonal $\bar{\mathbb{T}}_j$),
 construye los operadores de traslación $\mathbb{H}^{jl}$ que materializan
 el teorema de adición, resuelve el sistema autoconsistente de Foldy--Lax
 (\ref{eq:foldy-lax}) y, a partir de la solución
 $\{\mathbf{a}^{j}\}$, evalúa los observables del agregado: secciones
 eficaces, matriz de amplitud y de Mueller, parámetro de asimetría y
-campo cercano.
+campo cercano, es decir, la distribución local del campo electromagnético
+en el entorno inmediato de las partículas.
 
 Una característica práctica del código es que trabaja completamente en
 unidades adimensionales: las longitudes se expresan en unidades del
-número de onda $k = 2\pi/\lambda$ del medio circundante, de modo que los
+número de onda $k$ del medio circundante, de modo que los
 radios se introducen directamente como parámetros de tamaño $x^j = k a^j$
 y las posiciones de los centros $\mathbf{r}^j$ en las mismas unidades.
 Un cambio de longitud de onda equivale, por tanto, a un reescalado
 simultáneo de toda la geometría. Cuando se desea trabajar con unidades
 físicas, el parámetro \texttt{length\_scale\_factor} reescala
 internamente todas las posiciones y radios antes de comenzar el cálculo.
+
 
 
 \subsection{Estructura general del programa}
@@ -45,7 +50,7 @@ formalismo de la T-matrix:
         conforman directamente la T-matrix individual diagonal
         $\bar{\mathbb{T}}_j$. El orden multipolar $n_{max}^{j}$ se
         determina automáticamente para cada esfera mediante el criterio
-        de Wiscombe (sección~\ref{sec:funcesp}).
+        de Wiscombe\cite{Wiscombe1980} (sección~\ref{sec:funcesp}).
   \item Cálculo de los operadores de traslación $\mathbb{H}^{jl}$ entre
         cada par de esferas, que materializan el teorema de adición
         (\ref{eq:addition}) y permiten reexpresar el campo dispersado
@@ -66,9 +71,10 @@ formalismo de la T-matrix:
 
 \subsubsection{Organización en módulos}
 
-El código se estructura en módulos, cada uno responsable de una etapa
-del cálculo. Los módulos relevantes para los cálculos de este trabajo
-son:
+El código es autocontenido y no requiere la instalación de librerías
+numéricas externas para su compilación y ejecución. Internamente,
+se estructura en módulos, cada uno responsable de una etapa del cálculo.
+Los módulos relevantes para los cálculos de este trabajo son:
 
 \begin{itemize}
   \item \texttt{numconstants}: constantes matemáticas y coeficientes
@@ -82,26 +88,27 @@ son:
         $\pi_{mn},\,\tau_{mn}$), y rotaciones de Wigner.
   \item \texttt{spheredata}: almacenamiento y gestión de la geometría
         del sistema: posiciones $\mathbf{r}^j$, radios $a^j$, índices
-        de refracción $m^j$ y jerarquía de esferas anidadas.
+        de refracción $m^j$ y jerarquía de esferas anidadas (una dentro de otra).
   \item \texttt{mie}: cálculo de los coeficientes de Mie $\bar a_n^j$,
         $\bar b_n^j$ que constituyen la T-matrix diagonal
-        $\bar{\mathbb{T}}_j$ de cada esfera, con soporte para medios
-        ópticamente activos. La rutina \texttt{multmiecoeffmult} aplica
+        $\bar{\mathbb{T}}_j$ de cada esfera. 
+        La rutina \texttt{multmiecoeffmult} aplica
         el operador $\bar{\mathbb{T}}_j$ a un vector dado.
   \item \texttt{translation}: implementación del teorema de adición de
         las VSWF y cálculo de los operadores de traslación
-        $\mathbb{H}^{jl}$ entre pares de esferas; la rutina central es
+        $\mathbb{H}^{jl}$ entre pares de esferas; la subrutina central es
         \texttt{gentranmatrix}, que ensambla los coeficientes
         $A_{mn}^{kl}$ y $B_{mn}^{kl}$ definidos en
         (\ref{eq:addition}).
   \item \texttt{solver}: construcción y resolución numérica del
         sistema de Foldy--Lax mediante factorización LU
         (\texttt{direct\_solver}) o método iterativo de gradiente
-        biconjugado complejo (\texttt{cbicg}). En el modo iterativo,
-        cada producto matriz--vector $\mathbb{M}_{sys}\,\mathbf{v}$ se
-        descompone en la aplicación sucesiva de los operadores
-        $\mathbb{H}^{jl}$ y $\bar{\mathbb{T}}_j$, sin necesidad de
-        almacenar $\mathbb{M}_{sys}$ explícitamente.
+        biconjugado complejo (\texttt{cbicg}). 
+      %   En el modo iterativo,
+      %   cada producto matriz--vector $\mathbb{M}_{sys}\,\mathbf{v}$ se
+      %   descompone en la aplicación sucesiva de los operadores
+      %   $\mathbb{H}^{jl}$ y $\bar{\mathbb{T}}_j$, sin necesidad de
+      %   almacenar $\mathbb{M}_{sys}$ explícitamente.
   \item \texttt{scatprops}: cálculo de los observables a partir de los
         $\{\mathbf{a}^{j}\}$ obtenidos: secciones eficaces, elementos 
         de la matriz de Mueller, parámetro de asimetría $g$ y albedo $\omega_0$.
@@ -121,7 +128,7 @@ para generar configuraciones aleatorias de esferas).
 
 
 \subsection{Métodos numéricos empleados}
-
+\label{sec:metodos}
 \subsubsection{Evaluación de funciones especiales y orden multipolar}
 \label{sec:funcesp}
 
@@ -139,7 +146,7 @@ analíticas que satisfacen, como
 \end{equation}
 
 y relaciones análogas para las funciones de Hankel. El uso de
-recurrencias en lugar de aproximaciones por diferencias finitas
+recurrencias en lugar de aproximaciones por derivación numérica
 garantiza la estabilidad numérica del cálculo incluso para órdenes
 elevados. De forma análoga, las funciones angulares $\pi_n,\,\tau_n$
 se evalúan mediante sus relaciones de recurrencia a partir de los
@@ -147,22 +154,20 @@ valores iniciales $\pi_0 = 0$, $\pi_1 = 1$.
 
 El orden multipolar máximo $n_{max}^{j}$ retenido en la expansión se
 determina automáticamente para cada esfera mediante el criterio de
-Wiscombe:
-
+Wiscombe~\cite{Wiscombe1980}:
 \begin{equation}
 \label{eq:wiscombe}
   n_{max}^{j} \approx x^{j} + 4\,(x^{j})^{1/3} + 5,
 \end{equation}
-
-que garantiza la convergencia de la serie para cualquier valor del
-parámetro de tamaño $x^{j}$. La dimensión total del sistema lineal
+Esta regla se emplea ampliamente en cálculos de dispersión de Mie y
+proporciona una forma práctica de escoger el truncamiento de la serie sin
+tener que fijarlo manualmente para cada valor de $x^{j}$.
+La dimensión total del sistema lineal
 asociado a Foldy--Lax es entonces
-
 \begin{equation}
 \label{eq:Neq}
   N_{eq} = \sum_{j=1}^{N_S} 2\,n_{max}^{j}\bigl(n_{max}^{j}+2\bigr),
 \end{equation}
-
 donde el factor $2$ contabiliza los dos modos de polarización (TM y TE),
 y el segundo factor el número de pares $(m,n)$ con $1 \le n \le n_{max}^{j}$
 y $-n \le m \le n$. Cuando todas las esferas son idénticas
@@ -219,7 +224,7 @@ procede columna a columna y, en cada una de las $\sim N_S$ columnas,
 anula del orden de $N_S$ elementos por debajo de la diagonal; cada uno
 de esos ceros se obtiene combinando linealmente dos filas, lo que
 modifica $\sim N_S$ entradas de la matriz. El producto de los tres
-factores da el escalado cúbico
+factores da una complejidad computacional de tipo cúbico
 
 \begin{equation}
   C_{LU} \;\sim\; \frac{N_S^{\,3}}{3} \;=\; \mathcal{O}(N_S^{\,3}),
@@ -234,7 +239,7 @@ completamente en memoria, con coste $\mathcal{O}(N_S^{\,2})$.
 \paragraph{Gradiente biconjugado complejo (\texttt{cbicg}).}
 Para sistemas mayores se emplea el método iterativo del
 \textit{gradiente biconjugado} (BiCG), que evita las dos limitaciones
-de LU: ni factoriza la matriz ni siquiera la construye explícitamente
+de LU: ni factoriza la matriz  $\mathbb{M}_{sys}$ ni siquiera la construye explícitamente
 en memoria. Solo necesita ser capaz de evaluar productos
 matriz--vector $\mathbb{M}_{sys}\,\mathbf{v}$, que en el código se
 obtienen de la propia estructura de
@@ -347,8 +352,8 @@ magnético en ambas polarizaciones.
 \subsection{Interpretación de resultados}
 \label{sec:interpretacion}
  
-Para luz no polarizada, los observables se obtienen promediando
-incoherentemente las contribuciones de las dos polarizaciones
+Para luz no polarizada, los observables se obtienen promediando 
+las contribuciones de las dos polarizaciones
 ortogonales calculadas, de modo que la combinación se realiza sobre
 magnitudes cuadráticas. Para el campo cercano, la intensidad media se
 expresa como

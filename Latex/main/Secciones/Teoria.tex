@@ -1,11 +1,10 @@
-\section{Fundamento teórico}
+\section{Fundamento teórico: formalismo de Mie para esfera individual}
 
 \subsection{Ecuaciones de Maxwell en medios lineales}
 
 El comportamiento de la radiación electromagnética en un medio lineal, isótropo
 y homogéneo está gobernado por las ecuaciones de Maxwell en ausencia de cargas y
 corrientes libres:
-
 \begin{equation}
 \begin{aligned}
 \nabla \times \mathbf{E} &= -\mu \frac{\partial \mathbf{H}}{\partial t}
@@ -16,7 +15,6 @@ corrientes libres:
 \nabla \cdot (\mu \mathbf{H}) &= 0
 \end{aligned}
 \end{equation}
-
 donde $\mathbf{E}$ y $\mathbf{H}$ son el campo eléctrico y la intensidad 
 de campo magnético, respectivamente, y $\epsilon$ y $\mu$ son la 
 permitividad y permeabilidad del medio.
@@ -32,25 +30,31 @@ campo eléctrico y magnético:
   \qquad
   \nabla^2 \mathbf{H} + k^2 \mathbf{H} = 0,
 \end{equation}
-
 donde
-
 \begin{equation}
-  k = \frac{2\pi}{\lambda}\,N
+k = \frac{2\pi}{\lambda}\tilde{N}
 \end{equation}
+es el número de onda en el medio, $\lambda$ es la longitud de onda en el vacío y $\tilde{N}
+=N+i\kappa$ es el índice de refracción complejo del medio circundante. En un medio no
+absorbente, $\kappa=0$.
 
-es el número de onda en el medio, $\lambda$ la longitud de onda en el vacío y
-$N$ el índice de refracción del medio circundante. En materiales absorbentes, el
-índice de refracción es complejo, $\tilde{m} = N + i\kappa$.
+
+% \begin{equation}
+%   k = \frac{2\pi}{\lambda}\,N
+% \end{equation}
+% es el número de onda en el medio, $\lambda$ la longitud de onda en el vacío y
+% $N$ el índice de refracción del medio circundante. En materiales absorbentes, el
+% índice de refracción es complejo, $\tilde{m} = N + i\kappa$.
 
 % , y la parte imaginaria $\kappa$ da cuenta de la 
 % absorción interna \cite[cap.~1]{Bohren1983}.
 
 El problema de la dispersión de la luz por una partícula esférica consiste en
 resolver la ecuación de onda en dos dominios: el interior de la esfera,
-caracterizado por un índice de refracción $N_1$ (en general complejo), y el
+caracterizado por un índice de refracción $\tilde{N_1}$ (en general complejo), y el
 exterior, caracterizado por el índice del medio circundante $N$ (en este
-trabajo, vacío, $N = 1$). Las soluciones deben satisfacer las condiciones de
+trabajo, supondremos que las esferas se encuentran en vacío, con $N = 1$). 
+Las soluciones deben satisfacer las condiciones de
 contorno en la superficie de la partícula, que exigen la continuidad de las
 componentes tangenciales de los campos eléctrico y magnético.
 
@@ -68,7 +72,7 @@ lineal de ambas.
 
 El problema de la dispersión consiste en resolver la ecuación de onda en los
 dos dominios descritos anteriormente. Las soluciones deben satisfacer en
-$r = a$ la continuidad de las componentes tangenciales de los campos:
+$r\!=\!a$ la continuidad de las componentes tangenciales de los campos:
 
 \begin{equation}
   \left.(E_\theta^{(i)} + E_\theta^{(s)})\right|_{r=a}
@@ -77,7 +81,6 @@ $r = a$ la continuidad de las componentes tangenciales de los campos:
   \left.(H_\theta^{(i)} + H_\theta^{(s)})\right|_{r=a}
   = \left.H_\theta^{(\mathrm{int})}\right|_{r=a},
 \end{equation}
-
 y análogamente para las componentes azimutales $\phi$.
 
 Dado que tanto las ecuaciones de Maxwell como estas condiciones de contorno son
@@ -113,7 +116,6 @@ adopta la forma matricial:
     E_{\perp}^{(i)}
   \end{pmatrix},
 \end{equation}
-
 donde $E_{\parallel}^{(i)}$ y $E_{\perp}^{(i)}$ son las componentes paralela y
 perpendicular del campo eléctrico incidente respecto al plano de incidencia, y
 $E_{\parallel}^{(s)}$ y $E_{\perp}^{(s)}$ son las componentes correspondientes
@@ -129,13 +131,13 @@ base para calcular las magnitudes observables: patrones angulares de dispersión
 secciones eficaces y grado de polarización del campo dispersado.
 
 % =========================================================================
-\subsection{Expansión en armónicos esféricos vectoriales}
+\subsection{Desarrollo en armónicos esféricos vectoriales}
 % =========================================================================
 
 La resolución del problema de dispersión por una partícula esférica requiere
 expresar los campos electromagnéticos en una base que respete la simetría del
 sistema. La ecuación de onda vectorial \eqref{eq:wave_equation},
-junto con la condición de transversidad $\nabla \cdot \mathbf{E} = 0$,
+junto con la condición de transversalidad $\nabla \cdot \mathbf{E} = 0$,
 $\nabla \cdot \mathbf{H} = 0$, describe modos electromagnéticos físicamente
 realizables. Cuando el dominio posee simetría esférica, como ocurre en la
 teoría de Mie, resulta natural buscar soluciones separables en coordenadas
@@ -165,7 +167,6 @@ físicos.
 La ecuación de onda escalar admite soluciones separables en coordenadas
 esféricas de la forma $\psi(r,\theta,\phi) = R(r)\,\Theta(\theta)\,\Phi(\phi)$,
 lo que conduce a las ecuaciones
-
 \begin{equation}
   \frac{d^{2}\Phi}{d\phi^{2}} + m^{2}\Phi = 0,
 \end{equation}
@@ -189,18 +190,19 @@ La parte radial da lugar a funciones de Bessel esféricas, y la dependencia
 angular a polinomios de Legendre asociados y funciones trigonométricas. Al
 imponer periodicidad en la coordenada azimutal y regularidad en el eje polar
 aparecen las funciones generadoras
-
 \begin{equation}
   \psi_{emn} = \cos(m\phi)\,P_{n}^{m}(\cos\theta)\,z_{n}(kr),
   \qquad
   \psi_{omn} = \sin(m\phi)\,P_{n}^{m}(\cos\theta)\,z_{n}(kr),
 \end{equation}
-
-donde $P_{n}^{m}$ son los polinomios de Legendre asociados y $z_{n}$ representa
+donde $P_{n}^{m}$ son los polinomios de Legendre asociados, $z_{n}$ representa
 cualquiera de las funciones de Bessel esféricas $j_n$, $y_n$, $h_n^{(1)}$ o
-$h_n^{(2)}$.
+$h_n^{(2)}$, y $e$ y $o$ denotan las soluciones pares (\textit{even}) e 
+impares (\textit{odd}) en la coordenada azimutal.
 
-A partir de estas funciones se generan los armónicos esféricos vectoriales
+A partir de estas funciones se generan los armónicos esféricos vectoriales, 
+una generalización de los armónicos esféricos que nos permite describir un 
+problema vectorial en una base con simetría esférica,
 mediante la construcción anterior:
 
 \begin{equation}
@@ -216,10 +218,9 @@ mediante la construcción anterior:
 \end{aligned}
 \end{equation}
 
-Cualquier solución de las ecuaciones de campo puede expandirse como serie en
+Cualquier solución de las ecuaciones de campo puede desarrollarse como serie en
 las funciones~(\ref{Generadores vectoriales}). En particular, el campo
 incidente se escribe como
-
 \begin{equation}
   \mathbf{E}_i =
   \sum_{m=0}^{\infty}\sum_{n=m}^{\infty}
@@ -230,7 +231,6 @@ incidente se escribe como
   + A_{omn}\,\mathbf{N}_{omn}
   \Bigr),
 \end{equation}
-
 y los campos interno y dispersado admiten expansiones análogas con coeficientes
 distintos. Cada término satisface automáticamente la ecuación de onda en su
 dominio y, gracias a la ortogonalidad de los armónicos esféricos vectoriales,
@@ -318,9 +318,11 @@ y, a partir de ellos, las propiedades ópticas de la partícula.
 
 \label{subsec:expansion_vectorial}
 Para expresar una onda plana de amplitud $E_0$ en esta base, se determinan los 
-coeficientes $A_{emn}$, $A_{omn}$, $B_{emn}$ y $B_{omn}$. La derivación detallada,
-disponible en \cite[pp.~91--92]{Bohren1983}, conduce a las expansiones del
-campo incidente:
+coeficientes $A_{emn}$, $A_{omn}$, $B_{emn}$ y $B_{omn}$. 
+La derivación detallada, en la que se proyecta la onda plana sobre los armónicos
+esféricos vectoriales y se emplea su ortogonalidad para seleccionar los modos con
+$m=1$ y determinar sus coeficientes, se encuentra en \cite[pp.~91--92]{Bohren1983}
+y conduce a los desarrollos del campo incidente:
 \begin{equation}
   \mathbf{E}_{i} =
   E_0 \sum_{n=1}^{\infty}
@@ -345,9 +347,10 @@ esféricas de primera clase $j_n(kr)$. Esta expresión constituye el punto de
 partida para la aplicación de las condiciones de contorno en la superficie de
 la esfera.
 
-El siguiente paso consiste en expresar los campos interno y
-dispersado. A partir de la expansión del campo incidente, y teniendo en cuenta las
-condiciones de contorno
+El siguiente paso consiste en expresar el campo interno, $\mathbf{E}_{int}$, 
+y el campo dispersado, $\mathbf{E}_{sca}$, junto con sus campos magnéticos 
+correspondientes. A partir de la expansión del campo incidente, y teniendo 
+en cuenta las condiciones de contorno
 \begin{equation}
   \bigl(\mathbf{E}_{i} + \mathbf{E}_{sca} - \mathbf{E}_{int}\bigr)
   \times \hat{\mathbf{e}}_r
@@ -409,8 +412,8 @@ tangenciales de los campos en $r = a$ \cite{Bohren1983}:
 
 \[
 \begin{aligned}
-  E_\theta^{(i)} + E_\theta^{(s)} &= E_\theta^{(\mathrm{int})}, \qquad   H_\theta^{(i)} + H_\theta^{(s)} &= H_\theta^{(\mathrm{int})},\\
-  E_\phi^{(i)}   + E_\phi^{(s)}   &= E_\phi^{(\mathrm{int})},   \qquad  H_\phi^{(i)}   + H_\phi^{(s)}   &= H_\phi^{(\mathrm{int})}. \\
+  E_\theta^{(i)} + E_\theta^{(sca)} &= E_\theta^{({int})}, \qquad   H_\theta^{(i)} + H_\theta^{(sca)} &= H_\theta^{({int})},\\
+  E_\phi^{(i)}   + E_\phi^{(sca)}   &= E_\phi^{({int})},   \qquad  H_\phi^{(i)}   + H_\phi^{(sca)}   &= H_\phi^{({int})}. \\
 \end{aligned}
 \]
 
@@ -419,10 +422,10 @@ esféricos vectoriales, el sistema se desacopla para cada orden $n$ y se
 expresa en términos del parámetro de tamaño y el índice de refracción relativo:
 
 \begin{equation}
-\label{eq:miecoeffs}
+  \label{eq:size_parameter}
   x = ka = \frac{2\pi\,N\,a}{\lambda},
   \qquad
-  m = \frac{k_1}{k} = \frac{N_1}{N}.
+  m = \frac{k_1}{k} = \frac{\tilde{N}_1}{N}.
 \end{equation}
 
 Aquí $m$ denota el índice de refracción relativo (cociente entre el
@@ -432,6 +435,7 @@ sección anterior.
 Los coeficientes de campo interno son
 
 \begin{align}
+  \label{eq:internalcoef}
 c_n &=
 \frac{
   \mu_1\, j_n(x)\,\bigl[x\, h_n^{(1)}(x)\bigr]^{\prime}
@@ -454,6 +458,7 @@ d_n &=
 y los coeficientes de dispersión son
 
 \begin{align}
+  \label{eq:miecoef}
 a_n &=
 \frac{
   \mu\, m^2\, j_n(mx)\,\bigl[x\, j_n(x)\bigr]^{\prime}
@@ -480,9 +485,7 @@ b_n &=
 Desde un punto de vista físico, la dispersión puede interpretarse como la
 rerradiación de energía electromagnética por parte de las cargas ligadas y
 corrientes de polarización inducidas en la partícula por el campo incidente
-\cite[cap.~3]{Bohren1983}. La
-onda incidente excita momentos multipolares en el interior de la partícula, que
-a su vez emiten radiación en todas las direcciones. En medios disipativos,
+\cite[cap.~3]{Bohren1983}. En medios disipativos,
 parte de la energía electromagnética se transforma en energía interna del
 material, dando lugar a la absorción. El balance energético de la interacción
 se expresa mediante
@@ -490,9 +493,11 @@ se expresa mediante
 \begin{equation}
   C_{\text{ext}} = C_{\text{sca}} + C_{\text{abs}},
 \end{equation}
+donde $C_{\text{ext}}$ es la sección eficaz de extinción, que cuantifica 
+la energía total retirada del haz incidente. Esta contribución se reparte 
+entre la energía rerradiada como dispersión, representada por $C_{\text{sca}}$, 
+y la energía absorbida por el material, representada por $C_{\text{abs}}$.
 
-donde $C_{\text{ext}}$ es la sección eficaz de extinción, $C_{\text{sca}}$ la
-de dispersión y $C_{\text{abs}}$ la de absorción.
 
 % =========================================================================
 \subsection{Secciones eficaces}
@@ -586,12 +591,12 @@ expresión de $W_{sca}/I_i$ se simplifica a
   C_{\text{abs}} = C_{\text{ext}} - C_{\text{sca}}.
 \end{equation}
 
-La sección eficaz de extinción sigue el \textit{teorema óptico} \cite{Bohren1983}: está
-determinada únicamente por la amplitud de dispersión en la dirección hacia
-adelante ($\theta = 0$), lo que refleja la interferencia destructiva entre el
-campo incidente y el dispersado que produce la sombra de la partícula.
+% La sección eficaz de extinción sigue el \textit{teorema óptico} \cite{Bohren1983}: está
+% determinada únicamente por la amplitud de dispersión en la dirección hacia
+% adelante ($\theta = 0$), lo que refleja la interferencia destructiva entre el
+% campo incidente y el dispersado que produce la sombra de la partícula.
 
-Es habitual introducir las eficiencias adimensionales, definidas como las
+Por último, es habitual introducir las eficiencias adimensionales, definidas como las
 secciones eficaces normalizadas por el área geométrica de la partícula
 $\pi a^2$:
 
@@ -646,18 +651,19 @@ funciones satisfacen las relaciones de recurrencia
 \end{equation}
 
 con valores iniciales $\pi_0 = 0$, $\pi_1 = 1$, que permiten su evaluación
-numérica eficiente.
+numérica eficiente, como se describe en la sección~\ref{sec:metodos}.
 
 Para una esfera homogénea e isotrópica, $S_3 = S_4 = 0$ por simetría azimutal,
 de modo que la matriz de amplitud es diagonal y los modos de polarización
-paralelo y perpendicular se dispersan de forma independiente. En el límite de
-dispersión hacia adelante ($\theta = 0$), y dado que $S_1(0) = S_2(0)$ por la
-isotropía de la esfera, se recupera el teorema óptico en su forma explícita:
+paralelo y perpendicular se dispersan de forma independiente. 
+% En el límite de
+% dispersión hacia adelante ($\theta = 0$), y dado que $S_1(0) = S_2(0)$ por la
+% isotropía de la esfera, se recupera el teorema óptico en su forma explícita:
 
-\begin{equation}
-  C_{\text{ext}} = \frac{4\pi}{k^2}\,\mathrm{Re}\bigl[S_1(0)\bigr]
-                 = \frac{4\pi}{k^2}\,\mathrm{Re}\bigl[S_2(0)\bigr].
-\end{equation}
+% \begin{equation}
+%   C_{\text{ext}} = \frac{4\pi}{k^2}\,\mathrm{Re}\bigl[S_1(0)\bigr]
+%                  = \frac{4\pi}{k^2}\,\mathrm{Re}\bigl[S_2(0)\bigr].
+% \end{equation}
 
 % =========================================================================
 \subsection{Matriz de Mueller}
@@ -794,13 +800,18 @@ corresponde a una partícula puramente absorbente. Una parte imaginaria nula del
 índice ($\kappa = 0$, medio transparente) conduce a $\omega_0 = 1$, mientras
 que una parte imaginaria elevada implica $\omega_0 \ll 1$.
 
+La eficiencia de extinción $Q_{\text{ext}}$ y el albedo $\omega_0$ constituyen una
+descripción óptica de una partícula individual. El albedo $\omega_0$ será la
+herramienta empleada para determinar el canal de extinción dominante en cada
+caso: dispersión, absorción o mixto.
+
 % Los tres parámetros $\{Q_{\text{ext}},\,\omega_0,\,g\}$ constituyen la
 % descripción óptica mínima de una partícula individual y son las magnitudes de
 % entrada que requiere la ecuación de transporte radiativo para describir un
 % medio dispersor.
 
-Los tres parámetros $\{Q_{\text{ext}},\,\omega_0,\,g\}$ constituyen la
-descripción óptica de una partícula individual.
+% Los tres parámetros $\{Q_{\text{ext}},\,\omega_0,\,g\}$ constituyen la
+% descripción óptica de una partícula individual.
 
 
 % =========================================================================
@@ -808,14 +819,14 @@ descripción óptica de una partícula individual.
 % =========================================================================
 
 El comportamiento óptico de una partícula esférica depende fundamentalmente del
-\textit{parámetro de tamaño} $x = 2\pi a / \lambda$, que compara la
+\textit{parámetro de tamaño} $x$, que compara la
 circunferencia de la partícula con la longitud de onda incidente. En función
 del valor de $x$ se distinguen tres regímenes cualitativamente distintos.
 
 Cuando la partícula es mucho más pequeña que la longitud de onda ($x \ll 1$),
 estamos en el \textit{régimen de Rayleigh}: el campo incidente varía poco sobre
-su volumen y la respuesta queda dominada por el término dipolar ($n = 1$)
-\cite[cap.~5]{Bohren1983}. En este límite, los coeficientes de Mie se aproximan por
+su volumen y la respuesta queda dominada por el término dipolar \ref{eq:miecoef}. 
+En este límite, los coeficientes de Mie se aproximan por
 
 \begin{equation}
   a_1 \approx -\frac{2i\,x^3}{3}\,\frac{m^2-1}{m^2+2},
@@ -845,7 +856,8 @@ Cuando el tamaño de la partícula es comparable a la longitud de onda ($x \sim
 oscilaciones resonantes en función de $x$, conocidas como \textit{resonancias
 de Mie}, asociadas a los modos electromagnéticos del interior de la esfera. La
 dispersión se vuelve marcadamente anisótropa hacia adelante ($g \to 1$), como
-se aprecia en la figura~\ref{fig:S11_mie}, y la función de fase desarrolla
+se aprecia en la figura~\ref{fig:S11_mie}, y la distribución angular de la energía
+$S_{11}$ desarrolla
 lóbulos bien definidos que resultan especialmente visibles en escala
 logarítmica (figura~\ref{fig:S11_mie_log}). Este es el régimen de mayor
 riqueza fenomenológica y el que requiere el tratamiento completo de la teoría
@@ -862,7 +874,7 @@ la interacción puede describirse mediante rayos geométricos.
         \centering
         % \vspace{0pt}
         \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/rayleigh/1e/a20/plots/S11_negrita.png}
-        \caption{Régimen de Rayleigh.}
+        \caption{Régimen de Rayleigh $x \sim 0.1$.}
         \label{fig:S11_rayleigh}
     \end{subfigure}
     \hfill
@@ -870,7 +882,7 @@ la interacción puede describirse mediante rayos geométricos.
         \centering
         % \vspace{0pt}
         \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/regimenmie/1e/a600/plots/S11_negrita.png}
-        \caption{Régimen de Mie.}
+        \caption{Régimen de Mie $x \sim 6$.}
         \label{fig:S11_mie}
     \end{subfigure}
     \hfill
@@ -878,11 +890,14 @@ la interacción puede describirse mediante rayos geométricos.
         \centering
         % \vspace{0pt}
         \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/regimenmie/1e/a600/plots/S11_log_negrita.png}
-        \caption{Régimen de Mie en escala logarítmica.}
+        \caption{Régimen de Mie en escala logarítmica $x \sim 6$.}
         \label{fig:S11_mie_log}
     \end{subfigure}
 
-    \caption{Patrón angular $S_{11}(\theta)$ de una esfera de oro en dos regímenes de dispersión.}
+    \caption{Patrón angular $S_{11}(\theta)$ de una esfera de oro en dos regímenes
+            de dispersión, a una longitud de onda $\lambda = 600$~nm. Los índices de
+            refracción del oro se toman de los datos de Johnson \& Christy
+            \cite{johnson1972optical}.}
     \label{fig:S11_regimenes}
 \end{figure}
 
@@ -949,7 +964,8 @@ la interacción puede describirse mediante rayos geométricos.
 
 
 % =========================================================================
-\subsection{Dispersión independiente y dispersión múltiple}
+\section{Fundamento teórico: dispersión múltiple}
+% \subsection{Dispersión independiente y dispersión múltiple}
 % =========================================================================
  
 La teoría de Mie desarrollada en las secciones anteriores describe la
@@ -996,8 +1012,8 @@ respuesta de cada esfera en su propio sistema de coordenadas
 $(r^i,\theta^i,\phi^i)$ centrado en $\mathbf{r}^i$, usando la base de
 armónicos esféricos vectoriales ya introducida en la
 sección~\ref{subsec:expansion_vectorial}. Los coeficientes que pesan las
-ondas \textit{salientes} ($\mathbf{M}^{(3)},\mathbf{N}^{(3)}$) en la
-expansión del campo dispersado por la esfera $i$ se denotan
+ondas \textit{salientes} ($\mathbf{M}^{(3)},\mathbf{N}^{(3)}$) en el
+desarrollo del campo dispersado por la esfera $i$ se denotan
 $a_{mn}^{i}$ (modo TM) y $b_{mn}^{i}$ (modo TE), y los coeficientes que
 pesan las ondas \textit{regulares} ($\mathbf{M}^{(1)},\mathbf{N}^{(1)}$)
 en la expansión del campo incidente externo en torno a $\mathbf{r}^i$ se
@@ -1043,7 +1059,7 @@ campo dispersado por la esfera $l$, descrito en su sistema centrado en
 $\mathbf{r}^l$, en el sistema de la esfera $j$, centrado en
 $\mathbf{r}^j$. Esta operación es posible gracias al \textit{teorema de
 adición} de las funciones vectoriales de onda
-esférica~\cite{Stein1961,Cruzan1962,Mackowski1991,Mishchenko2002}, que
+esférica (VSWF, por sus siglas en inglés)~\cite{Stein1961,Cruzan1962,Mackowski1991,Mishchenko2002}, que
 establece que una onda saliente centrada en $\mathbf{r}^l$ puede
 reexpresarse, en la región $|\mathbf{r}-\mathbf{r}^j| < |\mathbf{r}^l-\mathbf{r}^j|$, como una serie de ondas
 regulares centradas en $\mathbf{r}^j$:
@@ -1085,7 +1101,7 @@ $\mathbf{r}^l$ en la expansión equivalente de ondas regulares centrada en
 $\mathbf{r}^j$. El teorema de adición es el ingrediente matemático
 central del formalismo: sin él no sería posible expresar el campo
 dispersado por una esfera en términos de las funciones base de otra. 
-La computación numérica de los coeficientes de adición se discute en la
+La computación numérica de los coeficientes de adición se discutirá en la
 sección~\ref{sec:mstm}.
  
 % =========================================================================
@@ -1095,7 +1111,6 @@ sección~\ref{sec:mstm}.
 Combinando la T-matrix de cada esfera con el teorema de adición, los
 coeficientes del campo excitante sobre la esfera $j$, expresados en su
 sistema local, se escriben
- 
 \begin{equation}
 \label{eq:exciting}
   \mathbf{q}^{j}
@@ -1103,11 +1118,10 @@ sistema local, se escriben
   + \sum_{\substack{l=1\\l\neq j}}^{N_S}
     \mathbb{H}^{jl}\,\mathbf{a}^{l},
 \end{equation}
- 
-donde $\mathbf{p}^{j}$ son los coeficientes del campo incidente
+ donde $\mathbf{p}^{j}$ son los coeficientes del campo incidente
 proyectados sobre el sistema de la esfera $j$. Sustituyendo
 (\ref{eq:exciting}) en (\ref{eq:T_indiv}) se obtiene el sistema acoplado
-de \textit{Foldy--Lax}~\cite{Foldy1945,Lax1951,Mackowski1991,Mackowski1996}:
+de Foldy--Lax~\cite{Foldy1945,Lax1951,Mackowski1991,Mackowski1996}:
  
 \begin{equation}
 \label{eq:foldy-lax}
@@ -1117,7 +1131,6 @@ de \textit{Foldy--Lax}~\cite{Foldy1945,Lax1951,Mackowski1991,Mackowski1996}:
   = \bar{\mathbb{T}}_j\,\mathbf{p}^{j},
   \qquad j = 1,\ldots,N_S,
 \end{equation}
- 
 que en forma matricial global es
  
 \begin{equation}

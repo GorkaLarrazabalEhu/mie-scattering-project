@@ -8,66 +8,72 @@ en distintas direcciones. Cómo se reparte esa energía depende del tamaño, la
 geometría y la composición de la partícula, y de la longitud de onda de la luz
 incidente. El primer tratamiento completo de este problema para una esfera lo
 dieron Ludvig Lorenz y, de forma independiente y más conocida, el físico alemán
-Gustav Mie en 1908. La teoría de Mie proporciona la solución analítica exacta
-para una esfera homogénea, a partir de la cual se calculan las
-secciones eficaces de dispersión, absorción y extinción, así como la
-distribución angular de la radiación dispersada. Más de un siglo después, sigue
-siendo una herramienta de referencia para entender la interacción entre la luz y
-la materia.
+Gustav Mie en 1908~\cite{Mie1908}. La teoría de Mie proporciona la solución
+analítica exacta para una esfera homogénea~\cite{Bohren1983,vandeHulst1981}, a
+partir de la cual se calculan las secciones eficaces de dispersión, absorción y
+extinción, así como la distribución angular de la radiación dispersada. Más de
+un siglo después, sigue siendo una herramienta de referencia para entender la
+interacción entre la luz y la materia.
 
 La esfera aislada es solo el punto de partida. Muchos sistemas de interés no
 están formados por una única partícula, sino por conjuntos de esferas próximas
 entre sí, donde el campo que excita a cada una no es únicamente el incidente
 externo, sino también el dispersado por las demás. Aparece entonces un problema
-de dispersión múltiple, en el que las respuestas individuales quedan acopladas.
-Este caso se aborda extendiendo la propia teoría de Mie: cada esfera se sigue
-describiendo mediante sus coeficientes de Mie, pero acoplados entre sí a través
-del formalismo de la matriz de transición, o matriz $T$, que relaciona los
-coeficientes del campo excitante con los del campo dispersado en una base de
-armónicos esféricos vectoriales. Este enfoque está implementado en el código
-MSTM (\textit{Multiple Sphere T-Matrix}), escrito en Fortran por Mackowski, que
-constituye la herramienta de cálculo sobre la que se apoya este trabajo y que
-permite estudiar tanto propiedades de campo lejano como distribuciones de campo
-cercano.
+de dispersión múltiple, en el que las respuestas individuales quedan
+acopladas~\cite{Foldy1945,Lax1951}. Este caso se aborda extendiendo la propia
+teoría de Mie: cada esfera se sigue describiendo mediante sus coeficientes de
+Mie, pero acoplados entre sí a través del formalismo de la matriz de transición,
+o T-Matrix~\cite{Waterman1965,Waterman1971}, que relaciona los coeficientes del campo
+excitante con los del campo dispersado en una base de armónicos esféricos
+vectoriales~\cite{Mackowski1991,Mackowski1996}. 
+Este enfoque está implementado en el código MSTM
+(\textit{Multiple Sphere T-Matrix}), un código Fortran para dispersión por
+múltiples esferas desarrollado en el marco de los trabajos de Mackowski y
+Mishchenko~\cite{Mackowski2011,Mackowski_code}\footnote{El código fuente de
+MSTM está disponible públicamente en
+\url{https://github.com/dmckwski/MSTM}.}, que constituye la herramienta de
+cálculo sobre la que se apoya este trabajo y que permite estudiar tanto
+propiedades de campo lejano como distribuciones de campo cercano.
 
 La dispersión por partículas esféricas aparece en disciplinas muy distintas. En
 óptica atmosférica permite comprender fenómenos asociados a aerosoles, gotas y
-partículas en suspensión; en física biomédica interviene en la interacción de la
-luz con tejidos y partículas biológicas; y en nanofotónica resulta esencial para
-diseñar estructuras capaces de controlar la luz por debajo de la escala de la
-longitud de onda. Dentro de este último campo, las nanopartículas metálicas
----y en particular las de oro--- son capaces de concentrar la luz incidente en
-regiones mucho más pequeñas que su longitud de onda, intensificando
-notablemente el campo electromagnético en su entorno inmediato. Estas regiones
-de campo intenso, o \emph{hot spots}, son la base de las nanoantenas ópticas y
-sus aplicaciones. Aunque este trabajo no desarrolla una aplicación experimental concreta, sí
-estudia los mecanismos físicos que las sustentan.
+partículas en suspensión~\cite{Mishchenko2002}; en física biomédica interviene
+en la interacción de la luz con tejidos y partículas biológicas~\cite{Tuchin2015,Jacques2013};
+y en nanofotónica resulta esencial para diseñar estructuras capaces de controlar
+la luz por debajo de la escala de la longitud de onda~\cite{Novotny2011}. Dentro de
+este último campo, las nanopartículas metálicas ---y en particular las de oro--- son
+capaces de concentrar la luz incidente en regiones mucho más pequeñas que su
+longitud de onda, intensificando notablemente el campo electromagnético en su
+entorno inmediato~\cite{Myroshnychenko2008,Kolwas2013}. Estas regiones de campo
+intenso, o \emph{hot spots}, son la base de las nanoantenas ópticas y sus
+aplicaciones~\cite{Bharadwaj2009,Novotny2011}. Aunque este trabajo no desarrolla
+una aplicación experimental concreta, sí estudia los mecanismos físicos que las
+sustentan.
+
 
 El objetivo de este trabajo es estudiar la dispersión electromagnética por
 nanopartículas esféricas de oro y por agregados simples de esferas mediante
 simulaciones numéricas basadas en MSTM. Para ello se toma primero la esfera
-individual como referencia y después se analizan configuraciones
-acopladas, concretamente un dímero y un tetrámero. 
-El estudio considera tanto la respuesta en campo lejano como la intensificación
-del campo cercano alrededor de las partículas. Finalmente, los resultados
-obtenidos se reinterpretan desde el punto de vista de las nanoantenas ópticas,
-analizando el papel del tamaño, la separación entre partículas y la geometría
-del agregado.
-
-La utilización de MSTM implica preparar los ficheros de entrada en un formato
-concreto, trabajar en unidades adimensionales y procesar los ficheros de salida
-que genera el programa. Para agilizar este proceso se ha desarrollado un entorno
-gráfico propio en Python, que automatiza la generación de los ficheros de entrada, la
-ejecución de MSTM y el postproceso de los resultados.
+individual como referencia y después se analizan configuraciones acopladas,
+concretamente un dímero y un tetrámero. El estudio considera tanto la respuesta
+en campo lejano como la intensificación del campo cercano alrededor de las
+partículas. Finalmente, los resultados obtenidos se reinterpretan desde el punto
+de vista de las nanoantenas ópticas, analizando el papel del tamaño, la
+separación entre partículas y la geometría del agregado. Como la utilización de
+MSTM implica preparar los ficheros de entrada en un formato concreto, trabajar
+en unidades adimensionales y procesar los ficheros de salida que genera el
+programa, se ha desarrollado además un entorno gráfico propio en Python que
+automatiza la generación de los ficheros de entrada, la ejecución de MSTM y el
+postproceso de los resultados.
 
 A partir de este planteamiento, los objetivos específicos del trabajo son:
 
 \begin{enumerate}
-\item Comprender el formalismo de Mie y de la matriz $T$, así como su aplicación
+\item Comprender el formalismo de Mie y de la T-Matrix, así como su aplicación
         al problema de la dispersión electromagnética por una o varias esferas.
 
 \item Analizar la implementación de estos métodos en el código MSTM de
-        Mackowski, identificando las magnitudes físicas que calcula y la forma
+        Mackowski y Mishchenko, identificando las magnitudes físicas que calcula y la forma
         en que deben interpretarse sus resultados.
 
 \item Desarrollar un entorno de trabajo en Python que automatice la

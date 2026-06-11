@@ -18,7 +18,7 @@ cualitativamente distintos, resumidos en la tabla~\ref{tab:dimero_regimenes}.
     \hline
     Radio $a$ & Rango de $x$ ($\lambda\in[400,800]\,\text{nm}$) & Régimen \\
     \hline
-    25\,nm  & $0.20$ -- $0.39$ & Dipolar (Rayleigh) \\
+    25\,nm  & $0.20$ -- $0.39$ & Rayleigh (dipolar) \\
     85\,nm  & $0.67$ -- $1.34$ & Transición (cuadrupolar) \\
     600\,nm & $4.71$ -- $9.42$ & Mie avanzado \\
     \hline
@@ -31,8 +31,11 @@ cualitativamente distintos, resumidos en la tabla~\ref{tab:dimero_regimenes}.
 Para cada radio se estudia el efecto del gap variando $d$ desde distancias
 muy pequeñas (acoplamiento fuerte) hasta distancias grandes 
 (acoplamiento débil). En cada caso se presentan: las eficiencias
-espectrales del conjunto y el campo cercano $|\mathbf{E}|^2$ evaluado en el
+espectrales del conjunto (con sus resonancias) y el campo cercano 
+$|\mathbf{E}|^2$ evaluado en el
 plano $xz$ a la longitud de onda de resonancia del dímero.
+Recodamos que el índice de refracción
+del oro se obtiene de Johnson \& Christy~\cite{johnson1972optical}.
 
 
 % =========================================================================
@@ -40,9 +43,82 @@ plano $xz$ a la longitud de onda de resonancia del dímero.
 \label{subsec:dimero_ref}
 % =========================================================================
 
+% Antes de analizar los dímeros se recogen los resultados de la esfera individual
+% para cada radio, que servirán como referencia para cuantificar el efecto del
+% acoplamiento.
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a25/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$a=25\,\text{nm}$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a85/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$a=85\,\text{nm}$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a600/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$a=600\,\text{nm}$.}
+%   \end{subfigure}
+%   \caption{Eficiencias espectrales de la esfera individual de Au para los tres
+%             radios estudiados. Para $a=25\,\text{nm}$ la respuesta óptica está
+%             dominada por el modo dipolar con $Q_\text{abs}$ dominante ($x\ll1$).
+%             Para $a=85\,\text{nm}$ el espectro presenta un pico pronunciado en
+%             torno a $\lambda\approx570\,\text{nm}$ donde la contribución
+%             cuadrupolar es relevante ($x\sim1$). Para $a=600\,\text{nm}$ las
+%             eficiencias varían suavemente con contribuciones multipolares de
+%             orden superior, siendo la dispersión dominante en todo el rango
+%             visible ($x\gg1$).}
+%   \label{fig:ref_eff}
+% \end{figure}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a25/wl520/plots/nf.png}
+%     \caption{$a=25\,\text{nm}$, $\lambda=520\,\text{nm}$.
+%              Máximo: $11.90\,|\mathbf{E}_0|^2$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a85/wl570/plots/nf.png}
+%     \caption{$a=85\,\text{nm}$, $\lambda=570\,\text{nm}$.
+%              Máximo: $12.75\,|\mathbf{E}_0|^2$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a600/wl560/plots/nf.png}
+%     \caption{$a=600\,\text{nm}$, $\lambda=560\,\text{nm}$.
+%              Máximo: $6.55\,|\mathbf{E}_0|^2$.}
+%   \end{subfigure}
+%   \caption{Campo cercano $|\mathbf{E}|^2$ de la esfera individual de Au para
+%            los tres radios. 
+%            %evaluado a la longitud de onda de resonancia de cada uno. 
+%            Para $a=25\,\text{nm}$ la intensificación se localiza en
+%            los polos de la esfera perpendiculares a la dirección de
+%            propagación, característico del modo dipolar ($x\ll1$). Para
+%            $a=85\,\text{nm}$ la concentración superficial aparece ligeramente
+%            desplazada hacia adelante (la cara de sombra), reflejo de la
+%            contribución de órdenes superiores ($x\sim1$). Para
+%            $a=600\,\text{nm}$ el campo exhibe patrones de interferencia
+%            característicos del régimen de Mie avanzado.}
+%   \label{fig:ref_nf}
+% \end{figure}
+
 Antes de analizar los dímeros se recogen los resultados de la esfera individual
 para cada radio, que servirán como referencia para cuantificar el efecto del
-acoplamiento.
+acoplamiento. Para cada tamaño se presentan las eficiencias espectrales
+(figura~\ref{fig:ref_eff}) y el campo cercano $|\mathbf{E}|^2$ evaluado a la
+longitud de onda de resonancia (figura~\ref{fig:ref_nf}).
 
 \begin{figure}[H]
   \centering
@@ -50,28 +126,24 @@ acoplamiento.
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a25/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{$a=25\,\text{nm}$.}
+    \label{fig:ref_eff_a25}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a85/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{$a=85\,\text{nm}$.}
+    \label{fig:ref_eff_a85}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a600/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{$a=600\,\text{nm}$.}
+    \label{fig:ref_eff_a600}
   \end{subfigure}
   \caption{Eficiencias espectrales de la esfera individual de Au para los tres
-            radios estudiados. Para $a=25\,\text{nm}$ la respuesta óptica está
-            dominada por el modo dipolar con $Q_\text{abs}$ dominante ($x\ll1$).
-            Para $a=85\,\text{nm}$ el espectro presenta un pico pronunciado en
-            torno a $\lambda\approx570\,\text{nm}$ donde la contribución
-            cuadrupolar es relevante ($x\sim1$). Para $a=600\,\text{nm}$ las
-            eficiencias varían suavemente con contribuciones multipolares de
-            orden superior, siendo la dispersión dominante en todo el rango
-            visible ($x\gg1$).}
+           radios estudiados.}
   \label{fig:ref_eff}
 \end{figure}
 
@@ -80,49 +152,149 @@ acoplamiento.
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a25/wl520/plots/nf.png}
-    \caption{$a=25\,\text{nm}$, $\lambda=520\,\text{nm}$.
-             Máximo: $11.90\,|\mathbf{E}_0|^2$.}
+    \caption{$a=25\,\text{nm}$, $\lambda=520\,\text{nm}$.}
+    \label{fig:ref_nf_a25}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a85/wl570/plots/nf.png}
-    \caption{$a=85\,\text{nm}$, $\lambda=570\,\text{nm}$.
-             Máximo: $12.75\,|\mathbf{E}_0|^2$.}
+    \caption{$a=85\,\text{nm}$, $\lambda=570\,\text{nm}$.}
+    \label{fig:ref_nf_a85}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/1e/ew/a600/wl560/plots/nf.png}
-    \caption{$a=600\,\text{nm}$, $\lambda=560\,\text{nm}$.
-             Máximo: $6.55\,|\mathbf{E}_0|^2$.}
+    \caption{$a=600\,\text{nm}$, $\lambda=560\,\text{nm}$.}
+    \label{fig:ref_nf_a600}
   \end{subfigure}
   \caption{Campo cercano $|\mathbf{E}|^2$ de la esfera individual de Au para
-           los tres radios. 
-           %evaluado a la longitud de onda de resonancia de cada uno. 
-           Para $a=25\,\text{nm}$ la intensificación se localiza en
-           los polos de la esfera perpendiculares a la dirección de
-           propagación, característico del modo dipolar ($x\ll1$). Para
-           $a=85\,\text{nm}$ la concentración superficial aparece ligeramente
-           desplazada hacia adelante (la cara de sombra), reflejo de la
-           contribución de órdenes superiores ($x\sim1$). Para
-           $a=600\,\text{nm}$ el campo exhibe patrones de interferencia
-           característicos del régimen de Mie avanzado.}
+           los tres radios.}
   \label{fig:ref_nf}
 \end{figure}
 
+Las eficiencias espectrales (figura~\ref{fig:ref_eff}) reflejan el cambio de
+régimen al aumentar el tamaño. Para $a=25\,\text{nm}$ la respuesta óptica está
+dominada por el modo dipolar, con $Q_\text{abs}$ como canal de extinción
+dominante ($x\ll1$). Para $a=85\,\text{nm}$ el espectro presenta un pico
+pronunciado en torno a $\lambda\approx570\,\text{nm}$, donde la contribución
+cuadrupolar ya es relevante ($x\sim1$). Para $a=600\,\text{nm}$ las eficiencias
+varían suavemente por la superposición de contribuciones multipolares de orden
+superior, y la dispersión pasa a ser dominante en todo el rango visible
+($x\gg1$).
+
+Esta misma progresión se observa en el campo cercano (figura~\ref{fig:ref_nf}).
+Para $a=25\,\text{nm}$ la intensificación se localiza en los polos de la esfera
+perpendiculares a la dirección de propagación, como corresponde al modo dipolar
+($x\ll1$). Para $a=85\,\text{nm}$ la concentración superficial aparece
+ligeramente desplazada hacia adelante (la cara de sombra), reflejo de la
+contribución de los órdenes superiores ($x\sim1$). Para $a=600\,\text{nm}$ el
+campo exhibe los patrones de interferencia característicos del régimen de Mie
+avanzado. En todos los casos la intensificación máxima es moderada (entre $6$ y
+$13\,|\mathbf{E}_0|^2$), valor que servirá de referencia frente a la
+concentración de campo que introduce el gap en los dímeros.
 
 % =========================================================================
 \subsection{Dímero en régimen dipolar: $a = 25\,\text{nm}$}
 \label{subsec:dimero_a25}
 % =========================================================================
 
+% El radio $a=25\,\text{nm}$ sitúa a cada esfera en el límite superior del
+% régimen cuasidipolar ($x\in[0.20,0.39]$), donde la respuesta óptica está
+% dominada por el término dipolar eléctrico $a_1$. Se han simulado tres
+% separaciones: $d=5$, $10$ y $50\,\text{nm}$.
+
+% \subsubsection*{Eficiencias espectrales}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep5/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=5\,\text{nm}$.}
+%     \label{fig:a25_eff_g5}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep10/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=10\,\text{nm}$.}
+%     \label{fig:a25_eff_g10}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep50/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=50\,\text{nm}$.}
+%     \label{fig:a25_eff_g50}
+%   \end{subfigure}
+%   \caption{Eficiencias espectrales del dímero con $a=25\,\text{nm}$ para
+%            tres separaciones. La resonancia permanece en torno a
+%            $\lambda\approx520\,\text{nm}$ en los tres casos; el acoplamiento
+%            incrementa la amplitud del pico sin desplazarlo espectralmente.
+%            La absorción sigue siendo el canal dominante de extinción para
+%            todos los gaps estudiados. A medida que aumenta $d$, la amplitud
+%            del pico disminuye progresivamente, convergiendo hacia los valores
+%            de la esfera individual.}
+%   \label{fig:a25_eff}
+% \end{figure}
+
+% \subsubsection*{Campo cercano}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep5/wl530/plots/nf.png}
+%     \caption{$d=5\,\text{nm}$, $\lambda=530\,\text{nm}$.
+%              Máximo: $147.35\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a25_nf_g5}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep10/wl525/plots/nf.png}
+%     \caption{$d=10\,\text{nm}$, $\lambda=525\,\text{nm}$.
+%              Máximo: $61.58\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a25_nf_g10}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep50/wl520/plots/nf.png}
+%     \caption{$d=50\,\text{nm}$, $\lambda=520\,\text{nm}$.
+%              Máximo: $14.67\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a25_nf_g50}
+%   \end{subfigure}
+%   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero con
+%            $a=25\,\text{nm}$ evaluado a la longitud de onda de máxima
+%            $Q_\text{sca}$. La zona de concentración se localiza en el gap entre
+%            las dos esferas. Al reducir el gap de $50\,\text{nm}$ a
+%            $5\,\text{nm}$, la intensificación máxima pasa de
+%            $14.67\,|\mathbf{E}_0|^2$ a $147.35\,|\mathbf{E}_0|^2$,
+%            un aumento de un orden de magnitud respecto a la esfera
+%            individual ($11.90\,|\mathbf{E}_0|^2$).}
+%   \label{fig:a25_nf}
+% \end{figure}
+
+% En el dímero de $a=25\,\text{nm}$ el acoplamiento no cambia la posición de la
+% resonancia, que se mantiene en torno a $\lambda\approx520\,\text{nm}$, fijada
+% por la respuesta del oro. Lo que sí cambia es la amplitud: el pico de
+% eficiencia para $d=5\,\text{nm}$ casi duplica el de la esfera individual (figura~\ref{fig:ref_eff}), y el
+% efecto es aún mayor en campo cercano, donde la intensificación en el gap
+% aumenta rápidamente al reducir la separación. Que la resonancia no se desplace
+% no significa, por tanto, que el acoplamiento sea débil: actúa sobre la
+% intensidad, no sobre la posición del pico.
+
 El radio $a=25\,\text{nm}$ sitúa a cada esfera en el límite superior del
 régimen cuasidipolar ($x\in[0.20,0.39]$), donde la respuesta óptica está
 dominada por el término dipolar eléctrico $a_1$. Se han simulado tres
-separaciones: $d=5$, $10$ y $50\,\text{nm}$.
+separaciones: $d=5$, $10$ y $50\,\text{nm}$. Para cada una se presentan las
+eficiencias espectrales (figura~\ref{fig:a25_eff}) y el campo cercano
+$|\mathbf{E}|^2$ en el gap (figura~\ref{fig:a25_nf}).
 
-\subsubsection*{Eficiencias espectrales}
+% \subsubsection*{Eficiencias espectrales}
 
 \begin{figure}[H]
   \centering
@@ -146,138 +318,234 @@ separaciones: $d=5$, $10$ y $50\,\text{nm}$.
     \caption{$d=50\,\text{nm}$.}
     \label{fig:a25_eff_g50}
   \end{subfigure}
-  \caption{Eficiencias espectrales del dímero con $a=25\,\text{nm}$ para
-           tres separaciones. La resonancia permanece en torno a
-           $\lambda\approx520\,\text{nm}$ en los tres casos; el acoplamiento
-           incrementa la amplitud del pico sin desplazarlo espectralmente.
-           La absorción sigue siendo el canal dominante de extinción para
-           todos los gaps estudiados. A medida que aumenta $d$, la amplitud
-           del pico disminuye progresivamente, convergiendo hacia los valores
-           de la esfera individual.}
+  \caption{Eficiencias espectrales del dímero con $a=25\,\text{nm}$ para las
+           tres separaciones estudiadas.}
   \label{fig:a25_eff}
 \end{figure}
 
-\subsubsection*{Campo cercano}
+% \subsubsection*{Campo cercano}
 
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep5/wl530/plots/nf.png}
-    \caption{$d=5\,\text{nm}$, $\lambda=530\,\text{nm}$.
-             Máximo: $147.35\,|\mathbf{E}_0|^2$.}
+    \caption{$d=5\,\text{nm}$, $\lambda=530\,\text{nm}$.}
     \label{fig:a25_nf_g5}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep10/wl525/plots/nf.png}
-    \caption{$d=10\,\text{nm}$, $\lambda=525\,\text{nm}$.
-             Máximo: $61.58\,|\mathbf{E}_0|^2$.}
+    \caption{$d=10\,\text{nm}$, $\lambda=525\,\text{nm}$.}
     \label{fig:a25_nf_g10}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a25/sep50/wl520/plots/nf.png}
-    \caption{$d=50\,\text{nm}$, $\lambda=520\,\text{nm}$.
-             Máximo: $14.67\,|\mathbf{E}_0|^2$.}
+    \caption{$d=50\,\text{nm}$, $\lambda=520\,\text{nm}$.}
     \label{fig:a25_nf_g50}
   \end{subfigure}
   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero con
            $a=25\,\text{nm}$ evaluado a la longitud de onda de máxima
-           $Q_\text{sca}$. La zona de concentración se localiza en el gap entre
-           las dos esferas. Al reducir el gap de $50\,\text{nm}$ a
-           $5\,\text{nm}$, la intensificación máxima pasa de
-           $14.67\,|\mathbf{E}_0|^2$ a $147.35\,|\mathbf{E}_0|^2$,
-           un aumento de un orden de magnitud respecto a la esfera
-           individual ($11.90\,|\mathbf{E}_0|^2$).}
+           $Q_\text{sca}$.}
   \label{fig:a25_nf}
 \end{figure}
 
-En el dímero de $a=25\,\text{nm}$ el acoplamiento no cambia la posición de la
-resonancia, que se mantiene en torno a $\lambda\approx520\,\text{nm}$, fijada
-por la respuesta del oro. Lo que sí cambia es la amplitud: el pico de
-eficiencia para $d=5\,\text{nm}$ casi duplica el de la esfera individual (figura~\ref{fig:ref_eff}), y el
-efecto es aún mayor en campo cercano, donde la intensificación en el gap
-aumenta rápidamente al reducir la separación. Que la resonancia no se desplace
-no significa, por tanto, que el acoplamiento sea débil: actúa sobre la
-intensidad, no sobre la posición del pico.
+Las eficiencias espectrales (figura~\ref{fig:a25_eff}) muestran que la
+resonancia permanece en torno a $\lambda\approx520\,\text{nm}$ en los tres
+casos: el acoplamiento incrementa la amplitud del pico sin desplazarlo
+espectralmente, y la absorción sigue siendo el canal dominante de extinción
+para todos los gaps estudiados. A medida que aumenta $d$, la amplitud del pico
+disminuye progresivamente, convergiendo hacia los valores de la esfera
+individual (figura~\ref{fig:ref_eff}); para $d=5\,\text{nm}$ el pico casi
+duplica el de la esfera aislada.
 
+El efecto es mucho más notable en campo cercano (figura~\ref{fig:a25_nf}),
+donde la zona de concentración se localiza en el gap entre las dos esferas. Al
+reducir la separación de $50\,\text{nm}$ a $5\,\text{nm}$, la intensificación
+máxima pasa de $14.67$ a $147.35\,|\mathbf{E}_0|^2$, un aumento de más de un
+orden de magnitud respecto a la esfera individual
+($11.90\,|\mathbf{E}_0|^2$, figura~\ref{fig:ref_nf}). Que la resonancia no se
+desplace no implica, por tanto, un acoplamiento débil: este actúa sobre la
+intensidad del campo, no sobre la posición espectral del pico.
 
 % =========================================================================
 \subsection{Dímero en régimen de transición: $a = 85\,\text{nm}$}
 \label{subsec:dimero_a85}
 % =========================================================================
 
+% Con $a=85\,\text{nm}$ el parámetro de tamaño entra en el rango $x\in[0.67,1.34]$,
+% donde los modos cuadrupolares comienzan a contribuir de forma apreciable junto
+% al dipolar. Se han simulado cuatro separaciones: $d=5$, $10$, $50$ y
+% $150\,\text{nm}$, que barren desde el acoplamiento muy fuerte hasta el límite
+% de dispersión independiente.
+
+% \subsubsection*{Eficiencias espectrales}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep5/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=5\,\text{nm}$. Resonancia en $\lambda\approx730\,\text{nm}$.}
+%     \label{fig:a85_eff_g5}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep10/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=10\,\text{nm}$. Resonancia en $\lambda\approx700\,\text{nm}$.}
+%     \label{fig:a85_eff_g10}
+%   \end{subfigure}
+
+%   \vspace{0.5em}
+
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep50/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=50\,\text{nm}$. Resonancia en $\lambda\approx600\,\text{nm}$.}
+%     \label{fig:a85_eff_g50}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep150/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=150\,\text{nm}$. Resonancia en $\lambda\approx560\,\text{nm}$.}
+%     \label{fig:a85_eff_g150}
+%   \end{subfigure}
+
+%   \caption{Eficiencias espectrales del dímero con $a=85\,\text{nm}$ para
+%            $d=5$, $10$, $50$ y $150\,\text{nm}$. Al reducir el gap, la
+%            resonancia de $Q_\text{sca}$ se desplaza hacia el rojo: de
+%            $\sim560\,\text{nm}$ (esfera individual) hasta $\sim730\,\text{nm}$
+%            para $d=5\,\text{nm}$, un desplazamiento de más de $170\,\text{nm}$.
+%            Simultáneamente, $Q_\text{abs}$ se reduce notablemente en la resonancia,
+%            indicando que la extinción queda dominada por la dispersión.
+%            Para $d=150\,\text{nm}$ el espectro recupera el perfil de la
+%            esfera individual.}
+%   \label{fig:a85_eff}
+% \end{figure}
+
+% \subsubsection*{Campo cercano}
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep5/wl730/plots/nf.png}
+%     \caption{$d=5\,\text{nm}$, $\lambda=730\,\text{nm}$.
+%              Máximo: $168.67\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a85_nf_g5}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep10/wl700/plots/nf.png}
+%     \caption{$d=10\,\text{nm}$, $\lambda=700\,\text{nm}$.
+%              Máximo: $106.03\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a85_nf_g10}
+%   \end{subfigure}
+% \end{figure}
+
+% \begin{figure}[H]\ContinuedFloat
+%   \centering
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep50/wl600/plots/nf.png}
+%     \caption{$d=50\,\text{nm}$, $\lambda=600\,\text{nm}$.
+%              Máximo: $22.68\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a85_nf_g50}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.45\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep150/wl560/plots/nf.png}
+%     \caption{$d=150\,\text{nm}$, $\lambda=560\,\text{nm}$.
+%              Máximo: $10.77\,|\mathbf{E}_0|^2$, recuperando el campo
+%              de la esfera individual.}
+%     \label{fig:a85_nf_g150}
+%   \end{subfigure}
+%   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero con
+%            $a=85\,\text{nm}$ evaluado a la longitud de onda de máxima
+%            $Q_\text{sca}$. La zona de concentración se localiza en el gap y
+%            crece de $10.77$ (esfera individual, $d=150\,\text{nm}$) a
+%            $168.67\,|\mathbf{E}_0|^2$ ($d=5\,\text{nm}$).}
+%   \label{fig:a85_nf}
+% \end{figure}
+
+
+% El dímero opera en régimen de acoplamiento fuerte.
+% Para gaps pequeños el espectro muestra dos picos bien diferenciados: el
+% primero, a longitudes de onda más cortas, está dominado por la absorción;
+% el segundo, desplazado hacia el rojo, está dominado por la dispersión y
+% presenta mayor amplitud. La resonancia de este segundo pico se desplaza
+% más de $160\,\text{nm}$ respecto a la esfera individual (figura~\ref{fig:ref_eff}), alcanzando
+% $\lambda\approx730\,\text{nm}$ para $d=5\,\text{nm}$. A medida que el
+% gap aumenta, ambos picos se acercan y acaban fusionándose: la absorción
+% recupera peso en la extinción total, aunque la dispersión sigue siendo
+% el canal dominante. Para $d=150\,\text{nm}$ los dos picos han convergido
+% y el espectro recupera prácticamente el perfil de la esfera individual,
+% indicando que el acoplamiento es mucho menor.
 Con $a=85\,\text{nm}$ el parámetro de tamaño entra en el rango $x\in[0.67,1.34]$,
 donde los modos cuadrupolares comienzan a contribuir de forma apreciable junto
 al dipolar. Se han simulado cuatro separaciones: $d=5$, $10$, $50$ y
 $150\,\text{nm}$, que barren desde el acoplamiento muy fuerte hasta el límite
-de dispersión independiente.
-
-\subsubsection*{Eficiencias espectrales}
+de dispersión independiente. Para cada una se presentan las eficiencias
+espectrales (figura~\ref{fig:a85_eff}) y el campo cercano $|\mathbf{E}|^2$ en
+el gap (figura~\ref{fig:a85_nf}).
 
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep5/sw/plots/Eficiencias_-_Unpol_negrita.png}
-    \caption{$d=5\,\text{nm}$. Resonancia en $\lambda\approx730\,\text{nm}$.}
+    \caption{$d=5\,\text{nm}$.}
     \label{fig:a85_eff_g5}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep10/sw/plots/Eficiencias_-_Unpol_negrita.png}
-    \caption{$d=10\,\text{nm}$. Resonancia en $\lambda\approx700\,\text{nm}$.}
+    \caption{$d=10\,\text{nm}$.}
     \label{fig:a85_eff_g10}
   \end{subfigure}
+\end{figure}
 
-  \vspace{0.5em}
-
+\begin{figure}[H]\ContinuedFloat
+  \centering
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep50/sw/plots/Eficiencias_-_Unpol_negrita.png}
-    \caption{$d=50\,\text{nm}$. Resonancia en $\lambda\approx600\,\text{nm}$.}
+    \caption{$d=50\,\text{nm}$.}
     \label{fig:a85_eff_g50}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep150/sw/plots/Eficiencias_-_Unpol_negrita.png}
-    \caption{$d=150\,\text{nm}$. Resonancia en $\lambda\approx560\,\text{nm}$.}
+    \caption{$d=150\,\text{nm}$.}
     \label{fig:a85_eff_g150}
   \end{subfigure}
 
-  \caption{Eficiencias espectrales del dímero con $a=85\,\text{nm}$ para
-           $d=5$, $10$, $50$ y $150\,\text{nm}$. Al reducir el gap, la
-           resonancia de $Q_\text{sca}$ se desplaza hacia el rojo: de
-           $\sim560\,\text{nm}$ (esfera individual) hasta $\sim730\,\text{nm}$
-           para $d=5\,\text{nm}$, un desplazamiento de más de $170\,\text{nm}$.
-           Simultáneamente, $Q_\text{abs}$ se reduce notablemente en la resonancia,
-           indicando que la extinción queda dominada por la dispersión.
-           Para $d=150\,\text{nm}$ el espectro recupera el perfil de la
-           esfera individual.}
+  \caption{Eficiencias espectrales del dímero con $a=85\,\text{nm}$ para las
+           cuatro separaciones estudiadas.}
   \label{fig:a85_eff}
 \end{figure}
 
-\subsubsection*{Campo cercano}
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep5/wl730/plots/nf.png}
-    \caption{$d=5\,\text{nm}$, $\lambda=730\,\text{nm}$.
-             Máximo: $168.67\,|\mathbf{E}_0|^2$.}
+    \caption{$d=5\,\text{nm}$, $\lambda=730\,\text{nm}$.}
     \label{fig:a85_nf_g5}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep10/wl700/plots/nf.png}
-    \caption{$d=10\,\text{nm}$, $\lambda=700\,\text{nm}$.
-             Máximo: $106.03\,|\mathbf{E}_0|^2$.}
+    \caption{$d=10\,\text{nm}$, $\lambda=700\,\text{nm}$.}
     \label{fig:a85_nf_g10}
   \end{subfigure}
 \end{figure}
@@ -287,54 +555,136 @@ de dispersión independiente.
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep50/wl600/plots/nf.png}
-    \caption{$d=50\,\text{nm}$, $\lambda=600\,\text{nm}$.
-             Máximo: $22.68\,|\mathbf{E}_0|^2$.}
+    \caption{$d=50\,\text{nm}$, $\lambda=600\,\text{nm}$.}
     \label{fig:a85_nf_g50}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/sep150/wl560/plots/nf.png}
-    \caption{$d=150\,\text{nm}$, $\lambda=560\,\text{nm}$.
-             Máximo: $10.77\,|\mathbf{E}_0|^2$, recuperando el campo
-             de la esfera individual.}
+    \caption{$d=150\,\text{nm}$, $\lambda=560\,\text{nm}$.}
     \label{fig:a85_nf_g150}
   \end{subfigure}
   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero con
            $a=85\,\text{nm}$ evaluado a la longitud de onda de máxima
-           $Q_\text{sca}$. La zona de concentración se localiza en el gap y
-           crece de $10.77$ (esfera individual, $d=150\,\text{nm}$) a
-           $168.67\,|\mathbf{E}_0|^2$ ($d=5\,\text{nm}$).}
+           $Q_\text{sca}$.}
   \label{fig:a85_nf}
 \end{figure}
 
-
-El dímero opera en régimen de acoplamiento fuerte.
+A este tamaño el dímero opera en régimen de acoplamiento fuerte, y las
+eficiencias espectrales (figura~\ref{fig:a85_eff}) lo reflejan con claridad.
 Para gaps pequeños el espectro muestra dos picos bien diferenciados: el
-primero, a longitudes de onda más cortas, está dominado por la absorción;
-el segundo, desplazado hacia el rojo, está dominado por la dispersión y
-presenta mayor amplitud. La resonancia de este segundo pico se desplaza
-más de $160\,\text{nm}$ respecto a la esfera individual (figura~\ref{fig:ref_eff}), alcanzando
-$\lambda\approx730\,\text{nm}$ para $d=5\,\text{nm}$. A medida que el
-gap aumenta, ambos picos se acercan y acaban fusionándose: la absorción
-recupera peso en la extinción total, aunque la dispersión sigue siendo
-el canal dominante. Para $d=150\,\text{nm}$ los dos picos han convergido
-y el espectro recupera prácticamente el perfil de la esfera individual,
-indicando que el acoplamiento es mucho menor.
+primero, a longitudes de onda más cortas, está dominado por la absorción; el
+segundo, desplazado hacia el rojo y de mayor amplitud, está dominado por la
+dispersión. Al reducir el gap, la resonancia de $Q_\text{sca}$ de este segundo
+pico se desplaza hacia el rojo desde $\sim560\,\text{nm}$ (esfera individual,
+figura~\ref{fig:ref_eff}) hasta $\sim730\,\text{nm}$ para $d=5\,\text{nm}$, un
+corrimiento de más de $170\,\text{nm}$; simultáneamente, $Q_\text{abs}$ se
+reduce de forma notable en la resonancia, de modo que la extinción queda
+dominada por la dispersión. A medida que el gap aumenta, ambos picos se
+acercan y acaban fusionándose, y la absorción recupera peso en la extinción
+total aunque la dispersión sigue siendo el canal dominante. Para
+$d=150\,\text{nm}$ los dos picos han convergido y el espectro recupera
+prácticamente el perfil de la esfera individual.
 
+En campo cercano (figura~\ref{fig:a85_nf}) la zona de concentración se localiza
+en el gap entre las dos esferas y sigue la misma tendencia: la intensificación
+máxima crece de $10.77\,|\mathbf{E}_0|^2$ ($d=150\,\text{nm}$, que recupera el
+valor de la esfera individual) a $168.67\,|\mathbf{E}_0|^2$ para
+$d=5\,\text{nm}$. A diferencia del dímero de $25\,\text{nm}$, aquí el
+acoplamiento actúa de manera notable tanto sobre la posición espectral de la
+resonancia como sobre su intensidad.
 
 % =========================================================================
 \subsection{Dímero en régimen Mie avanzado: $a = 600\,\text{nm}$}
 \label{subsec:dimero_a600}
 % =========================================================================
 
+% Con $a=600\,\text{nm}$ el parámetro de tamaño alcanza valores
+% $x\in[4.71,9.42]$, muy superiores a la unidad. En este límite participan
+% múltiples órdenes multipolares y el espectro óptico pierde por completo
+% el carácter resonante estrecho. Se han simulado tres
+% separaciones: $d=10$, $20$ y $60\,\text{nm}$.
+
+% \subsubsection*{Eficiencias espectrales}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep10/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=10\,\text{nm}$.}
+%     \label{fig:a600_eff_g10}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep20/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=20\,\text{nm}$.}
+%     \label{fig:a600_eff_g20}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep60/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=60\,\text{nm}$.}
+%     \label{fig:a600_eff_g60}
+%   \end{subfigure}
+%   \caption{Eficiencias espectrales del dímero con $a=600\,\text{nm}$ para
+%            las tres separaciones estudiadas. Los espectros son prácticamente
+%            idénticos entre sí y al de la esfera individual: el gap no produce
+%            desplazamiento espectral ni modifica la forma del espectro.}
+%   \label{fig:a600_eff}
+% \end{figure}
+
+% \subsubsection*{Campo cercano}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep10/wl670/plots/nf.png}
+%     \caption{$d=10\,\text{nm}$, $\lambda=670\,\text{nm}$.
+%               Máximo en gap: $15.02\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a600_nf_g10}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep20/wl660/plots/nf.png}
+%     \caption{$d=20\,\text{nm}$, $\lambda=660\,\text{nm}$.
+%              Máximo en gap: $11.52\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a600_nf_g20}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep60/wl670/plots/nf.png}
+%     \caption{$d=60\,\text{nm}$, $\lambda=670\,\text{nm}$.
+%              Máximo en gap: $6.44\,|\mathbf{E}_0|^2$.}
+%     \label{fig:a600_nf_g60}
+%   \end{subfigure}
+%   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero con
+%            $a=600\,\text{nm}$. El rasgo dominante no es la zona de
+%            concentración del gap sino los patrones de interferencia que
+%            rodean a las esferas.}
+%   \label{fig:a600_nf}
+% \end{figure}
+
+% En el régimen Mie avanzado el acoplamiento tiene un efecto limitado en campo
+% lejano ya que el espectro de eficiencias apenas varía con la separación.
+% En campo cercano la zona de concentración en el gap sigue presente, pero
+% los patrones de interferencia de cada esfera dominan la imagen. Este resultado
+% sugiere que, en este régimen, el dímero es menos eficaz como nanoantena óptica
+% que a tamaños menores.
+
 Con $a=600\,\text{nm}$ el parámetro de tamaño alcanza valores
 $x\in[4.71,9.42]$, muy superiores a la unidad. En este límite participan
-múltiples órdenes multipolares y el espectro óptico pierde por completo
-el carácter resonante estrecho. Se han simulado tres
-separaciones: $d=10$, $20$ y $60\,\text{nm}$.
-
-\subsubsection*{Eficiencias espectrales}
+múltiples órdenes multipolares y el espectro óptico pierde por completo el
+carácter de dipolo resonante de banda estrecha. Se han simulado tres
+separaciones: $d=10$, $20$ y $60\,\text{nm}$. Para cada una se presentan las
+eficiencias espectrales (figura~\ref{fig:a600_eff}) y el campo cercano
+$|\mathbf{E}|^2$ en el gap (figura~\ref{fig:a600_nf}).
 
 \begin{figure}[H]
   \centering
@@ -358,65 +708,137 @@ separaciones: $d=10$, $20$ y $60\,\text{nm}$.
     \caption{$d=60\,\text{nm}$.}
     \label{fig:a600_eff_g60}
   \end{subfigure}
-  \caption{Eficiencias espectrales del dímero con $a=600\,\text{nm}$ para
-           las tres separaciones estudiadas. Los espectros son prácticamente
-           idénticos entre sí y al de la esfera individual: el gap no produce
-           desplazamiento espectral ni modifica la forma del espectro.}
+  \caption{Eficiencias espectrales del dímero con $a=600\,\text{nm}$ para las
+           tres separaciones estudiadas.}
   \label{fig:a600_eff}
 \end{figure}
-
-\subsubsection*{Campo cercano}
 
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep10/wl670/plots/nf.png}
-    \caption{$d=10\,\text{nm}$, $\lambda=670\,\text{nm}$.
-              Máximo en gap: $15.02\,|\mathbf{E}_0|^2$.}
+    \caption{$d=10\,\text{nm}$, $\lambda=670\,\text{nm}$.}
     \label{fig:a600_nf_g10}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep20/wl660/plots/nf.png}
-    \caption{$d=20\,\text{nm}$, $\lambda=660\,\text{nm}$.
-             Máximo en gap: $11.52\,|\mathbf{E}_0|^2$.}
+    \caption{$d=20\,\text{nm}$, $\lambda=660\,\text{nm}$.}
     \label{fig:a600_nf_g20}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a600/sep60/wl670/plots/nf.png}
-    \caption{$d=60\,\text{nm}$, $\lambda=670\,\text{nm}$.
-             Máximo en gap: $6.44\,|\mathbf{E}_0|^2$.}
+    \caption{$d=60\,\text{nm}$, $\lambda=670\,\text{nm}$.}
     \label{fig:a600_nf_g60}
   \end{subfigure}
   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero con
-           $a=600\,\text{nm}$. El rasgo dominante no es la zona de
-           concentración del gap sino los patrones de interferencia que
-           rodean a las esferas.}
+           $a=600\,\text{nm}$ evaluado a la longitud de onda de máxima
+           $Q_\text{sca}$.}
   \label{fig:a600_nf}
 \end{figure}
 
-En el régimen Mie avanzado el acoplamiento tiene un efecto limitado en campo
-lejano ya que el espectro de eficiencias apenas varía con la separación.
-En campo cercano la zona de concentración en el gap sigue presente, pero
-los patrones de interferencia de cada esfera dominan la imagen. Este resultado
-sugiere que, en este régimen, el dímero es menos eficaz como nanoantena óptica
-que a tamaños menores.
+En este régimen de Mie avanzado el acoplamiento tiene un efecto limitado en
+campo lejano: las eficiencias espectrales (figura~\ref{fig:a600_eff}) son
+prácticamente idénticas entre sí y a las de la esfera individual, de modo que
+el gap no produce desplazamiento espectral ni modifica la forma del espectro.
+
+En campo cercano (figura~\ref{fig:a600_nf}) la zona de concentración en el gap
+sigue presente —con un máximo que decrece de $15.02$ a $6.44\,|\mathbf{E}_0|^2$
+al ampliar la separación de $10$ a $60\,\text{nm}$—, pero el rasgo dominante de
+la imagen no es ese hueco, sino los patrones de interferencia que rodean a cada
+esfera.
 
 % =========================================================================
 \subsection{Dímero heterogéneo: $a_1 = 25\,\text{nm}$, $a_2 = 85\,\text{nm}$}
 \label{subsec:dimero_hetero}
 % =========================================================================
 
-La combinación de una esfera pequeña ($a_1=25\,\text{nm}$, régimen dipolar) con
-una esfera mediana ($a_2=85\,\text{nm}$, contribución cuadrupolar) permite explorar
-el acoplamiento asimétrico entre dos modos de naturaleza distinta. Se han
-simulado tres separaciones: $d=5$, $10$ y $50\,\text{nm}$.
+% La combinación de una esfera pequeña ($a_1=25\,\text{nm}$, régimen dipolar) con
+% una esfera mediana ($a_2=85\,\text{nm}$, contribución cuadrupolar) permite explorar
+% el acoplamiento asimétrico entre dos modos de naturaleza distinta. Se han
+% simulado tres separaciones: $d=5$, $10$ y $50\,\text{nm}$.
 
-\subsubsection*{Eficiencias espectrales}
+% \subsubsection*{Eficiencias espectrales}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep5/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=5\,\text{nm}$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep10/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=10\,\text{nm}$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep50/sw/plots/Eficiencias_-_Unpol_negrita.png}
+%     \caption{$d=50\,\text{nm}$.}
+%   \end{subfigure}
+%   \caption{Eficiencias espectrales del dímero heterogéneo
+%            ($a_1=25\,\text{nm}$, $a_2=85\,\text{nm}$) para tres separaciones.
+%            El espectro reproduce la forma de la esfera individual de
+%            $85\,\text{nm}$: pico de dispersión dominante en torno a
+%            $\lambda\approx560$--$580\,\text{nm}$ con absorción pequeña.
+%            La esfera mayor gobierna la respuesta óptica del conjunto y
+%            el gap no produce desplazamiento espectral apreciable.}
+%   \label{fig:hetero_eff}
+% \end{figure}
+
+% \subsubsection*{Campo cercano}
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep5/wl590/plots/nf.png}
+%     \caption{$d=5\,\text{nm}$, $\lambda=590\,\text{nm}$.
+%              Máximo: $186.16\,|\mathbf{E}_0|^2$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep10/wl585/plots/nf.png}
+%     \caption{$d=10\,\text{nm}$, $\lambda=585\,\text{nm}$.
+%              Máximo: $117.51\,|\mathbf{E}_0|^2$.}
+%   \end{subfigure}
+%   \hfill
+%   \begin{subfigure}[b]{0.32\textwidth}
+%     \centering
+%     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep50/wl580/plots/nf.png}
+%     \caption{$d=50\,\text{nm}$, $\lambda=580\,\text{nm}$.
+%              Máximo: $20.97\,|\mathbf{E}_0|^2$.}
+%   \end{subfigure}
+%   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero heterogéneo
+%            evaluado a la longitud de onda de resonancia. La zona de
+%            concentración se localiza en el gap, entre la cara de la esfera
+%            grande y la esfera pequeña. Al reducir $d$ de $50$ a
+%            $5\,\text{nm}$, la intensificación crece de $20.97$ a
+%            $186.16\,|\mathbf{E}_0|^2$.}
+%   \label{fig:hetero_nf}
+% \end{figure}
+
+% En el dímero heterogéneo la respuesta óptica está gobernada por la esfera
+% mayor: el espectro de eficiencias reproduce el perfil de la partícula de
+% $85\,\text{nm}$ individual (figura~\ref{fig:ref_eff}), sin desplazamiento espectral apreciable con el
+% gap. Sin embargo, la asimetría geométrica concentra el campo en el lado de
+% la esfera pequeña, alcanzando $186\,|\mathbf{E}_0|^2$ para $d=5\,\text{nm}$,
+% comparable a lo obtenido en el dímero homogéneo de $85\,\text{nm}$ (figura~\ref{fig:a85_nf}).
+
+La combinación de una esfera pequeña ($a_1=25\,\text{nm}$, régimen dipolar) con
+una esfera mediana ($a_2=85\,\text{nm}$, contribución cuadrupolar) permite
+explorar el acoplamiento asimétrico entre dos modos de naturaleza distinta. Se
+han simulado tres separaciones: $d=5$, $10$ y $50\,\text{nm}$. Para cada una se
+presentan las eficiencias espectrales (figura~\ref{fig:hetero_eff}) y el campo
+cercano $|\mathbf{E}|^2$ en el gap (figura~\ref{fig:hetero_nf}).
 
 \begin{figure}[H]
   \centering
@@ -424,69 +846,68 @@ simulado tres separaciones: $d=5$, $10$ y $50\,\text{nm}$.
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep5/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{$d=5\,\text{nm}$.}
+    \label{fig:hetero_eff_g5}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep10/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{$d=10\,\text{nm}$.}
+    \label{fig:hetero_eff_g10}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep50/sw/plots/Eficiencias_-_Unpol_negrita.png}
     \caption{$d=50\,\text{nm}$.}
+    \label{fig:hetero_eff_g50}
   \end{subfigure}
   \caption{Eficiencias espectrales del dímero heterogéneo
-           ($a_1=25\,\text{nm}$, $a_2=85\,\text{nm}$) para tres separaciones.
-           El espectro reproduce la forma de la esfera individual de
-           $85\,\text{nm}$: pico de dispersión dominante en torno a
-           $\lambda\approx560$--$580\,\text{nm}$ con absorción pequeña.
-           La esfera mayor gobierna la respuesta óptica del conjunto y
-           el gap no produce desplazamiento espectral apreciable.}
+           ($a_1=25\,\text{nm}$, $a_2=85\,\text{nm}$) para las tres
+           separaciones estudiadas.}
   \label{fig:hetero_eff}
 \end{figure}
-
-\subsubsection*{Campo cercano}
 
 \begin{figure}[H]
   \centering
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep5/wl590/plots/nf.png}
-    \caption{$d=5\,\text{nm}$, $\lambda=590\,\text{nm}$.
-             Máximo: $186.16\,|\mathbf{E}_0|^2$.}
+    \caption{$d=5\,\text{nm}$, $\lambda=590\,\text{nm}$.}
+    \label{fig:hetero_nf_g5}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep10/wl585/plots/nf.png}
-    \caption{$d=10\,\text{nm}$, $\lambda=585\,\text{nm}$.
-             Máximo: $117.51\,|\mathbf{E}_0|^2$.}
+    \caption{$d=10\,\text{nm}$, $\lambda=585\,\text{nm}$.}
+    \label{fig:hetero_nf_g10}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.32\textwidth}
     \centering
     \includegraphics[width=\textwidth]{../../Simulaciones/Definitivo/simulacion-de-referencia/2e/ew/a85a25/sep50/wl580/plots/nf.png}
-    \caption{$d=50\,\text{nm}$, $\lambda=580\,\text{nm}$.
-             Máximo: $20.97\,|\mathbf{E}_0|^2$.}
+    \caption{$d=50\,\text{nm}$, $\lambda=580\,\text{nm}$.}
+    \label{fig:hetero_nf_g50}
   \end{subfigure}
   \caption{Campo cercano $|\mathbf{E}_\text{avg}|^2$ del dímero heterogéneo
-           evaluado a la longitud de onda de resonancia. La zona de
-           concentración se localiza en el gap, entre la cara de la esfera
-           grande y la esfera pequeña. Al reducir $d$ de $50$ a
-           $5\,\text{nm}$, la intensificación crece de $20.97$ a
-           $186.16\,|\mathbf{E}_0|^2$.}
+           evaluado a la longitud de onda de resonancia.}
   \label{fig:hetero_nf}
 \end{figure}
 
 En el dímero heterogéneo la respuesta óptica está gobernada por la esfera
-mayor: el espectro de eficiencias reproduce el perfil de la partícula de
-$85\,\text{nm}$ individual (figura~\ref{fig:ref_eff}), sin desplazamiento espectral apreciable con el
-gap. Sin embargo, la asimetría geométrica concentra el campo en el lado de
-la esfera pequeña, alcanzando $186\,|\mathbf{E}_0|^2$ para $d=5\,\text{nm}$,
-comparable a lo obtenido en el dímero homogéneo de $85\,\text{nm}$ (figura~\ref{fig:a85_nf}).
+mayor: el espectro de eficiencias (figura~\ref{fig:hetero_eff}) reproduce el
+perfil de la partícula de $85\,\text{nm}$ individual
+(figura~\ref{fig:ref_eff}), con un pico de dispersión dominante en torno a
+$\lambda\approx560$--$580\,\text{nm}$ y absorción pequeña, sin desplazamiento
+espectral apreciable al variar el gap.
 
+En campo cercano (figura~\ref{fig:hetero_nf}) la zona de concentración se
+localiza en el gap, entre la cara de la esfera grande y la esfera pequeña: la
+asimetría geométrica concentra el campo en el lado de la partícula menor. Al
+reducir $d$ de $50$ a $5\,\text{nm}$, la intensificación máxima crece de
+$20.97$ a $186.16\,|\mathbf{E}_0|^2$, valor comparable al del dímero homogéneo
+de $85\,\text{nm}$ (figura~\ref{fig:a85_nf}).
 
 Para cuantificar el canal dominante de extinción
 en cada resonancia se recurre al albedo de dispersión simple (ec.~\ref{eq:albedo}),

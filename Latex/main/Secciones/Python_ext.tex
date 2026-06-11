@@ -78,7 +78,7 @@ interfaz de la figura~\ref{GUI:screenshot}, consta de cuatro pasos:
 
 La comunicación entre Python y Fortran se realiza estrictamente por
 archivos: Python escribe la entrada y lee las salidas, sin acoplarse al
-código de Fortran. Como el binario puede tardar en converger, su
+código de Fortran. Como el código compilado puede tardar en converger, su
 ejecución se lanza en un hilo aparte y se muestra una ventana de
 progreso mientras dura; de este modo el programa no se cuelga ni deja de
 responder. Cuando la simulación termina, se informa del resultado. 
@@ -96,10 +96,9 @@ mediante esta interfaz.
 \label{subsec:mstm_utils}
 
 MSTM trabaja con todas las longitudes escaladas por el número de onda en
-el medio externo, $k_{0} = \frac{2\pi}{\lambda}$,
+el medio externo, $k_{0}$,
 de modo que cada esfera queda caracterizada por su parámetro de tamaño
-$x = k_{0}\,a$, siendo $a$ el radio, siguiendo la convención de la
-sección~\ref{sec:miecoeffs}. El módulo \texttt{mstm\_utils.py} convierte
+$x$ (ec~\ref{eq:size_parameter}). El módulo \texttt{mstm\_utils.py} convierte
 los parámetros geométricos del usuario (longitud de onda y radio en
 $\mu$m) al par (\texttt{length\_scale\_factor}, \texttt{size\_parameter})
 que requiere el fichero de entrada.
@@ -108,9 +107,10 @@ El usuario puede introducir directamente un índice de refracción
 complejo o seleccionar un material de una pequeña base de datos. En este
 último caso, el módulo carga tablas de
 \texttt{refractiveindex.info} almacenadas localmente (Au, Ag, Cu y Fe a
-partir de las medidas de Johnson \& Christy; Al según Rakić; agua según
-Hale \& Querry) e interpola linealmente el índice complejo
-$\tilde{n}$ a la longitud de onda solicitada. 
+partir de las medidas de Johnson \& Christy~\cite{johnson1972optical}; 
+Al según Rakic~\cite{Rakic1995}; agua según
+Hale \& Querry~\cite{Hale1973}) e interpola linealmente el índice complejo
+$\tilde{m}$ a la longitud de onda solicitada. 
 % El espaciado
 % de estas tablas ($\sim 10$\,nm) es suficientemente fino para que el error
 % de interpolación sea despreciable frente a la incertidumbre experimental
@@ -151,19 +151,19 @@ facilita comprobar la disposición antes de lanzar la simulación.
 
 El entorno permite repetir una misma configuración variando un
 parámetro, ya sea la longitud de onda o el radio de las esferas. En lugar
-de invocar el binario una vez por cada valor, la GUI genera un único
+de invocar el ejecutable una vez por cada valor, la GUI genera un único
 \texttt{mstm.inp} con bloques \texttt{new\_run} sucesivos, aprovechando el
 mecanismo nativo de MSTM. Los dos barridos son excluyentes: solo uno puede
 estar activo a la vez.
 
 En un barrido en longitud de onda, cada \texttt{new\_run} actualiza el
-factor de escala $k_{0} = 2\pi/\lambda$ y el índice de refracción
-$\tilde{n}(\lambda)$ interpolado, manteniendo fija la geometría física del
+factor de escala $k_{0}$ y el índice de refracción
+$\tilde{m}(\lambda)$ interpolado, manteniendo fija la geometría física del
 agregado. El resultado son las eficiencias y demás observables en función
 de $\lambda$.
 
 En un barrido en radio, la longitud de onda es fija, de modo que $k_{0}$
-y $\tilde{n}$ son constantes y se calculan una sola vez; lo único que
+y $\tilde{m}$ son constantes y se calculan una sola vez; lo único que
 cambia entre \emph{runs} es el radio de las esferas. Cuando se usa una de
 las geometrías predefinidas, los centros se recalculan en cada paso con la
 misma regla $d = 2r + s$, de manera que la separación entre superficies
@@ -174,11 +174,14 @@ alterar el hueco entre ellas.
 % ---------------------------------------------------------------------
 \subsection{Muestreo del campo cercano}
 \label{subsec:adaptive_step}
-
-El paso espacial $\Delta$ de la malla del campo cercano debe resolver
-simultáneamente la longitud de onda, el radio de la esfera más pequeña y
-el \emph{gap} entre esferas adyacentes. El módulo calcula automáticamente
-un paso candidato como el mínimo de tres criterios:
+El cálculo del campo cercano es costoso y puede tardar bastante, sobre
+todo con mallas finas, por lo que conviene no elegir un paso espacial $\Delta$
+demasiado pequeño a ciegas. Para ello, se ha diseñado un criterio 
+que estima un paso adecuado a partir de las características del problema, teniendo
+en cuenta la longitud de onda, el radio de la esfera más pequeña y el hueco más 
+estrecho entre esferas adyacentes. 
+Este criterio se activa por defecto, aunque el usuario puede introducir 
+un paso manual si lo desea.
 
 \begin{equation}
     \Delta = \min\!\left(
@@ -189,18 +192,16 @@ un paso candidato como el mínimo de tres criterios:
     \label{eq:dmin}
 \end{equation}
 
-Cada criterio fija un número mínimo de puntos a lo largo de una escala
+Cada término fija un número mínimo de puntos a lo largo de una escala
 característica del problema. $N_{\text{ppw}}$ (\emph{points per
 wavelength}) es el número de puntos por longitud de onda: como en
-unidades escaladas una longitud de onda equivale a $2\pi$, el término
+unidades escaladas una longitud de onda equivale a $2\pi$, el factor
 $2\pi/N_{\text{ppw}}$ garantiza que las oscilaciones del campo queden bien
 muestreadas. $N_{\text{rad}}$ es el número de puntos a lo largo del radio
 de la esfera más pequeña, $r_{\min}$, y $N_{\text{gap}}$ el número de
-puntos a lo largo del hueco más estrecho entre dos esferas.
-% $g_{\min} = \min_{i\neq j}\!\bigl(\|\mathbf{r}^i - \mathbf{r}^j\| - a^i -
-% a^j\bigr)$. 
-Este último criterio es importante porque es justo en esos
-huecos donde el campo varía de forma más brusca, y donde aparecen los
+puntos a lo largo del hueco más estrecho entre dos esferas, $g_{\min}$.
+Este último término es el más delicado, porque es justo en esos
+huecos donde el campo varía de forma más brusca y donde aparecen los
 fenómenos que interesa analizar. Tomar el mínimo de los tres
 asegura que se muestrea adecuadamente la más fina de esas escalas. Los
 valores por defecto son $N_{\text{ppw}}=50$, $N_{\text{rad}}=25$ y
@@ -208,20 +209,12 @@ $N_{\text{gap}}=12$; además, el paso se acota a un rango razonable y, si
 la malla resultante superase $2\times 10^{6}$ puntos, se reescala hasta
 satisfacer esa cota.
 
-El cálculo del campo cercano es costoso y puede tardar bastante, sobre
-todo con mallas finas, por lo que conviene no elegir un paso demasiado
-pequeño a ciegas. Este criterio no pretende dar el paso definitivo, sino
-una estimación del orden de magnitud al que conviene trabajar: en este
-trabajo se ha usado como punto de partida y, tras inspeccionar los
-resultados, se ha empleado ese mismo valor o uno ligeramente menor. El
-usuario puede en cualquier momento sustituir el valor automático por uno
-manual.
 
 % ---------------------------------------------------------------------
 \subsection{Visualización de resultados}
 \label{subsec:visualizacion}
 
-Cada tipo de figura se genera con un script independiente que la GUI lanza
+Cada tipo de figura se genera con un \textit{script} independiente que la GUI lanza
 como un proceso aparte, pasándole el fichero de salida correspondiente.
 Esto mantiene la representación separada del resto del programa y permite
 abrir varias figuras a la vez.
@@ -259,6 +252,6 @@ El programa calcula también los grados de polarización del campo
 dispersado a partir de sus parámetros de Stokes
 (ec.~\ref{eq:MuellerMatrix}, \ref{eq:stokes_farfield}) y el parámetro de 
 asimetría $g$
-(ec.~\ref{eq:g_mie}, mediante \texttt{plot\_asymmetry.py}). Son magnitudes
-disponibles en el entorno que se han empleado de forma puntual según el
-caso.
+(ec.~\ref{eq:g_mie}, mediante \texttt{plot\_asymmetry.py}). Estas magnitudes 
+están disponibles en el entorno y, aunque se exploraron durante el trabajo,
+no se presentan resultados de ellas en esta memoria.

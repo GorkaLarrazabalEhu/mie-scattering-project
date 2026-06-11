@@ -1,24 +1,24 @@
 {
-    "output_file": "a20.dat",
+    "output_file": "a300.dat",
     "num_spheres": "1",
     "positions": [
-        "0.d0, 0.d0, 0.d0, 0.01d0, (0.2487319885d0, 3.0739827089d0)"
+        "0.d0, 0.d0, 0.d0, 0.5d0, (0.2487319885d0, 3.0739827089d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
     "length_scale": "10.4719755120d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
-    "near_field": true,
-    "near_field_file": "a20_nf.dat",
+    "near_field": false,
+    "near_field_file": "f",
     "nearfieldplot": "",
-    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\rayleigh\\1e\\a20",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\regimenmie\\1e\\a300",
     "plot_type": "absE",
     "plot_options": [
         "|E_avg|^2"
     ],
     "wavelength": "0.6",
-    "sphere_radius": "0.01",
+    "sphere_radius": "0.5",
     "material": "Au",
     "separation": "0.004",
     "geometry": "(none)",
@@ -36,7 +36,7 @@
     },
     "custom_n": "",
     "custom_k": "",
-    "near_field_stepsize": "0.004d0",
+    "near_field_stepsize": "0.05d0",
     "near_field_stepsize_auto": false,
     "scattering_angle": "1.d0",
     "radii_equal": true,
