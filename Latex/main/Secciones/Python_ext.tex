@@ -37,7 +37,16 @@ físicas y un conjunto de scripts de representación:
           cercano, campo lejano, barridos y parámetro de asimetría.
 \end{itemize}
 
-% ---------------------------------------------------------------------
+
+\subsection{Arquitectura y flujo de trabajo}
+\label{subsec:arquitectura}
+
+Toda la configuración de una simulación se almacena en un único objeto
+(clase \texttt{Config}) que agrupa la geometría del agregado, el haz
+incidente, el material, las opciones de campo cercano y los barridos.
+Ese objeto se serializa en un fichero JSON, de modo que cualquier
+simulación queda descrita por completo en un fichero de texto legible.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Imagenes/Pantallazo_GUI.png}
@@ -49,16 +58,6 @@ físicas y un conjunto de scripts de representación:
     actualiza en tiempo real.}
     \label{GUI:screenshot}
 \end{figure}
-
-% ---------------------------------------------------------------------
-\subsection{Arquitectura y flujo de trabajo}
-\label{subsec:arquitectura}
-
-Toda la configuración de una simulación se almacena en un único objeto
-(clase \texttt{Config}) que agrupa la geometría del agregado, el haz
-incidente, el material, las opciones de campo cercano y los barridos.
-Ese objeto se serializa en un fichero JSON, de modo que cualquier
-simulación queda descrita por completo en un fichero de texto legible.
 
 El ciclo de trabajo habitual, que se sigue íntegramente desde la
 interfaz de la figura~\ref{GUI:screenshot}, consta de cuatro pasos:
@@ -77,7 +76,7 @@ interfaz de la figura~\ref{GUI:screenshot}, consta de cuatro pasos:
 \end{enumerate}
 
 La comunicación entre Python y Fortran se realiza estrictamente por
-archivos: Python escribe la entrada y lee las salidas, sin acoplarse al
+archivos de texto: Python escribe la entrada y lee las salidas, sin acoplarse al
 código de Fortran. Como el código compilado puede tardar en converger, su
 ejecución se lanza en un hilo aparte y se muestra una ventana de
 progreso mientras dura; de este modo el programa no se cuelga ni deja de
