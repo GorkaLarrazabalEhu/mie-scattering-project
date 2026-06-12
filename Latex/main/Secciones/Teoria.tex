@@ -122,7 +122,7 @@ $E_{\parallel}^{(s)}$ y $E_{\perp}^{(s)}$ son las componentes correspondientes
 del campo dispersado. Los elementos $S_1,\,S_2,\,S_3,\,S_4$ dependen del
 ángulo de dispersión $\theta$ y del ángulo azimutal $\phi$, y quedan
 completamente determinados por las condiciones de contorno sobre la superficie
-de la partícula. Para una esfera homogénea e isotrópica, la simetría azimutal
+de la partícula. Para una esfera homogénea e isótropa, la simetría azimutal
 impone $S_3 = S_4 = 0$, de modo que los modos de polarización paralelo y
 perpendicular se dispersan de forma independiente.
 
@@ -231,7 +231,7 @@ incidente se escribe como
   + A_{omn}\,\mathbf{N}_{omn}
   \Bigr),
 \end{equation}
-y los campos interno y dispersado admiten expansiones análogas con coeficientes
+y los campos interno y dispersado admiten desarrollos análogos con coeficientes
 distintos. Cada término satisface automáticamente la ecuación de onda en su
 dominio y, gracias a la ortogonalidad de los armónicos esféricos vectoriales,
 las condiciones de contorno en $r = a$ se reducen a un conjunto de ecuaciones
@@ -349,7 +349,7 @@ la esfera.
 
 El siguiente paso consiste en expresar el campo interno, $\mathbf{E}_{int}$, 
 y el campo dispersado, $\mathbf{E}_{sca}$, junto con sus campos magnéticos 
-correspondientes. A partir de la expansión del campo incidente, y teniendo 
+correspondientes. A partir del desarrollo del campo incidente, y teniendo 
 en cuenta las condiciones de contorno
 \begin{equation}
   \bigl(\mathbf{E}_{i} + \mathbf{E}_{sca} - \mathbf{E}_{int}\bigr)
@@ -382,7 +382,6 @@ de onda y la permeabilidad del interior de la esfera, y $c_{n}$ y $d_{n}$ son
 los coeficientes de campo interno. El campo dispersado, que debe satisfacer la
 condición de radiación saliente, viene dado por funciones de Hankel esféricas
 de primera clase (superíndice $(3)$):
-
 \begin{equation}
   \mathbf{E}_{sca} =
   \sum_{n=1}^{\infty}
@@ -399,7 +398,6 @@ de primera clase (superíndice $(3)$):
   + a_{n}\,\mathbf{M}_{e1n}^{(3)}
   \Bigr),
 \end{equation}
-
 donde $a_{n}$ y $b_{n}$ son los coeficientes de dispersión de Mie.
 
 
@@ -417,7 +415,7 @@ tangenciales de los campos en $r = a$ \cite{Bohren1983}:
 \end{aligned}
 \]
 
-Sustituyendo las expansiones y usando la ortogonalidad de los armónicos
+Sustituyendo los desarrollos y usando la ortogonalidad de los armónicos
 esféricos vectoriales, el sistema se desacopla para cada orden $n$ y se
 expresa en términos del parámetro de tamaño y el índice de refracción relativo:
 
@@ -433,7 +431,6 @@ Aquí $m$ denota el índice de refracción relativo (cociente entre el
 sección anterior.
 
 Los coeficientes de campo interno son
-
 \begin{align}
   \label{eq:internalcoef}
 c_n &=
@@ -454,9 +451,7 @@ d_n &=
   - \mu_1\, h_n^{(1)}(x)\,\bigl[mx\, j_n(mx)\bigr]^{\prime}
 },
 \end{align}
-
 y los coeficientes de dispersión son
-
 \begin{align}
   \label{eq:miecoef}
 a_n &=
@@ -547,14 +542,13 @@ el campo incidente y el dispersado representa energía \emph{extraída} del haz.
 Las secciones eficaces se definen como las potencias normalizadas por la
 irradiancia incidente $I_i = |E_0|^2/(2\eta)$, donde $\eta = \sqrt{\mu/\epsilon}$
 es la impedancia del medio:
-
 \begin{equation}
   C_{sca} = \frac{W_{sca}}{I_i},
   \qquad
   C_{ext} = \frac{W_{ext}}{I_i}.
 \end{equation}
 
-Para evaluar las integrales~(\ref{eq:Wsca}) se recurre a la expansión en
+Para evaluar las integrales~(\ref{eq:Wsca}) se recurre al desarrollo en
 armónicos esféricos vectoriales de los campos dispersados. En el límite de
 campo lejano ($kr\to\infty$), las funciones de Hankel se comportan como
 $h_n^{(1)}(kr)\approx (-i)^{n+1}e^{ikr}/(kr)$, y $\mathbf{H}_{sca}$
@@ -566,15 +560,12 @@ por lo que
   |\mathbf{E}_{sca}|^2\sin\theta\;d\theta\,d\phi.
 \end{equation}
 
-Al sustituir la expansión del campo dispersado y aplicar la
+Al sustituir el desarrollo del campo dispersado y aplicar la
 ortogonalidad de los armónicos esféricos vectoriales, los productos cruzados
 entre modos distintos se anulan y las integrales se reducen a sumas de
 normas individuales. Usando $|E_n|^2 = |E_0|^2(2n+1)^2/[n(n+1)]^2$ y
 las relaciones de norma de los modos $\mathbf{M}$ y $\mathbf{N}$, la
 expresión de $W_{sca}/I_i$ se simplifica a
-
-% [continúa con las ecuaciones de C_sca, C_ext ya existentes]
-
 \begin{equation}
   C_{\text{sca}} = \frac{2\pi}{k^2}
   \sum_{n=1}^{\infty} (2n+1)
@@ -586,7 +577,6 @@ expresión de $W_{sca}/I_i$ se simplifica a
   \sum_{n=1}^{\infty} (2n+1)
   \,\mathrm{Re}(a_n + b_n),
 \end{equation}
-
 \begin{equation}
   C_{\text{abs}} = C_{\text{ext}} - C_{\text{sca}}.
 \end{equation}
@@ -632,28 +622,23 @@ polarización. El resultado son las funciones
   S_2(\theta) = \sum_{n=1}^{\infty} \frac{2n+1}{n(n+1)}
   \bigl[ b_n\,\pi_n(\cos\theta) + a_n\,\tau_n(\cos\theta) \bigr],
 \end{equation}
-
 donde las \textit{funciones angulares de Mie} se definen como
-
 \begin{equation}
   \pi_n(\cos\theta) = \frac{P_n^1(\cos\theta)}{\sin\theta},
   \qquad
   \tau_n(\cos\theta) = \frac{d\,P_n^1(\cos\theta)}{d\theta},
 \end{equation}
-
 siendo $P_n^1$ el polinomio de Legendre asociado de orden $m = 1$. Estas
 funciones satisfacen las relaciones de recurrencia
-
 \begin{equation}
   \pi_n = \frac{2n-1}{n-1}\cos\theta\,\pi_{n-1} - \frac{n}{n-1}\pi_{n-2},
   \qquad
   \tau_n = n\cos\theta\,\pi_n - (n+1)\pi_{n-1},
 \end{equation}
-
 con valores iniciales $\pi_0 = 0$, $\pi_1 = 1$, que permiten su evaluación
 numérica eficiente, como se describe en la sección~\ref{sec:metodos}.
 
-Para una esfera homogénea e isotrópica, $S_3 = S_4 = 0$ por simetría azimutal,
+Para una esfera homogénea e isótropa, $S_3 = S_4 = 0$ por simetría azimutal,
 de modo que la matriz de amplitud es diagonal y los modos de polarización
 paralelo y perpendicular se dispersan de forma independiente. 
 % En el límite de
@@ -693,14 +678,12 @@ $(I, Q, U, V)^T$:
 \end{equation}
 
 Los elementos de la matriz de Mueller se construyen desde $S_1$ y $S_2$:
-
 \begin{equation}
   \label{eq:MuellerElements}
   S_{11} = \tfrac{1}{2}\bigl(|S_2|^2 + |S_1|^2\bigr),
   \qquad
   S_{12} = \tfrac{1}{2}\bigl(|S_2|^2 - |S_1|^2\bigr),
 \end{equation}
-
 \begin{equation}
   \label{eq:MuellerElements2}
   S_{33} = \tfrac{1}{2}\bigl(S_2 S_1^* + S_2^* S_1\bigr),
@@ -712,7 +695,7 @@ La estructura en bloque de la matriz refleja la simetría de la esfera: los
 bloques diagonales $2\times 2$ de $U$ y $V$ están desacoplados de $I$ y $Q$.
 El elemento $S_{11}(\theta)$ representa la distribución angular 
 de la energía dispersada y es directamente medible. 
-Para una esfera homogénea e isotrópica, los elementos de la matriz de Mueller
+Para una esfera homogénea e isótropa, los elementos de la matriz de Mueller
 satisfacen $S_{11}^2 = S_{12}^2 + S_{33}^2 + S_{34}^2$,
 lo que implica que solo tres de los cuatro elementos son independientes.
 
@@ -729,12 +712,10 @@ normalizada de la potencia dispersada por unidad de ángulo sólido
 \end{equation}
 
 Esta satisface la condición de normalización
-
 \begin{equation}
   \frac{1}{4\pi}\int_{4\pi} p(\theta)\,d\Omega
   = \frac{1}{2}\int_0^{\pi} p(\theta)\sin\theta\,d\theta = 1,
 \end{equation}
-
 de modo que $p(\theta)\,d\Omega/4\pi$ representa la fracción de la potencia
 total dispersada que se redistribuye en el elemento de ángulo sólido $d\Omega$
 en torno a la dirección $\theta$. Esta normalización facilita la comparación
@@ -787,7 +768,6 @@ De la energía total extinguida por la partícula, una fracción es redistribuid
 espacialmente mediante dispersión y el resto es absorbida y convertida en
 energía interna. El \textit{albedo de dispersión simple} $\omega_0$ cuantifica
 esta fracción:
-
 \begin{equation}
   \label{eq:albedo}
   \omega_0 = \frac{C_{\text{sca}}}{C_{\text{ext}}}
@@ -827,13 +807,11 @@ Cuando la partícula es mucho más pequeña que la longitud de onda ($x \ll 1$),
 estamos en el \textit{régimen de Rayleigh}: el campo incidente varía poco sobre
 su volumen y la respuesta queda dominada por el término dipolar \ref{eq:miecoef}. 
 En este límite, los coeficientes de Mie se aproximan por
-
 \begin{equation}
   a_1 \approx -\frac{2i\,x^3}{3}\,\frac{m^2-1}{m^2+2},
   \qquad
   b_1 \approx 0,
 \end{equation}
-
 y los de orden superior son despreciables.
 % ESTO ES INCORRECTO PARA EL ORO ASIQUE NO ES RELEVANTE EN EL TRABAJO
 %  Las secciones eficaces escalan como
@@ -974,7 +952,6 @@ aislada. Cuando el medio contiene un agregado de $N_S$ esferas centradas
 en posiciones $\mathbf{r}^i$ (con $i = 1,\ldots,N_S$), el campo total es
 la superposición del campo incidente y de los campos dispersados por
 cada una~\cite{Mackowski1991}:
- 
 \begin{equation}
   \mathbf{E}^{tot} = \mathbf{E}^{inc} + \sum_{i=1}^{N_S} \mathbf{E}_s^{i}.
 \end{equation}
@@ -988,12 +965,10 @@ una partícula individual y no hay interferencia entre partículas.
 Sin embargo, cuando las esferas están suficientemente próximas, el campo
 dispersado por cada una alcanza a las demás con amplitud no despreciable.
 El campo excitante sobre la esfera $i$ es entonces
- 
 \begin{equation}
   \mathbf{E}_{exc}^{i} = \mathbf{E}^{inc}
   + \sum_{\substack{l=1\\l\neq i}}^{N_S} \mathbf{E}_s^{l},
 \end{equation}
- 
 lo que acopla las respuestas de todas las esferas entre sí. Este es el
 régimen de \textit{dispersión múltiple}, cuya solución requiere un
 tratamiento autoconsistente, es decir,
@@ -1016,7 +991,7 @@ ondas \textit{salientes} ($\mathbf{M}^{(3)},\mathbf{N}^{(3)}$) en el
 desarrollo del campo dispersado por la esfera $i$ se denotan
 $a_{mn}^{i}$ (modo TM) y $b_{mn}^{i}$ (modo TE), y los coeficientes que
 pesan las ondas \textit{regulares} ($\mathbf{M}^{(1)},\mathbf{N}^{(1)}$)
-en la expansión del campo incidente externo en torno a $\mathbf{r}^i$ se
+en el desarrollo del campo incidente externo en torno a $\mathbf{r}^i$ se
 denotan $p_{mn}^{i}$ (TM) y $q_{mn}^{i}$ (TE)~\cite[ecs.~7,~8,~17]{Mackowski1991}.
 Reuniendo todos los modos en vectores columna,
 $\mathbf{a}^{i} = (a_{mn}^{i}, b_{mn}^{i})^{\mathsf{T}}$ y
@@ -1026,7 +1001,6 @@ $i$ relaciona los coeficientes del campo
 \textit{excitante} $\mathbf{q}^{i}$ (suma del incidente más los
 dispersados por las demás) con los del campo
 dispersado~\cite{Mackowski1991,Mackowski1996}:
- 
 \begin{equation}
 \label{eq:T_indiv}
   \mathbf{a}^{i} = \bar{\mathbb{T}}_i\,\mathbf{q}^{i}.
@@ -1035,12 +1009,10 @@ dispersado~\cite{Mackowski1991,Mackowski1996}:
 Para una esfera homogénea e isótropa la simetría impide la mezcla de
 modos TM/TE y de órdenes multipolares distintos, por lo que
 $\bar{\mathbb{T}}_i$ es \textit{diagonal}:
- 
 \begin{equation}
   \bar{\mathbb{T}}_i
   = \mathrm{diag}\bigl(\,\ldots,\,\bar{a}_n^{i},\,\bar{b}_n^{i},\,\ldots\bigr),
 \end{equation}
- 
 donde $\bar{a}_n^{i}$ y $\bar{b}_n^{i}$ son los coeficientes de Mie
 derivados en la sección~\ref{sec:miecoeffs} particularizados a la esfera
 $i$ (la barra, tomada de \cite{Mackowski1996}, los distingue de los
@@ -1063,7 +1035,6 @@ esférica (VSWF, por sus siglas en inglés)~\cite{Stein1961,Cruzan1962,Mackowski
 establece que una onda saliente centrada en $\mathbf{r}^l$ puede
 reexpresarse, en la región $|\mathbf{r}-\mathbf{r}^j| < |\mathbf{r}^l-\mathbf{r}^j|$, como una serie de ondas
 regulares centradas en $\mathbf{r}^j$:
- 
 \begin{equation}
 \label{eq:addition}
   \mathbf{M}_{mn}^{(3)}(\mathbf{r}-\mathbf{r}^l)
@@ -1074,7 +1045,6 @@ regulares centradas en $\mathbf{r}^j$:
          \mathbf{N}_{kl}^{(1)}(\mathbf{r}-\mathbf{r}^j)
      \Bigr],
 \end{equation}
- 
 y análogamente para $\mathbf{N}_{mn}^{(3)}$~\cite[ecs.~9--10]{Mackowski1991}.
 Los \textit{coeficientes de adición} $A_{mn}^{kl}$ y $B_{mn}^{kl}$
 dependen únicamente del vector de separación
@@ -1085,7 +1055,6 @@ mezcla los modos TM y TE.
  
 Aplicando (\ref{eq:addition}) a las dos polarizaciones, el conjunto de
 coeficientes de adición se agrupa en el \textit{operador de traslación}:
- 
 \begin{equation}
 \label{eq:Hjl}
   \mathbb{H}^{jl}
@@ -1095,9 +1064,8 @@ coeficientes de adición se agrupa en el \textit{operador de traslación}:
     B^{jl} & A^{jl}
   \end{pmatrix},
 \end{equation}
- 
-que convierte la expansión multipolar de ondas salientes centrada en
-$\mathbf{r}^l$ en la expansión equivalente de ondas regulares centrada en
+que convierte el desarrollo multipolar de ondas salientes centrado en
+$\mathbf{r}^l$ en el desarrollo equivalente de ondas regulares centrado en
 $\mathbf{r}^j$. El teorema de adición es el ingrediente matemático
 central del formalismo: sin él no sería posible expresar el campo
 dispersado por una esfera en términos de las funciones base de otra. 
@@ -1118,11 +1086,10 @@ sistema local, se escriben
   + \sum_{\substack{l=1\\l\neq j}}^{N_S}
     \mathbb{H}^{jl}\,\mathbf{a}^{l},
 \end{equation}
- donde $\mathbf{p}^{j}$ son los coeficientes del campo incidente
+donde $\mathbf{p}^{j}$ son los coeficientes del campo incidente
 proyectados sobre el sistema de la esfera $j$. Sustituyendo
 (\ref{eq:exciting}) en (\ref{eq:T_indiv}) se obtiene el sistema acoplado
 de Foldy--Lax~\cite{Foldy1945,Lax1951,Mackowski1991,Mackowski1996}:
- 
 \begin{equation}
 \label{eq:foldy-lax}
   \mathbf{a}^{j}
@@ -1132,7 +1099,6 @@ de Foldy--Lax~\cite{Foldy1945,Lax1951,Mackowski1991,Mackowski1996}:
   \qquad j = 1,\ldots,N_S,
 \end{equation}
 que en forma matricial global es
- 
 \begin{equation}
 \label{eq:foldy-lax-global}
   \underbrace{
@@ -1156,7 +1122,7 @@ que en forma matricial global es
 La solución del sistema~(\ref{eq:foldy-lax}) proporciona los coeficientes
 $\{\mathbf{a}^{j}\}$ de todos los campos dispersados de forma
 autoconsistente, incorporando los efectos de dispersión múltiple a todos
-los órdenes. Tras truncar las expansiones a un orden multipolar máximo
+los órdenes. Tras truncar los desarrollos a un orden multipolar máximo
 $n = N_t$ (cuyo valor se analiza en la sección \ref{sec:funcesp}), la
 dimensión del sistema es $N_S \cdot 2 N_t(N_t+2)$. Para clusters grandes
 la inversión directa de $\mathbb{M}_{sys}$ es de elevado coste computacional
@@ -1176,7 +1142,6 @@ cada esfera son conocidos. Para calcular los observables del conjunto
 $\mathbb{T}^{cluster}$, que relaciona los coeficientes del campo
 incidente con los del campo dispersado total referidos a un origen
 común $O$:
- 
 \begin{equation}
   \mathbf{a}^{tot} = \mathbb{T}^{cluster}\,\mathbf{p}^{inc}.
 \end{equation}
@@ -1186,7 +1151,6 @@ aplica de nuevo el teorema de adición, ahora con el operador de
 traslación regular $\mathbb{J}^{Oj}$, que reexpresa una onda saliente
 centrada en $\mathbf{r}^j$ como una onda saliente referida al origen
 $O$~\cite[ecs.~25--26]{Mackowski1991}:
- 
 \begin{equation}
 \label{eq:atot}
   \mathbf{a}^{tot} = \sum_{j=1}^{N_S} \mathbb{J}^{Oj}\,\mathbf{a}^{j}.
@@ -1197,14 +1161,12 @@ Combinando (\ref{eq:atot}) con la inversión formal del sistema
 las esferas} $\mathbb{T}^{ij}$ tal que
 $\mathbf{a}^{i} = \sum_{j} \mathbb{T}^{ij}\,\mathbf{p}^{j}$, la
 T-matrix del cluster se expresa como~\cite[ec.~5]{Mackowski1996}
- 
 \begin{equation}
 \label{eq:Tcluster}
   \mathbb{T}^{cluster}
   = \sum_{i=1}^{N_S}\sum_{j=1}^{N_S}
     \mathbb{J}^{Oi}\,\mathbb{T}^{ij}\,\mathbb{J}^{jO},
 \end{equation}
- 
 donde $\mathbb{J}^{jO}$ traslada el campo incidente del origen común al
 sistema de la esfera $j$. La T-matrix del agregado tiene exactamente la
 misma estructura que la de una partícula no esférica
@@ -1215,7 +1177,6 @@ una partícula única.
 En particular, las secciones eficaces del agregado se obtienen como
 suma de las contribuciones individuales (extinción) más una contribución
 coherente (dispersión)~\cite[ecs.~30--33]{Mackowski1991}:
- 
 \begin{equation}
   C_{ext} = \sum_{i=1}^{N_S} C_{ext}^{i},
   \qquad
@@ -1223,7 +1184,6 @@ coherente (dispersión)~\cite[ecs.~30--33]{Mackowski1991}:
     \frac{n(n+1)}{2n+1}\frac{(n+m)!}{(n-m)!}
     \bigl(|a_{mn}^{tot}|^2 + |b_{mn}^{tot}|^2\bigr),
 \end{equation}
- 
 donde $a_{mn}^{tot}, b_{mn}^{tot}$ son las componentes de
 $\mathbf{a}^{tot}$ y la suma recorre todos los modos retenidos. La
 matriz de amplitud de dispersión del cluster se construye proyectando el

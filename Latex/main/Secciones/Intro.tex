@@ -23,12 +23,11 @@ de dispersión múltiple, en el que las respuestas individuales quedan
 acopladas~\cite{Foldy1945,Lax1951}. Este caso se aborda extendiendo la propia
 teoría de Mie: cada esfera se sigue describiendo mediante sus coeficientes de
 Mie, pero acoplados entre sí a través del formalismo de la matriz de transición,
-o T-Matrix~\cite{Waterman1965,Waterman1971}, que relaciona los coeficientes del campo
+o T-matrix~\cite{Waterman1965,Waterman1971}, que relaciona los coeficientes del campo
 excitante con los del campo dispersado en una base de armónicos esféricos
 vectoriales~\cite{Mackowski1991,Mackowski1996}. 
-Este enfoque está implementado en el código MSTM
-(\textit{Multiple Sphere T-Matrix}), un código Fortran para dispersión por
-múltiples esferas desarrollado en el marco de los trabajos de Mackowski y
+Este enfoque está implementado en el código MSTM (\textit{Multiple Sphere T-Matrix}), 
+un código escrito en Fortran por Mackowski y
 Mishchenko~\cite{Mackowski2011,Mackowski_code}\footnote{El código fuente de
 MSTM está disponible públicamente en
 \url{https://github.com/dmckwski/MSTM}.}, que constituye la herramienta de
@@ -69,7 +68,7 @@ postproceso de los resultados.
 A partir de este planteamiento, los objetivos específicos del trabajo son:
 
 \begin{enumerate}
-\item Comprender el formalismo de Mie y de la T-Matrix, así como su aplicación
+\item Comprender el formalismo de Mie y de la T-matrix, así como su aplicación
         al problema de la dispersión electromagnética por una o varias esferas.
 
 \item Analizar la implementación de estos métodos en el código MSTM de
