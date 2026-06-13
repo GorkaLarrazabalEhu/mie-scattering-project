@@ -133,9 +133,9 @@ posiciones de varias geometrías sencillas: dos o cuatro esferas en línea
 (en dirección norte--sur o este--oeste), cuatro esferas en cuadrado y
 cuatro en cuadrado girado $45^\circ$ respecto a la onda incidente. Las
 posiciones se calculan a partir del radio y de la separación entre
-superficies $s$ que indica el usuario: la distancia centro a centro de un
-par de esferas se fija como $d = a_i + a_j + s$, de manera que el hueco
-entre superficies es exactamente $s$ con independencia de los radios. Se
+superficies $d$ que indica el usuario: la distancia centro a centro de un
+par de esferas se fija como $D_{ij} = a_i + a_j + d$, de manera que el hueco
+entre superficies es exactamente $d$ con independencia de los radios. Se
 puede asignar un radio común a todas las esferas o un radio distinto a
 cada una.
 
@@ -165,8 +165,8 @@ En un barrido en radio, la longitud de onda es fija, de modo que $k_{0}$
 y $\tilde{N}$ son constantes y se calculan una sola vez; lo único que
 cambia entre \emph{runs} es el radio de las esferas. Cuando se usa una de
 las geometrías predefinidas, los centros se recalculan en cada paso con la
-misma regla $d = 2r + s$, de manera que la separación entre superficies
-$s$ se mantiene constante mientras crece el radio. Esto permite estudiar
+misma regla $D{ij} = a_i + a_j + d$, de manera que la separación entre superficies
+$d$ se mantiene constante mientras crece el radio. Esto permite estudiar
 cómo cambia la respuesta del agregado con el tamaño de las partículas sin
 alterar el hueco entre ellas.
 
@@ -186,7 +186,7 @@ un paso manual si lo desea.
     \Delta = \min\!\left(
         \frac{2\pi}{N_{\text{ppw}}},\;
         \frac{r_{\min}}{N_{\text{rad}}},\;
-        \frac{g_{\min}}{N_{\text{gap}}}
+        \frac{d_{\min}}{N_{\text{gap}}}
     \right),
     \label{eq:dmin}
 \end{equation}
@@ -198,7 +198,7 @@ unidades escaladas una longitud de onda equivale a $2\pi$, el factor
 $2\pi/N_{\text{ppw}}$ garantiza que las oscilaciones del campo queden bien
 muestreadas. $N_{\text{rad}}$ es el número de puntos a lo largo del radio
 de la esfera más pequeña, $r_{\min}$, y $N_{\text{gap}}$ el número de
-puntos a lo largo del hueco más estrecho entre dos esferas, $g_{\min}$.
+puntos a lo largo del hueco más estrecho entre dos esferas, $d_{\min}$.
 Este último término es el más delicado, porque es justo en esos
 huecos donde el campo varía de forma más brusca y donde aparecen los
 fenómenos que interesa analizar. Tomar el mínimo de los tres

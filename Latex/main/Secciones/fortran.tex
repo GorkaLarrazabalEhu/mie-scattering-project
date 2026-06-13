@@ -50,7 +50,7 @@ formalismo de la T-matrix:
         conforman directamente la T-matrix individual diagonal
         $\bar{\mathbb{T}}_j$. El orden multipolar $n_{max}^{j}$ se
         determina automáticamente para cada esfera mediante el criterio
-        de Wiscombe\cite{Wiscombe1980} (sección~\ref{sec:funcesp}).
+        de Wiscombe~\cite{Wiscombe1980} (sección~\ref{sec:funcesp}).
   \item Cálculo de los operadores de traslación $\mathbb{H}^{jl}$ entre
         cada par de esferas, que materializan el teorema de adición
         (\ref{eq:addition}) y permiten reexpresar el campo dispersado
@@ -63,7 +63,7 @@ formalismo de la T-matrix:
         $\{\mathbf{a}^{j}\}$: secciones eficaces, elementos de la matriz
         de Mueller y parámetro de asimetría. Si se solicita
         explícitamente, el programa construye además la T-matrix del
-        cluster $\mathbb{T}^{cluster}$ definida en (\ref{eq:Tcluster}).
+        agregado $\mathbb{T}^{ag}$ definida en (\ref{eq:Tcluster}).
       %   , necesaria para los promedios sobre orientaciones aleatorias.
   \item Evaluación opcional del campo electromagnético en la región
         cercana al agregado (sección~\ref{sec:nearfield}).
@@ -233,7 +233,7 @@ factores da una complejidad computacional de tipo cúbico
 
 de modo que duplicar el número de esferas multiplica el coste por ocho.
 Este crecimiento es el que limita en la práctica el uso de LU para
-clusters grandes y motiva el empleo del método iterativo en ese
+agregados grandes y motiva el empleo del método iterativo en ese
 régimen. El método requiere además almacenar $\mathbb{M}_{sys}$
 completamente en memoria, con coste $\mathcal{O}(N_S^{\,2})$.
 
@@ -287,7 +287,7 @@ el método converge en $K$ iteraciones, el coste total es
 El número $K$ depende del condicionamiento de $\mathbb{M}_{sys}$ ---es
 decir, de la geometría del agregado y de los índices de refracción de
 las partículas--- pero no del tamaño del sistema, por lo que el
-escalado efectivo del método es $\mathcal{O}(N_S^{\,2})$. Para clusters
+escalado efectivo del método es $\mathcal{O}(N_S^{\,2})$. Para agregados
 grandes esta ganancia de un orden en $N_S$ frente a LU resulta
 determinante.
 
@@ -344,8 +344,8 @@ evalúa las VSWF en esa posición y suma las contribuciones de todos los
 modos multipolares retenidos y de todas las esferas, añadiendo
 finalmente la contribución del campo incidente para obtener el campo
 total. El proceso se realiza de forma independiente para cada una de
-las dos polarizaciones del campo incidente introducidas
-en~\ref{sec:solver}, de modo que la salida contiene, para cada punto
+las dos polarizaciones ortogonales del campo incidente, 
+de modo que la salida contiene, para cada punto
 de la malla, las tres componentes complejas de los campos eléctrico y
 magnético en ambas polarizaciones.
 

@@ -1,5 +1,5 @@
 \section{Fundamento teórico: formalismo de Mie para esfera individual}
-
+\label{sec:formalismo}
 \subsection{Ecuaciones de Maxwell en medios lineales}
 
 El comportamiento de la radiación electromagnética en un medio lineal, isótropo
@@ -463,6 +463,7 @@ a_n &=
   - \mu_1\, h_n^{(1)}(x)\,\bigl[mx\, j_n(mx)\bigr]^{\prime}
 },
 \\[1em]
+\label{eq:miecoefb}
 b_n &=
 \frac{
   \mu_1\, j_n(mx)\,\bigl[x\, j_n(x)\bigr]^{\prime}
@@ -805,8 +806,8 @@ del valor de $x$ se distinguen tres regímenes cualitativamente distintos.
 
 Cuando la partícula es mucho más pequeña que la longitud de onda ($x \ll 1$),
 estamos en el \textit{régimen de Rayleigh}: el campo incidente varía poco sobre
-su volumen y la respuesta queda dominada por el término dipolar \ref{eq:miecoef}. 
-En este límite, los coeficientes de Mie se aproximan por
+su volumen (aproximación cuasiestática) y la respuesta queda dominada por el término dipolar $a_1$. 
+En este límite, los coeficientes de Mie (\ref{eq:miecoef},\ref{eq:miecoefb}) se aproximan por
 \begin{equation}
   a_1 \approx -\frac{2i\,x^3}{3}\,\frac{m^2-1}{m^2+2},
   \qquad
@@ -841,9 +842,9 @@ logarítmica (Figura~\ref{fig:S11_mie_log}). Este es el régimen de mayor
 riqueza fenomenológica y el que requiere el tratamiento completo de la teoría
 de Mie.
 
-\textit{Régimen de óptica geométrica} ($x \gg 1$): cuando la partícula es
-mucho mayor que la longitud de onda, 
-la interacción puede describirse mediante rayos geométricos. 
+Finalmente, cuando la partícula es mucho mayor que la longitud de onda
+($x \gg 1$), se entra en el régimen de óptica geométrica, en el que la
+interacción puede describirse mediante rayos geométricos.
 
 \begin{figure}[H]
     \centering
@@ -943,6 +944,7 @@ la interacción puede describirse mediante rayos geométricos.
 
 % =========================================================================
 \section{Fundamento teórico: dispersión múltiple}
+\label{sec:fundamento multiple}
 % \subsection{Dispersión independiente y dispersión múltiple}
 % =========================================================================
  
@@ -1124,7 +1126,7 @@ $\{\mathbf{a}^{j}\}$ de todos los campos dispersados de forma
 autoconsistente, incorporando los efectos de dispersión múltiple a todos
 los órdenes. Tras truncar los desarrollos a un orden multipolar máximo
 $n = N_t$ (cuyo valor se analiza en la sección \ref{sec:funcesp}), la
-dimensión del sistema es $N_S \cdot 2 N_t(N_t+2)$. Para clusters grandes
+dimensión del sistema es $N_S \cdot 2 N_t(N_t+2)$. Para agregados grandes
 la inversión directa de $\mathbb{M}_{sys}$ es de elevado coste computacional
 y la solución se obtiene mediante métodos
 iterativos~\cite{Mackowski1996}; los detalles de la implementación
@@ -1139,11 +1141,11 @@ Una vez resuelto el sistema de Foldy--Lax, los campos dispersados por
 cada esfera son conocidos. Para calcular los observables del conjunto
 (secciones eficaces, matriz de Mueller) es conveniente construir la
 \textit{T-matrix efectiva del agregado}~\cite{Mackowski1994,Mackowski1996},
-$\mathbb{T}^{cluster}$, que relaciona los coeficientes del campo
+$\mathbb{T}^{ag}$, que relaciona los coeficientes del campo
 incidente con los del campo dispersado total referidos a un origen
 común $O$:
 \begin{equation}
-  \mathbf{a}^{tot} = \mathbb{T}^{cluster}\,\mathbf{p}^{inc}.
+  \mathbf{a}^{tot} = \mathbb{T}^{ag}\,\mathbf{p}^{inc}.
 \end{equation}
  
 Para trasladar el campo dispersado de cada esfera al origen común se
@@ -1160,10 +1162,10 @@ Combinando (\ref{eq:atot}) con la inversión formal del sistema
 (\ref{eq:foldy-lax-global}), que define la \textit{T-matrix centrada en
 las esferas} $\mathbb{T}^{ij}$ tal que
 $\mathbf{a}^{i} = \sum_{j} \mathbb{T}^{ij}\,\mathbf{p}^{j}$, la
-T-matrix del cluster se expresa como~\cite[ec.~5]{Mackowski1996}
+T-matrix del agregado se expresa como~\cite[ec.~5]{Mackowski1996}
 \begin{equation}
 \label{eq:Tcluster}
-  \mathbb{T}^{cluster}
+  \mathbb{T}^{ag}
   = \sum_{i=1}^{N_S}\sum_{j=1}^{N_S}
     \mathbb{J}^{Oi}\,\mathbb{T}^{ij}\,\mathbb{J}^{jO},
 \end{equation}
@@ -1186,12 +1188,12 @@ coherente (dispersión)~\cite[ecs.~30--33]{Mackowski1991}:
 \end{equation}
 donde $a_{mn}^{tot}, b_{mn}^{tot}$ son las componentes de
 $\mathbf{a}^{tot}$ y la suma recorre todos los modos retenidos. La
-matriz de amplitud de dispersión del cluster se construye proyectando el
+matriz de amplitud de dispersión del agregado se construye proyectando el
 campo dispersado en campo lejano sobre las direcciones paralela y
 perpendicular al plano de dispersión, dando
 $S_1^{tot},\,S_2^{tot},\,S_3^{tot},\,S_4^{tot}$~\cite[ecs.~17--20]{Mackowski1996}.
 A diferencia del caso de una esfera única (donde $S_3 = S_4 = 0$ por
-simetría azimutal), para una orientación arbitraria del cluster en
+simetría azimutal), para una orientación arbitraria del agregado en
 general $S_3^{tot}, S_4^{tot} \neq 0$, ya que la disposición geométrica
 de las esferas rompe la simetría azimutal global. Los cuatro elementos
 permiten construir la matriz de Mueller del agregado mediante las
