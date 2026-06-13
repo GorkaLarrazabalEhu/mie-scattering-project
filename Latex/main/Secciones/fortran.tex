@@ -6,7 +6,7 @@
 El código empleado en este trabajo para el cálculo de la dispersión múltiple
 es MSTM (\textit{Multiple Sphere
 T-Matrix}), una implementación en Fortran desarrollada por
-Mackowski~\cite{Mackowski_code} del formalismo de la T-matrix descrito en
+Mackowski y Mishchenko~\cite{Mackowski_code} del formalismo de la T-matrix descrito en
 la sección anterior. Para las simulaciones realizadas en este trabajo,
 el programa se ha compilado en Windows~11 con \texttt{gfortran}
 versión~10.3.0. El programa calcula los coeficientes de Mie de cada
@@ -41,7 +41,7 @@ formalismo de la T-matrix:
 \begin{enumerate}
   \item Lectura de los parámetros de entrada: parámetros de tamaño
         $x^j = k a^j$, posiciones $\{\mathbf{r}^j\}$ e índices de
-        refracción complejos $\{m^j\}$ de las $N_S$ esferas.
+        refracción complejos $\{\tilde{N}^j\}$ de las $N_S$ esferas.
   \item Inicialización de la geometría del sistema: cálculo de los
         vectores de separación $\mathbf{r}^j - \mathbf{r}^l$ y
         determinación del radio de circunscripción del agregado.
@@ -88,7 +88,7 @@ Los módulos relevantes para los cálculos de este trabajo son:
         $\pi_{mn},\,\tau_{mn}$), y rotaciones de Wigner.
   \item \texttt{spheredata}: almacenamiento y gestión de la geometría
         del sistema: posiciones $\mathbf{r}^j$, radios $a^j$, índices
-        de refracción $m^j$ y jerarquía de esferas anidadas (una dentro de otra).
+        de refracción $\tilde{N}^j$ y jerarquía de esferas anidadas (una dentro de otra).
   \item \texttt{mie}: cálculo de los coeficientes de Mie $\bar a_n^j$,
         $\bar b_n^j$ que constituyen la T-matrix diagonal
         $\bar{\mathbb{T}}_j$ de cada esfera. 

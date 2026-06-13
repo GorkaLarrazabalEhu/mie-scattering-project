@@ -60,7 +60,7 @@ simulación queda descrita por completo en un fichero de texto legible.
 \end{figure}
 
 El ciclo de trabajo habitual, que se sigue íntegramente desde la
-interfaz de la figura~\ref{GUI:screenshot}, consta de cuatro pasos:
+interfaz de la Figura~\ref{GUI:screenshot}, consta de cuatro pasos:
 
 \begin{enumerate}
     \item El usuario introduce los parámetros en la GUI.
@@ -109,7 +109,7 @@ complejo o seleccionar un material de una pequeña base de datos. En este
 partir de las medidas de Johnson \& Christy~\cite{johnson1972optical}; 
 Al según Rakic~\cite{Rakic1995}; agua según
 Hale \& Querry~\cite{Hale1973}) e interpola linealmente el índice complejo
-$\tilde{m}$ a la longitud de onda solicitada. 
+$\tilde{N}$ a la longitud de onda solicitada. 
 % El espaciado
 % de estas tablas ($\sim 10$\,nm) es suficientemente fino para que el error
 % de interpolación sea despreciable frente a la incertidumbre experimental
@@ -140,7 +140,7 @@ puede asignar un radio común a todas las esferas o un radio distinto a
 cada una.
 
 La GUI muestra además una vista previa del agregado en el plano $XZ$
-(figura~\ref{GUI:screenshot}) que se actualiza en tiempo real a medida
+(Figura~\ref{GUI:screenshot}) que se actualiza en tiempo real a medida
 que se modifican las posiciones, los radios o la separación, lo que
 facilita comprobar la disposición antes de lanzar la simulación.
 
@@ -157,12 +157,12 @@ estar activo a la vez.
 
 En un barrido en longitud de onda, cada \texttt{new\_run} actualiza el
 factor de escala $k_{0}$ y el índice de refracción
-$\tilde{m}(\lambda)$ interpolado, manteniendo fija la geometría física del
+$\tilde{N}(\lambda)$ interpolado, manteniendo fija la geometría física del
 agregado. El resultado son las eficiencias y demás observables en función
 de $\lambda$.
 
 En un barrido en radio, la longitud de onda es fija, de modo que $k_{0}$
-y $\tilde{m}$ son constantes y se calculan una sola vez; lo único que
+y $\tilde{N}$ son constantes y se calculan una sola vez; lo único que
 cambia entre \emph{runs} es el radio de las esferas. Cuando se usa una de
 las geometrías predefinidas, los centros se recalculan en cada paso con la
 misma regla $d = 2r + s$, de manera que la separación entre superficies
