@@ -1,32 +1,33 @@
 {
-    "output_file": "a300.dat",
-    "num_spheres": "1",
+    "output_file": "sw.dat",
+    "num_spheres": "2",
     "positions": [
-        "0.d0, 0.d0, 0.d0, 0.5d0, (0.2487319885d0, 3.0739827089d0)"
+        "-0.09000000000000001d0, 0d0, 0.0d0, 0.085d0, (0.6351200000d0, 2.0720720000d0)",
+        "0.09000000000000001d0, 0d0, 0.0d0, 0.085d0, (0.6351200000d0, 2.0720720000d0)"
     ],
     "incident_beta": "0.d0",
     "incident_alpha": "0.d0",
-    "length_scale": "10.4719755120d0",
+    "length_scale": "12.0830486677d0",
     "gaussian_beam_constant": false,
     "is_gaussian_beam": false,
-    "near_field": false,
-    "near_field_file": "f",
+    "near_field": true,
+    "near_field_file": "sw.dat",
     "nearfieldplot": "",
-    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\regimenmie\\1e\\a300",
+    "folder_location": "C:\\Users\\txuel\\UNI\\TFG Fisika\\code\\Simulaciones\\Definitivo\\simulacion-de-referencia\\2e\\ew\\sep10\\sw",
     "plot_type": "absE",
     "plot_options": [
         "|E_avg|^2"
     ],
-    "wavelength": "0.6",
-    "sphere_radius": "0.5",
+    "wavelength": "0.520",
+    "sphere_radius": "0.085",
     "material": "Au",
-    "separation": "0.004",
-    "geometry": "(none)",
+    "separation": "0.01",
+    "geometry": "2 in line (EW)",
     "wavelength_sweep": {
-        "enabled": false,
+        "enabled": true,
         "min": "0.4",
-        "max": "1.4",
-        "n": "100"
+        "max": "0.8",
+        "n": "400"
     },
     "radius_sweep": {
         "enabled": false,
@@ -36,9 +37,9 @@
     },
     "custom_n": "",
     "custom_k": "",
-    "near_field_stepsize": "0.05d0",
+    "near_field_stepsize": "0.002d0",
     "near_field_stepsize_auto": false,
-    "scattering_angle": "1.d0",
+    "scattering_angle": "0.1d0",
     "radii_equal": true,
     "sphere_radii_individual": []
 }

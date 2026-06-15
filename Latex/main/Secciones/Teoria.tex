@@ -73,15 +73,17 @@ lineal de ambas.
 El problema de la dispersión consiste en resolver la ecuación de onda en los
 dos dominios descritos anteriormente. Las soluciones deben satisfacer en
 $r\!=\!a$ la continuidad de las componentes tangenciales de los campos:
-
 \begin{equation}
-  \left.(E_\theta^{(i)} + E_\theta^{(s)})\right|_{r=a}
-  = \left.E_\theta^{(\mathrm{int})}\right|_{r=a},
+  \left.(E_\theta^{(i)} + E_\theta^{(sca)})\right|_{r=a}
+  = \left.E_\theta^{(int)}\right|_{r=a},
   \qquad
-  \left.(H_\theta^{(i)} + H_\theta^{(s)})\right|_{r=a}
-  = \left.H_\theta^{(\mathrm{int})}\right|_{r=a},
+  \left.(H_\theta^{(i)} + H_\theta^{(sca)})\right|_{r=a}
+  = \left.H_\theta^{(int)}\right|_{r=a},
 \end{equation}
-y análogamente para las componentes azimutales $\phi$.
+donde los superíndices $i$, $sca$ e $int$ denotan,
+respectivamente, el campo incidente, el campo dispersado (\textit{scattered})
+y el campo interno a la partícula, y análogamente para las componentes
+azimutales $\phi$.
 
 Dado que tanto las ecuaciones de Maxwell como estas condiciones de contorno son
 lineales en los campos, el campo dispersado en cualquier punto del espacio
@@ -91,7 +93,7 @@ depende linealmente del campo incidente. En la zona de campo lejano
 
 \begin{equation}
 \label{eq:Escat_farfield}
-  \mathbf{E}^{(s)} \;\xrightarrow{kr \to \infty}\;
+  \mathbf{E}^{(sca)} \;\xrightarrow{kr \to \infty}\;
   \frac{e^{ikr}}{-ikr}\,\mathbf{f}(\theta,\phi).
 \end{equation}
 
@@ -102,8 +104,8 @@ adopta la forma matricial:
 \begin{equation}
 \label{eq:amplitudematrix}
   \begin{pmatrix}
-    E_{\parallel}^{(s)} \\[4pt]
-    E_{\perp}^{(s)}
+    E_{\parallel}^{(sca)} \\[4pt]
+    E_{\perp}^{(sca)}
   \end{pmatrix}
   =
   \frac{e^{ikr}}{-ikr}
@@ -118,7 +120,7 @@ adopta la forma matricial:
 \end{equation}
 donde $E_{\parallel}^{(i)}$ y $E_{\perp}^{(i)}$ son las componentes paralela y
 perpendicular del campo eléctrico incidente respecto al plano de incidencia, y
-$E_{\parallel}^{(s)}$ y $E_{\perp}^{(s)}$ son las componentes correspondientes
+$E_{\parallel}^{(sca)}$ y $E_{\perp}^{(sca)}$ son las componentes correspondientes
 del campo dispersado. Los elementos $S_1,\,S_2,\,S_3,\,S_4$ dependen del
 ángulo de dispersión $\theta$ y del ángulo azimutal $\phi$, y quedan
 completamente determinados por las condiciones de contorno sobre la superficie
@@ -220,7 +222,7 @@ mediante la construcción anterior:
 
 Cualquier solución de las ecuaciones de campo puede desarrollarse como serie en
 las funciones~(\ref{Generadores vectoriales}). En particular, el campo
-incidente se escribe como
+incidente $\mathbf{E}_i$ se escribe como
 \begin{equation}
   \mathbf{E}_i =
   \sum_{m=0}^{\infty}\sum_{n=m}^{\infty}
@@ -639,9 +641,6 @@ funciones satisfacen las relaciones de recurrencia
 con valores iniciales $\pi_0 = 0$, $\pi_1 = 1$, que permiten su evaluación
 numérica eficiente, como se describe en la sección~\ref{sec:metodos}.
 
-Para una esfera homogénea e isótropa, $S_3 = S_4 = 0$ por simetría azimutal,
-de modo que la matriz de amplitud es diagonal y los modos de polarización
-paralelo y perpendicular se dispersan de forma independiente. 
 % En el límite de
 % dispersión hacia adelante ($\theta = 0$), y dado que $S_1(0) = S_2(0)$ por la
 % isotropía de la esfera, se recupera el teorema óptico en su forma explícita:
@@ -666,7 +665,7 @@ $(I, Q, U, V)^T$:
 
 \begin{equation}
   \label{eq:MuellerMatrix}
-  \begin{pmatrix} I^{(s)} \\ Q^{(s)} \\ U^{(s)} \\ V^{(s)} \end{pmatrix}
+  \begin{pmatrix} I^{(sca)} \\ Q^{(sca)} \\ U^{(sca)} \\ V^{(sca)} \end{pmatrix}
   =
   \frac{1}{k^2 r^2}
   \begin{pmatrix}
@@ -955,7 +954,7 @@ en posiciones $\mathbf{r}^i$ (con $i = 1,\ldots,N_S$), el campo total es
 la superposición del campo incidente y de los campos dispersados por
 cada una~\cite{Mackowski1991}:
 \begin{equation}
-  \mathbf{E}^{tot} = \mathbf{E}^{inc} + \sum_{i=1}^{N_S} \mathbf{E}_s^{i}.
+  \mathbf{E}^{tot} = \mathbf{E}^{inc} + \sum_{i=1}^{N_S} \mathbf{E}_{sca}^{i}.
 \end{equation}
  
 En el límite de \textit{dispersión independiente}, se asume que las
@@ -969,7 +968,7 @@ dispersado por cada una alcanza a las demás con amplitud no despreciable.
 El campo excitante sobre la esfera $i$ es entonces
 \begin{equation}
   \mathbf{E}_{exc}^{i} = \mathbf{E}^{inc}
-  + \sum_{\substack{l=1\\l\neq i}}^{N_S} \mathbf{E}_s^{l},
+  + \sum_{\substack{l=1\\l\neq i}}^{N_S} \mathbf{E}_{sca}^{l},
 \end{equation}
 lo que acopla las respuestas de todas las esferas entre sí. Este es el
 régimen de \textit{dispersión múltiple}, cuya solución requiere un
@@ -1020,8 +1019,8 @@ derivados en la sección~\ref{sec:miecoeffs} particularizados a la esfera
 $i$ (la barra, tomada de \cite{Mackowski1996}, los distingue de los
 coeficientes de campo del sistema $a_{mn}^{i}, b_{mn}^{i}$). Esta
 propiedad, exclusiva de la geometría esférica, simplifica
-considerablemente el problema. En este trabajo todas las esferas son
-idénticas, de modo que $\bar{\mathbb{T}}_i = \bar{\mathbb{T}}$ para todo
+considerablemente el problema. Si todas las esferas son
+idénticas, $\bar{\mathbb{T}}_i = \bar{\mathbb{T}}$ para todo
 $i$.
  
 % =========================================================================
@@ -1125,8 +1124,8 @@ La solución del sistema~(\ref{eq:foldy-lax}) proporciona los coeficientes
 $\{\mathbf{a}^{j}\}$ de todos los campos dispersados de forma
 autoconsistente, incorporando los efectos de dispersión múltiple a todos
 los órdenes. Tras truncar los desarrollos a un orden multipolar máximo
-$n = N_t$ (cuyo valor se analiza en la sección \ref{sec:funcesp}), la
-dimensión del sistema es $N_S \cdot 2 N_t(N_t+2)$. Para agregados grandes
+$n = n_{max}$ (cuyo valor se analiza en la sección \ref{sec:funcesp}), la
+dimensión del sistema es $N_S \cdot 2 n_{max}(n_{max}+2)$. Para agregados grandes
 la inversión directa de $\mathbb{M}_{sys}$ es de elevado coste computacional
 y la solución se obtiene mediante métodos
 iterativos~\cite{Mackowski1996}; los detalles de la implementación
