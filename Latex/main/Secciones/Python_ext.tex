@@ -50,7 +50,7 @@ simulación queda descrita por completo en un fichero de texto legible.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Imagenes/Pantallazo_GUI.png}
-    \caption{Interfaz gráfica del \emph{wrapper} en Python para MSTM,
+    \caption{Interfaz gráfica del entorno en Python para MSTM,
     configurada para una simulación de ejemplo: cuatro esferas de oro de
     radio 0.1\,$\mu$m dispuestas en un cuadrado a 45$^\circ$ respecto a la
     onda incidente, con un barrido en longitud de onda de 400 a 800\,nm en
@@ -165,7 +165,7 @@ En un barrido en radio, la longitud de onda es fija, de modo que $k_{0}$
 y $\tilde{N}$ son constantes y se calculan una sola vez; lo único que
 cambia entre \emph{runs} es el radio de las esferas. Cuando se usa una de
 las geometrías predefinidas, los centros se recalculan en cada paso con la
-misma regla $D{ij} = a_i + a_j + d$, de manera que la separación entre superficies
+misma regla $D_{ij} = a_i + a_j + d$, de manera que la separación entre superficies
 $d$ se mantiene constante mientras crece el radio. Esto permite estudiar
 cómo cambia la respuesta del agregado con el tamaño de las partículas sin
 alterar el hueco entre ellas.
